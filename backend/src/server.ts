@@ -15,13 +15,20 @@ getDatabase();
 
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 
 app.use('/api', setupRouter);
 app.use('/api/months', monthsRouter);
 app.use('/api/default-accounts', defaultAccountsRouter);
 app.use('/api', accountsRouter);
 app.use('/api', exportImportRouter);
+
+const frontendDist = path.join(__dirname, '../../frontend/dist');
+app.use(express.static(frontendDist));
+
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(frontendDist, 'index.html'));
+});
 
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);

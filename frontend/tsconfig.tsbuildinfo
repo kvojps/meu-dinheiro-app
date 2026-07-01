@@ -1,0 +1,16 @@
+{
+  "root": [
+    "./src/App.tsx",
+    "./src/main.tsx",
+    "./src/vite-env.d.ts",
+    "./src/api/client.ts",
+    "./src/components/DefaultAccountForm.tsx",
+    "./src/components/Layout.tsx",
+    "./src/components/PayDialog.tsx",
+    "./src/pages/Configuracao.tsx",
+    "./src/pages/Dashboard.tsx",
+    "./src/pages/Grafico.tsx",
+    "./src/pages/MonthDetail.tsx"
+  ],
+  "version": "5.9.3"
+}
