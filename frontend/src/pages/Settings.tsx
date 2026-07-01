@@ -6,6 +6,8 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemAvatar,
+  Avatar,
   ListItemSecondaryAction,
   IconButton,
   Accordion,
@@ -23,6 +25,7 @@ import {
   FileUpload as FileUploadIcon,
   FileDownload as FileDownloadIcon,
   ExpandMore,
+  ReceiptLong,
 } from '@mui/icons-material';
 import { DefaultAccount } from '../types/models';
 import DefaultAccountForm from '../components/DefaultAccountForm';
@@ -83,107 +86,115 @@ export default function Settings() {
         Configuração de Pagamento
       </Typography>
 
-      <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography variant="h6">Contas Padrão</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Box
-            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
-          >
-            <Typography variant="body2" color="text.secondary">
-              Contas que serão criadas automaticamente em cada novo mês.
-            </Typography>
-            <Button variant="contained" startIcon={<AddIcon />} onClick={openAdd} size="small">
-              Adicionar
-            </Button>
-          </Box>
-          <Divider sx={{ mb: 2 }} />
-          {defaultAccounts.length === 0 ? (
-            <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
-              Nenhuma conta padrão cadastrada.
-            </Typography>
-          ) : (
-            <List disablePadding>
-              {defaultAccounts.map((acc) => (
-                <ListItem key={acc.id} divider sx={{ px: 0 }}>
-                  <ListItemText
-                    primary={acc.name}
-                    secondary={`${formatCurrencyBRLOrFallback(acc.amount, 'Valor variável')}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}`}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" onClick={() => openEdit(acc)} sx={{ mr: 1 }}>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton edge="end" onClick={() => remove(acc.id)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          )}
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion defaultExpanded sx={{ mt: 2 }}>
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography variant="h6">Adicionar Meses</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Adicione meses passados ou futuros. As contas padrão serão copiadas automaticamente.
-          </Typography>
-          <Stack direction="row" spacing={2} alignItems="flex-end" flexWrap="wrap" useFlexGap>
-            <MonthYearPicker
-              label="De:"
-              month={range.fromMonth}
-              year={range.fromYear}
-              onMonthChange={(m) => setRange((p) => ({ ...p, fromMonth: m }))}
-              onYearChange={(y) => setRange((p) => ({ ...p, fromYear: y }))}
-            />
-            <MonthYearPicker
-              label="Até:"
-              month={range.toMonth}
-              year={range.toYear}
-              onMonthChange={(m) => setRange((p) => ({ ...p, toMonth: m }))}
-              onYearChange={(y) => setRange((p) => ({ ...p, toYear: y }))}
-            />
-            <Button
-              variant="contained"
-              onClick={createRange}
-              disabled={creating}
-              startIcon={<PlaylistAddIcon />}
+      <Stack spacing={2}>
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Typography variant="h6">Contas Padrão</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
             >
-              {creating ? 'Criando...' : 'Adicionar Meses'}
-            </Button>
-          </Stack>
-        </AccordionDetails>
-      </Accordion>
+              <Typography variant="body2" color="text.secondary">
+                Contas que serão criadas automaticamente em cada novo mês.
+              </Typography>
+              <Button variant="contained" startIcon={<AddIcon />} onClick={openAdd} size="small">
+                Adicionar
+              </Button>
+            </Box>
+            <Divider sx={{ mb: 2 }} />
+            {defaultAccounts.length === 0 ? (
+              <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
+                Nenhuma conta padrão cadastrada.
+              </Typography>
+            ) : (
+              <List disablePadding>
+                {defaultAccounts.map((acc) => (
+                  <ListItem key={acc.id} divider sx={{ px: 0 }}>
+                    <ListItemAvatar>
+                      <Avatar sx={{ bgcolor: 'primary.main' }}>
+                        <ReceiptLong fontSize="small" />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={acc.name}
+                      primaryTypographyProps={{ fontWeight: 600 }}
+                      secondary={`${formatCurrencyBRLOrFallback(acc.amount, 'Valor variável')}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" onClick={() => openEdit(acc)} sx={{ mr: 1 }}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton edge="end" onClick={() => remove(acc.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </AccordionDetails>
+        </Accordion>
 
-      <Accordion sx={{ mt: 2 }}>
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography variant="h6">Exportar / Importar Dados</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Exporta todos os meses, contas e comprovantes em um arquivo ZIP. A importação substitui
-            todos os dados atuais.
-          </Typography>
-          <Stack direction="row" spacing={2}>
-            <Button variant="outlined" startIcon={<FileDownloadIcon />} onClick={exportData}>
-              Exportar
-            </Button>
-            <FileUploadButton
-              label={importing ? 'Importando...' : 'Importar'}
-              accept=".zip"
-              disabled={importing}
-              startIcon={<FileUploadIcon />}
-              onFileSelected={importData}
-            />
-          </Stack>
-        </AccordionDetails>
-      </Accordion>
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Typography variant="h6">Adicionar Meses</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Adicione meses passados ou futuros. As contas padrão serão copiadas automaticamente.
+            </Typography>
+            <Stack direction="row" spacing={2} alignItems="flex-end" flexWrap="wrap" useFlexGap>
+              <MonthYearPicker
+                label="De:"
+                month={range.fromMonth}
+                year={range.fromYear}
+                onMonthChange={(m) => setRange((p) => ({ ...p, fromMonth: m }))}
+                onYearChange={(y) => setRange((p) => ({ ...p, fromYear: y }))}
+              />
+              <MonthYearPicker
+                label="Até:"
+                month={range.toMonth}
+                year={range.toYear}
+                onMonthChange={(m) => setRange((p) => ({ ...p, toMonth: m }))}
+                onYearChange={(y) => setRange((p) => ({ ...p, toYear: y }))}
+              />
+              <Button
+                variant="contained"
+                onClick={createRange}
+                disabled={creating}
+                startIcon={<PlaylistAddIcon />}
+              >
+                {creating ? 'Criando...' : 'Adicionar Meses'}
+              </Button>
+            </Stack>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Typography variant="h6">Exportar / Importar Dados</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Exporta todos os meses, contas e comprovantes em um arquivo ZIP. A importação
+              substitui todos os dados atuais.
+            </Typography>
+            <Stack direction="row" spacing={2}>
+              <Button variant="outlined" startIcon={<FileDownloadIcon />} onClick={exportData}>
+                Exportar
+              </Button>
+              <FileUploadButton
+                label={importing ? 'Importando...' : 'Importar'}
+                accept=".zip"
+                disabled={importing}
+                startIcon={<FileUploadIcon />}
+                onFileSelected={importData}
+              />
+            </Stack>
+          </AccordionDetails>
+        </Accordion>
+      </Stack>
 
       <DefaultAccountForm
         key={formKey}

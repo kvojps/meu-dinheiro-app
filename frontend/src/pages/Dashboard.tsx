@@ -16,6 +16,7 @@ import {
   MenuItem,
   Stack,
   Pagination,
+  LinearProgress,
 } from '@mui/material';
 import { api } from '../api/client';
 import { Month } from '../types/models';
@@ -67,6 +68,18 @@ export default function Dashboard() {
     return filteredMonths.slice(start, start + PAGE_SIZE);
   }, [filteredMonths, page]);
 
+  const summary = useMemo(
+    () =>
+      filteredMonths.reduce(
+        (acc, m) => ({
+          paid: acc.paid + (m.paid_amount ?? 0),
+          pending: acc.pending + (m.unpaid_amount ?? 0),
+        }),
+        { paid: 0, pending: 0 }
+      ),
+    [filteredMonths]
+  );
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
@@ -91,6 +104,39 @@ export default function Dashboard() {
 
   return (
     <Box>
+      <Grid container spacing={2} sx={{ mb: 3 }}>
+        <Grid item xs={6} sm={4}>
+          <Paper sx={{ p: 2 }}>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Pago no período
+            </Typography>
+            <Typography variant="h5" sx={{ fontWeight: 700 }} color="success.main">
+              {formatCurrencyBRL(summary.paid)}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={6} sm={4}>
+          <Paper sx={{ p: 2 }}>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Pendente no período
+            </Typography>
+            <Typography variant="h5" sx={{ fontWeight: 700 }} color="warning.main">
+              {formatCurrencyBRL(summary.pending)}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Paper sx={{ p: 2 }}>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Total no período
+            </Typography>
+            <Typography variant="h5" sx={{ fontWeight: 700 }}>
+              {formatCurrencyBRL(summary.paid + summary.pending)}
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+
       <Paper sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
           <Typography variant="subtitle1" sx={{ minWidth: 80 }}>
@@ -144,28 +190,49 @@ export default function Dashboard() {
               <Card>
                 <CardActionArea onClick={() => navigate(`/months/${month.id}`)}>
                   <CardContent>
-                    <Typography variant="h5" gutterBottom>
-                      {month.label}
-                    </Typography>
-                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
+                        mb: 1.5,
+                      }}
+                    >
+                      <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                        {month.label}
+                      </Typography>
                       {total > 0 ? (
-                        <>
-                          <Chip
-                            label={`${paid}/${total} pagas`}
-                            color={allPaid ? 'success' : 'warning'}
-                            size="small"
-                          />
-                          <Typography variant="body2" color="text.secondary">
-                            {Math.round((paid / total) * 100)}%
-                          </Typography>
-                        </>
+                        <Chip
+                          label={`${paid}/${total} pagas`}
+                          color={allPaid ? 'success' : 'warning'}
+                          size="small"
+                        />
                       ) : (
                         <Chip label="Sem contas" size="small" />
                       )}
                     </Box>
-                    <Typography variant="body1" color="primary">
-                      Total: {formatCurrencyBRL(month.total_amount ?? 0)}
+
+                    <Typography
+                      variant="h4"
+                      sx={{ fontWeight: 700 }}
+                      color={allPaid ? 'success.main' : 'text.primary'}
+                    >
+                      {formatCurrencyBRL(month.total_amount ?? 0)}
                     </Typography>
+
+                    {total > 0 && (
+                      <Box sx={{ mt: 1.5 }}>
+                        <LinearProgress
+                          variant="determinate"
+                          value={(paid / total) * 100}
+                          color={allPaid ? 'success' : 'warning'}
+                          sx={{ height: 6, borderRadius: 1, mb: 0.5 }}
+                        />
+                        <Typography variant="caption" color="text.secondary">
+                          {Math.round((paid / total) * 100)}% pago
+                        </Typography>
+                      </Box>
+                    )}
                   </CardContent>
                 </CardActionArea>
               </Card>

@@ -12,6 +12,7 @@ import {
   Grid,
   IconButton,
   Paper,
+  Tooltip,
 } from '@mui/material';
 import {
   ArrowBack,
@@ -28,6 +29,7 @@ import AddAccountDialog from '../components/AddAccountDialog';
 import EditAccountDialog from '../components/EditAccountDialog';
 import AccountDetailDialog from '../components/AccountDetailDialog';
 import DeleteMonthDialog from '../components/DeleteMonthDialog';
+import ConfirmDialog from '../components/ConfirmDialog';
 import AppSnackbar from '../components/AppSnackbar';
 import { useMonth } from '../hooks/useMonth';
 import { formatDateOnlyBR, formatDateTimeBR } from '../utils/date';
@@ -63,6 +65,18 @@ export default function MonthDetail() {
 
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailAccount, setDetailAccount] = useState<Account | null>(null);
+
+  const [deleteAccountTarget, setDeleteAccountTarget] = useState<Account | null>(null);
+  const [deletingAccount, setDeletingAccount] = useState(false);
+
+  async function handleDeleteAccount() {
+    if (!deleteAccountTarget) return;
+    setDeletingAccount(true);
+    if (await deleteAccount(deleteAccountTarget.id)) {
+      setDeleteAccountTarget(null);
+    }
+    setDeletingAccount(false);
+  }
 
   function openEditDialog(account: Account) {
     setEditingAccount(account);
@@ -138,7 +152,8 @@ export default function MonthDetail() {
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
-                  opacity: account.is_paid ? 0.85 : 1,
+                  borderLeft: '4px solid',
+                  borderLeftColor: account.is_paid ? 'success.main' : 'warning.main',
                 }}
               >
                 <CardContent sx={{ flexGrow: 1 }}>
@@ -154,12 +169,12 @@ export default function MonthDetail() {
                     </Typography>
                     <Chip
                       label={account.is_paid ? 'Paga' : 'Pendente'}
-                      color={account.is_paid ? 'success' : 'default'}
+                      color={account.is_paid ? 'success' : 'warning'}
                       size="small"
                       icon={account.is_paid ? <CheckCircle /> : undefined}
                     />
                   </Box>
-                  <Typography variant="body1" color="text.secondary" gutterBottom>
+                  <Typography variant="h5" sx={{ fontWeight: 700 }} gutterBottom>
                     {formatCurrencyBRLOrFallback(account.amount)}
                   </Typography>
                   {account.due_date && (
@@ -202,21 +217,27 @@ export default function MonthDetail() {
                       Pagar
                     </Button>
                   )}
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setDetailAccount(account);
-                      setDetailOpen(true);
-                    }}
-                  >
-                    <Visibility fontSize="small" />
-                  </IconButton>
-                  <IconButton size="small" onClick={() => openEditDialog(account)}>
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                  <IconButton size="small" onClick={() => deleteAccount(account.id)}>
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
+                  <Tooltip title="Ver detalhes">
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        setDetailAccount(account);
+                        setDetailOpen(true);
+                      }}
+                    >
+                      <Visibility fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Editar">
+                    <IconButton size="small" onClick={() => openEditDialog(account)}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Excluir">
+                    <IconButton size="small" onClick={() => setDeleteAccountTarget(account)}>
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
                 </CardActions>
               </Card>
             </Grid>
@@ -277,6 +298,20 @@ export default function MonthDetail() {
         deleting={deleting}
         onClose={() => setDeleteDialogOpen(false)}
         onConfirm={handleDeleteMonth}
+      />
+
+      <ConfirmDialog
+        open={!!deleteAccountTarget}
+        title="Excluir conta?"
+        message={
+          <>
+            Tem certeza que deseja excluir <strong>{deleteAccountTarget?.name}</strong>? Essa ação
+            não pode ser desfeita.
+          </>
+        }
+        loading={deletingAccount}
+        onClose={() => setDeleteAccountTarget(null)}
+        onConfirm={handleDeleteAccount}
       />
 
       <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
