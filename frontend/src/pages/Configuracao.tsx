@@ -22,7 +22,7 @@ import {
   Divider,
   Stack,
 } from '@mui/material';
-import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon, PlaylistAdd as PlaylistAddIcon, ExpandMore } from '@mui/icons-material';
+import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon, PlaylistAdd as PlaylistAddIcon, FileUpload as FileUploadIcon, FileDownload as FileDownloadIcon, ExpandMore } from '@mui/icons-material';
 import { api, DefaultAccount } from '../api/client';
 import DefaultAccountForm from '../components/DefaultAccountForm';
 
@@ -41,6 +41,7 @@ export default function Configuracao() {
   const [range, setRange] = useState({ fromYear: 2026, fromMonth: 1, toYear: 2026, toMonth: 12 });
   const [creating, setCreating] = useState(false);
 
+  const [importing, setImporting] = useState(false);
   const [snackbar, setSnackbar] = useState<{ message: string; severity: 'success' | 'error' | 'warning' } | null>(null);
 
   useEffect(() => {
@@ -113,6 +114,34 @@ export default function Configuracao() {
       setSnackbar({ message: err.message, severity: 'error' });
     } finally {
       setCreating(false);
+    }
+  }
+
+  async function handleExport() {
+    try {
+      const blob = await api.exportData();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'export-money-manager.zip';
+      a.click();
+      URL.revokeObjectURL(url);
+      setSnackbar({ message: 'Arquivo exportado com sucesso', severity: 'success' });
+    } catch (err: any) {
+      setSnackbar({ message: err.message, severity: 'error' });
+    }
+  }
+
+  async function handleImport(file: File) {
+    setImporting(true);
+    try {
+      await api.importData(file);
+      setSnackbar({ message: 'Dados importados com sucesso!', severity: 'success' });
+      loadData();
+    } catch (err: any) {
+      setSnackbar({ message: err.message, severity: 'error' });
+    } finally {
+      setImporting(false);
     }
   }
 
@@ -243,6 +272,41 @@ export default function Configuracao() {
               startIcon={<PlaylistAddIcon />}
             >
               {creating ? 'Criando...' : 'Adicionar Meses'}
+            </Button>
+          </Stack>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion sx={{ mt: 2 }}>
+        <AccordionSummary expandIcon={<ExpandMore />}>
+          <Typography variant="h6">Exportar / Importar Dados</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Exporta todos os meses, contas e comprovantes em um arquivo ZIP.
+            A importação substitui todos os dados atuais.
+          </Typography>
+          <Stack direction="row" spacing={2}>
+            <Button variant="outlined" startIcon={<FileDownloadIcon />} onClick={handleExport}>
+              Exportar
+            </Button>
+            <Button
+              variant="outlined"
+              component="label"
+              disabled={importing}
+              startIcon={<FileUploadIcon />}
+            >
+              {importing ? 'Importando...' : 'Importar'}
+              <input
+                type="file"
+                accept=".zip"
+                hidden
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImport(file);
+                  e.target.value = '';
+                }}
+              />
             </Button>
           </Stack>
         </AccordionDetails>

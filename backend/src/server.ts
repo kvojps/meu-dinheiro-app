@@ -6,6 +6,7 @@ import setupRouter from './routes/setup';
 import monthsRouter from './routes/months';
 import defaultAccountsRouter from './routes/defaultAccounts';
 import accountsRouter from './routes/accounts';
+import exportImportRouter from './routes/exportImport';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -20,6 +21,7 @@ app.use('/api', setupRouter);
 app.use('/api/months', monthsRouter);
 app.use('/api/default-accounts', defaultAccountsRouter);
 app.use('/api', accountsRouter);
+app.use('/api', exportImportRouter);
 
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);

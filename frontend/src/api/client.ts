@@ -149,4 +149,24 @@ export const api = {
   unpayAccount(id: number) {
     return request<Account>(`/accounts/${id}/unpay`, { method: 'PUT' });
   },
+
+  async exportData() {
+    const res = await fetch(`${API_BASE}/export`);
+    if (!res.ok) throw new Error('Erro ao exportar dados');
+    return res.blob();
+  },
+
+  async importData(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch(`${API_BASE}/import`, {
+      method: 'POST',
+      body: formData,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: res.statusText }));
+      throw new Error(err.error || 'Erro ao importar dados');
+    }
+    return res.json();
+  },
 };
