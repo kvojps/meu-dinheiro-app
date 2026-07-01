@@ -33,6 +33,7 @@ import {
 } from '@mui/icons-material';
 import { api, MonthDetail as MonthDetailType, Account } from '../api/client';
 import PayDialog from '../components/PayDialog';
+import { formatDateOnlyBR, formatDateTimeBR } from '../utils/date';
 
 export default function MonthDetail() {
   const { id } = useParams<{ id: string }>();
@@ -241,12 +242,12 @@ export default function MonthDetail() {
                   </Typography>
                   {account.due_date && (
                     <Typography variant="body2" color="text.secondary">
-                      Vencimento: {new Date(account.due_date).toLocaleDateString('pt-BR')}
+                      Vencimento: {formatDateOnlyBR(account.due_date)}
                     </Typography>
                   )}
                   {account.paid_at && (
                     <Typography variant="body2" color="text.secondary">
-                      Pago em: {new Date(account.paid_at).toLocaleDateString('pt-BR')}
+                      Pago em: {formatDateTimeBR(account.paid_at)}
                     </Typography>
                   )}
                   {account.receipt && (
@@ -399,7 +400,7 @@ export default function MonthDetail() {
               {detailAccount.due_date && (
                 <Box>
                   <Typography variant="caption" color="text.secondary">Vencimento</Typography>
-                  <Typography>{new Date(detailAccount.due_date).toLocaleDateString('pt-BR')}</Typography>
+                  <Typography>{formatDateOnlyBR(detailAccount.due_date)}</Typography>
                 </Box>
               )}
               <Box>
@@ -414,7 +415,7 @@ export default function MonthDetail() {
               {detailAccount.paid_at && (
                 <Box>
                   <Typography variant="caption" color="text.secondary">Pago em</Typography>
-                  <Typography>{new Date(detailAccount.paid_at).toLocaleDateString('pt-BR')}</Typography>
+                  <Typography>{formatDateTimeBR(detailAccount.paid_at)}</Typography>
                 </Box>
               )}
               {detailAccount.receipt && (

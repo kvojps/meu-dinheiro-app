@@ -1,8 +1,12 @@
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
-import fs from 'fs';
 import { getDatabase } from '../database';
+import { asyncHandler } from '../middleware/asyncHandler';
+import { validateBody } from '../middleware/validate';
+import { parseId } from '../utils/parseId';
+import { createAccountSchema, updateAccountSchema, payAccountSchema } from '../schemas/accounts.schema';
+import * as accountsService from '../services/accounts.service';
 
 const UPLOADS_DIR = path.join(__dirname, '../../uploads');
 
@@ -12,10 +16,12 @@ const storage = multer.diskStorage({
   },
   filename: (req: any, file, cb) => {
     const db = getDatabase();
-    const account = db.prepare('SELECT a.*, m.label as month_label FROM accounts a JOIN months m ON a.month_id = m.id WHERE a.id = ?').get(req.params.id) as any;
+    const account = accountsService.getAccountForFilename(db, req.params.id);
     const monthPart = (account?.month_label?.replace(/[^a-zA-Z0-9-]/g, '_') || 'unknown').toLowerCase();
     const namePart = (account?.name?.replace(/[^a-zA-Z0-9-]/g, '_') || 'unknown').toLowerCase();
-    cb(null, `${monthPart}-${namePart}${path.extname(file.originalname)}`);
+    // O id garante unicidade: duas contas com mesmo nome no mesmo mês não devem
+    // sobrescrever o comprovante uma da outra.
+    cb(null, `${monthPart}-${namePart}-${req.params.id}${path.extname(file.originalname)}`);
   },
 });
 
@@ -36,118 +42,43 @@ const upload = multer({
 
 const router = Router();
 
-router.get('/months/:monthId/accounts', (req: Request, res: Response) => {
+router.get('/months/:monthId/accounts', asyncHandler(async (req: Request, res: Response) => {
   const db = getDatabase();
-  const accounts = db.prepare(
-    'SELECT * FROM accounts WHERE month_id = ? ORDER BY due_date, name'
-  ).all(req.params.monthId);
-  res.json(accounts);
-});
+  const monthId = parseId(req.params.monthId);
+  res.json(accountsService.listAccountsForMonth(db, monthId));
+}));
 
-router.post('/months/:monthId/accounts', (req: Request, res: Response) => {
-  const { name, due_date, amount } = req.body;
+router.post('/months/:monthId/accounts', validateBody(createAccountSchema), asyncHandler(async (req: Request, res: Response) => {
   const db = getDatabase();
-
-  if (!name) {
-    return res.status(400).json({ error: 'name is required' });
-  }
-
-  const month = db.prepare('SELECT * FROM months WHERE id = ?').get(req.params.monthId);
-  if (!month) {
-    return res.status(404).json({ error: 'Month not found' });
-  }
-
-  const result = db.prepare(
-    'INSERT INTO accounts (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)'
-  ).run(req.params.monthId, name, due_date || null, amount || 0);
-
-  const created = db.prepare('SELECT * FROM accounts WHERE id = ?').get(result.lastInsertRowid);
+  const monthId = parseId(req.params.monthId);
+  const created = accountsService.createAccount(db, monthId, req.body);
   res.status(201).json(created);
-});
+}));
 
-router.put('/accounts/:id', (req: Request, res: Response) => {
-  const { name, due_date, amount, notes } = req.body;
+router.put('/accounts/:id', validateBody(updateAccountSchema), asyncHandler(async (req: Request, res: Response) => {
   const db = getDatabase();
+  const id = parseId(req.params.id);
+  res.json(accountsService.updateAccount(db, id, req.body));
+}));
 
-  const existing = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id);
-  if (!existing) {
-    return res.status(404).json({ error: 'Account not found' });
-  }
-
-  db.prepare(
-    'UPDATE accounts SET name = ?, due_date = ?, amount = ?, notes = ? WHERE id = ?'
-  ).run(
-    name ?? (existing as any).name,
-    due_date !== undefined ? due_date : (existing as any).due_date,
-    amount !== undefined ? amount : (existing as any).amount,
-    notes !== undefined ? notes : (existing as any).notes,
-    req.params.id
-  );
-
-  const updated = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id);
-  res.json(updated);
-});
-
-router.delete('/accounts/:id', (req: Request, res: Response) => {
+router.delete('/accounts/:id', asyncHandler(async (req: Request, res: Response) => {
   const db = getDatabase();
-  const existing = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id) as any;
-  if (!existing) {
-    return res.status(404).json({ error: 'Account not found' });
-  }
-
-  if (existing.receipt) {
-    const filePath = path.join(__dirname, '../../uploads', existing.receipt);
-    fs.unlink(filePath, (err) => {
-      if (err && err.code !== 'ENOENT') {
-        console.error('Erro ao excluir comprovante:', err);
-      }
-    });
-  }
-
-  db.prepare('DELETE FROM accounts WHERE id = ?').run(req.params.id);
+  const id = parseId(req.params.id);
+  accountsService.deleteAccount(db, id);
   res.json({ message: 'Account deleted' });
-});
+}));
 
-router.put('/accounts/:id/pay', upload.single('receipt'), (req: Request, res: Response) => {
+router.put('/accounts/:id/pay', upload.single('receipt'), validateBody(payAccountSchema), asyncHandler(async (req: Request, res: Response) => {
   const db = getDatabase();
-  const existing = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id);
-  if (!existing) {
-    return res.status(404).json({ error: 'Account not found' });
-  }
+  const id = parseId(req.params.id);
+  const receipt = req.file ? req.file.filename : undefined;
+  res.json(accountsService.payAccount(db, id, receipt, req.body.notes));
+}));
 
-  const receipt = req.file ? req.file.filename : (existing as any).receipt;
-  const notes = req.body.notes !== undefined ? req.body.notes : (existing as any).notes;
-
-  db.prepare(
-    'UPDATE accounts SET is_paid = 1, paid_at = datetime(\'now\'), receipt = ?, notes = ? WHERE id = ?'
-  ).run(receipt, notes, req.params.id);
-
-  const updated = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id);
-  res.json(updated);
-});
-
-router.put('/accounts/:id/unpay', (req: Request, res: Response) => {
+router.put('/accounts/:id/unpay', asyncHandler(async (req: Request, res: Response) => {
   const db = getDatabase();
-  const existing = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id) as any;
-  if (!existing) {
-    return res.status(404).json({ error: 'Account not found' });
-  }
-
-  if (existing.receipt) {
-    const filePath = path.join(__dirname, '../../uploads', existing.receipt);
-    fs.unlink(filePath, (err) => {
-      if (err && err.code !== 'ENOENT') {
-        console.error('Erro ao excluir comprovante:', err);
-      }
-    });
-  }
-
-  db.prepare(
-    'UPDATE accounts SET is_paid = 0, paid_at = NULL, receipt = NULL WHERE id = ?'
-  ).run(req.params.id);
-
-  const updated = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id);
-  res.json(updated);
-});
+  const id = parseId(req.params.id);
+  res.json(accountsService.unpayAccount(db, id));
+}));
 
 export default router;

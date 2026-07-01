@@ -10,6 +10,7 @@ import {
   TextField,
 } from '@mui/material';
 import { Account } from '../api/client';
+import { formatDateOnlyBR } from '../utils/date';
 
 interface PayDialogProps {
   open: boolean;
@@ -49,7 +50,7 @@ export default function PayDialog({ open, account, onClose, onConfirm }: PayDial
         </Typography>
         {account.due_date && (
           <Typography variant="body2" color="text.secondary" gutterBottom>
-            Vencimento: {new Date(account.due_date).toLocaleDateString('pt-BR')}
+            Vencimento: {formatDateOnlyBR(account.due_date)}
           </Typography>
         )}
 

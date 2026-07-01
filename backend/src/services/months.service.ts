@@ -1,0 +1,155 @@
+import Database from 'better-sqlite3';
+import { AppError } from '../errors/AppError';
+import { monthLabel, formatDueDate } from '../constants/monthNames';
+
+export interface MonthRow {
+  id: number;
+  label: string;
+  year: number;
+  month: number;
+  created_at: string;
+}
+
+interface DefaultAccountRow {
+  id: number;
+  name: string;
+  due_day: number | null;
+  amount: number;
+}
+
+function insertAccountsFromDefaults(db: Database.Database, monthId: number, year: number, month: number) {
+  const defaults = db.prepare('SELECT * FROM default_accounts').all() as DefaultAccountRow[];
+  const insertAccount = db.prepare(
+    'INSERT INTO accounts (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)'
+  );
+  for (const def of defaults) {
+    insertAccount.run(monthId, def.name, formatDueDate(year, month, def.due_day), def.amount);
+  }
+}
+
+export function findMonthByYearMonth(db: Database.Database, year: number, month: number) {
+  return db.prepare('SELECT id FROM months WHERE year = ? AND month = ?').get(year, month) as
+    | { id: number }
+    | undefined;
+}
+
+export function createMonthWithDefaults(db: Database.Database, year: number, month: number): MonthRow {
+  const label = monthLabel(year, month);
+
+  const create = db.transaction(() => {
+    const result = db
+      .prepare('INSERT INTO months (label, year, month) VALUES (?, ?, ?)')
+      .run(label, year, month);
+    const monthId = result.lastInsertRowid as number;
+    insertAccountsFromDefaults(db, monthId, year, month);
+    return monthId;
+  });
+
+  const monthId = create();
+  return db.prepare('SELECT * FROM months WHERE id = ?').get(monthId) as MonthRow;
+}
+
+export function ensureCurrentMonthExists(db: Database.Database) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  if (!findMonthByYearMonth(db, year, month)) {
+    createMonthWithDefaults(db, year, month);
+  }
+}
+
+export function listMonths(db: Database.Database) {
+  ensureCurrentMonthExists(db);
+
+  return db.prepare(`
+    SELECT m.*,
+      COUNT(a.id) as total_accounts,
+      COALESCE(SUM(CASE WHEN a.is_paid = 1 THEN 1 ELSE 0 END), 0) as paid_accounts,
+      COALESCE(SUM(CASE WHEN a.is_paid = 1 THEN a.amount ELSE 0 END), 0) as paid_amount,
+      COALESCE(SUM(CASE WHEN a.is_paid = 0 THEN a.amount ELSE 0 END), 0) as unpaid_amount,
+      COALESCE(SUM(a.amount), 0) as total_amount
+    FROM months m
+    LEFT JOIN accounts a ON a.month_id = m.id
+    GROUP BY m.id
+    ORDER BY m.year DESC, m.month DESC
+  `).all();
+}
+
+export function getMonthWithAccounts(db: Database.Database, id: number) {
+  const month = db.prepare('SELECT * FROM months WHERE id = ?').get(id) as MonthRow | undefined;
+  if (!month) {
+    throw new AppError(404, 'Month not found');
+  }
+
+  const accounts = db
+    .prepare('SELECT * FROM accounts WHERE month_id = ? ORDER BY due_date, name')
+    .all(id);
+
+  return { ...month, accounts };
+}
+
+export function createNextMonth(db: Database.Database, year?: number, month?: number): MonthRow {
+  if (!year || !month) {
+    const lastMonth = db
+      .prepare('SELECT * FROM months ORDER BY year DESC, month DESC LIMIT 1')
+      .get() as { year: number; month: number } | undefined;
+
+    if (!lastMonth) {
+      throw new AppError(400, 'No months exist. Use setup first.');
+    }
+
+    year = lastMonth.year;
+    month = lastMonth.month + 1;
+    if (month > 12) {
+      month = 1;
+      year++;
+    }
+  }
+
+  if (findMonthByYearMonth(db, year, month)) {
+    throw new AppError(400, 'Month already exists');
+  }
+
+  return createMonthWithDefaults(db, year, month);
+}
+
+export function deleteMonth(db: Database.Database, id: number) {
+  const existing = db.prepare('SELECT id FROM months WHERE id = ?').get(id);
+  if (!existing) {
+    throw new AppError(404, 'Month not found');
+  }
+  db.prepare('DELETE FROM months WHERE id = ?').run(id);
+}
+
+export function createMonthsBatch(
+  db: Database.Database,
+  fromYear: number,
+  fromMonth: number,
+  toYear: number,
+  toMonth: number
+) {
+  const created: MonthRow[] = [];
+  const errors: string[] = [];
+  let year = fromYear;
+  let month = fromMonth;
+
+  const run = db.transaction(() => {
+    while (year < toYear || (year === toYear && month <= toMonth)) {
+      if (findMonthByYearMonth(db, year, month)) {
+        errors.push(`${monthLabel(year, month)} já existe`);
+      } else {
+        created.push(createMonthWithDefaults(db, year, month));
+      }
+
+      month++;
+      if (month > 12) {
+        month = 1;
+        year++;
+      }
+    }
+  });
+
+  run();
+
+  return { created, errors };
+}
