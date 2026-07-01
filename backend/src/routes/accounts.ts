@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { getDatabase } from '../database';
 
 const UPLOADS_DIR = path.join(__dirname, '../../uploads');
@@ -9,9 +10,12 @@ const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
     cb(null, UPLOADS_DIR);
   },
-  filename: (_req, file, cb) => {
-    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `${unique}${path.extname(file.originalname)}`);
+  filename: (req: any, file, cb) => {
+    const db = getDatabase();
+    const account = db.prepare('SELECT a.*, m.label as month_label FROM accounts a JOIN months m ON a.month_id = m.id WHERE a.id = ?').get(req.params.id) as any;
+    const monthPart = (account?.month_label?.replace(/[^a-zA-Z0-9-]/g, '_') || 'unknown').toLowerCase();
+    const namePart = (account?.name?.replace(/[^a-zA-Z0-9-]/g, '_') || 'unknown').toLowerCase();
+    cb(null, `${monthPart}-${namePart}${path.extname(file.originalname)}`);
   },
 });
 
@@ -85,10 +89,20 @@ router.put('/accounts/:id', (req: Request, res: Response) => {
 
 router.delete('/accounts/:id', (req: Request, res: Response) => {
   const db = getDatabase();
-  const existing = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id);
+  const existing = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id) as any;
   if (!existing) {
     return res.status(404).json({ error: 'Account not found' });
   }
+
+  if (existing.receipt) {
+    const filePath = path.join(__dirname, '../../uploads', existing.receipt);
+    fs.unlink(filePath, (err) => {
+      if (err && err.code !== 'ENOENT') {
+        console.error('Erro ao excluir comprovante:', err);
+      }
+    });
+  }
+
   db.prepare('DELETE FROM accounts WHERE id = ?').run(req.params.id);
   res.json({ message: 'Account deleted' });
 });
@@ -113,9 +127,18 @@ router.put('/accounts/:id/pay', upload.single('receipt'), (req: Request, res: Re
 
 router.put('/accounts/:id/unpay', (req: Request, res: Response) => {
   const db = getDatabase();
-  const existing = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id);
+  const existing = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id) as any;
   if (!existing) {
     return res.status(404).json({ error: 'Account not found' });
+  }
+
+  if (existing.receipt) {
+    const filePath = path.join(__dirname, '../../uploads', existing.receipt);
+    fs.unlink(filePath, (err) => {
+      if (err && err.code !== 'ENOENT') {
+        console.error('Erro ao excluir comprovante:', err);
+      }
+    });
   }
 
   db.prepare(
