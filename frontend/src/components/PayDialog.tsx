@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { Account } from '../api/client';
 import { formatDateOnlyBR } from '../utils/date';
+import { formatCurrencyBRL } from '../utils/format';
 
 interface PayDialogProps {
   open: boolean;
@@ -46,7 +47,7 @@ export default function PayDialog({ open, account, onClose, onConfirm }: PayDial
           {account.name}
         </Typography>
         <Typography variant="body1" color="text.secondary" gutterBottom>
-          Valor: R$ {account.amount.toFixed(2)}
+          Valor: {formatCurrencyBRL(account.amount)}
         </Typography>
         {account.due_date && (
           <Typography variant="body2" color="text.secondary" gutterBottom>

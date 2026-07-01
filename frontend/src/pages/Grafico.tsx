@@ -12,18 +12,21 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { api, Month } from '../api/client';
+import AppSnackbar from '../components/AppSnackbar';
+import { useSnackbar } from '../hooks/useSnackbar';
 
 export default function Grafico() {
   const [data, setData] = useState<Month[]>([]);
   const [loading, setLoading] = useState(true);
+  const { snackbar, showError, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
     api
       .getMonths()
       .then(setData)
-      .catch(console.error)
+      .catch(showError)
       .finally(() => setLoading(false));
-  }, []);
+  }, [showError]);
 
   const years = useMemo(() => {
     const set = new Set(data.map((m) => m.year));
@@ -106,6 +109,8 @@ export default function Grafico() {
           </BarChart>
         </ResponsiveContainer>
       )}
+
+      <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
     </Box>
   );
 }

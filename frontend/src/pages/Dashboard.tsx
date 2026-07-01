@@ -18,6 +18,9 @@ import {
   Pagination,
 } from '@mui/material';
 import { api, Month } from '../api/client';
+import AppSnackbar from '../components/AppSnackbar';
+import { useSnackbar } from '../hooks/useSnackbar';
+import { formatCurrencyBRL } from '../utils/format';
 
 const PAGE_SIZE = 12;
 
@@ -28,14 +31,15 @@ export default function Dashboard() {
   const [toValue, setToValue] = useState('');
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
+  const { snackbar, showError, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
     api
       .getMonths()
       .then((data) => setMonths(data))
-      .catch(console.error)
+      .catch(showError)
       .finally(() => setLoading(false));
-  }, []);
+  }, [showError]);
 
   const monthOptions = useMemo(() => {
     return [...months]
@@ -87,6 +91,7 @@ export default function Dashboard() {
         <Typography color="text.secondary" sx={{ mb: 2 }}>
           Vá para a página de Configuração para iniciar.
         </Typography>
+        <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
       </Box>
     );
   }
@@ -152,7 +157,7 @@ export default function Dashboard() {
                       )}
                     </Box>
                     <Typography variant="body1" color="primary">
-                      Total: R$ {(month.total_amount ?? 0).toFixed(2)}
+                      Total: {formatCurrencyBRL(month.total_amount ?? 0)}
                     </Typography>
                   </CardContent>
                 </CardActionArea>
@@ -179,6 +184,8 @@ export default function Dashboard() {
           />
         </Box>
       )}
+
+      <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
     </Box>
   );
 }

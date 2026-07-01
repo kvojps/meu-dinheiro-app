@@ -16,8 +16,6 @@ import {
   DialogContentText,
   DialogActions,
   TextField,
-  Alert,
-  Snackbar,
   IconButton,
   Paper,
 } from '@mui/material';
@@ -32,7 +30,10 @@ import {
 } from '@mui/icons-material';
 import { api, MonthDetail as MonthDetailType, Account } from '../api/client';
 import PayDialog from '../components/PayDialog';
+import AppSnackbar from '../components/AppSnackbar';
+import { useSnackbar } from '../hooks/useSnackbar';
 import { formatDateOnlyBR, formatDateTimeBR } from '../utils/date';
+import { formatCurrencyBRLOrFallback } from '../utils/format';
 
 export default function MonthDetail() {
   const { id } = useParams<{ id: string }>();
@@ -61,10 +62,7 @@ export default function MonthDetail() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailAccount, setDetailAccount] = useState<Account | null>(null);
 
-  const [snackbar, setSnackbar] = useState<{
-    message: string;
-    severity: 'success' | 'error';
-  } | null>(null);
+  const { snackbar, showSnackbar, showError, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (id) loadMonth(Number(id));
@@ -75,8 +73,8 @@ export default function MonthDetail() {
       const data = await api.getMonth(monthId);
       data.accounts.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
       setMonth(data);
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+    } catch (err) {
+      showError(err);
     } finally {
       setLoading(false);
     }
@@ -88,20 +86,20 @@ export default function MonthDetail() {
       await api.payAccount(selectedAccount.id, file, notes);
       setPayDialogOpen(false);
       setSelectedAccount(null);
-      setSnackbar({ message: 'Conta marcada como paga!', severity: 'success' });
+      showSnackbar('Conta marcada como paga!');
       if (id) loadMonth(Number(id));
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+    } catch (err) {
+      showError(err);
     }
   }
 
   async function handleUnpay(accountId: number) {
     try {
       await api.unpayAccount(accountId);
-      setSnackbar({ message: 'Pagamento desmarcado', severity: 'success' });
+      showSnackbar('Pagamento desmarcado');
       if (id) loadMonth(Number(id));
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+    } catch (err) {
+      showError(err);
     }
   }
 
@@ -117,20 +115,20 @@ export default function MonthDetail() {
       setNewName('');
       setNewAmount('');
       setNewDueDate('');
-      setSnackbar({ message: 'Conta adicionada', severity: 'success' });
+      showSnackbar('Conta adicionada');
       loadMonth(Number(id));
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+    } catch (err) {
+      showError(err);
     }
   }
 
   async function handleDeleteAccount(accountId: number) {
     try {
       await api.deleteAccount(accountId);
-      setSnackbar({ message: 'Conta removida', severity: 'success' });
+      showSnackbar('Conta removida');
       if (id) loadMonth(Number(id));
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+    } catch (err) {
+      showError(err);
     }
   }
 
@@ -154,10 +152,10 @@ export default function MonthDetail() {
       });
       setEditDialogOpen(false);
       setEditingAccount(null);
-      setSnackbar({ message: 'Conta atualizada', severity: 'success' });
+      showSnackbar('Conta atualizada');
       if (id) loadMonth(Number(id));
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+    } catch (err) {
+      showError(err);
     }
   }
 
@@ -168,8 +166,8 @@ export default function MonthDetail() {
       await api.deleteMonth(Number(id));
       setDeleteDialogOpen(false);
       navigate('/');
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+    } catch (err) {
+      showError(err);
     } finally {
       setDeleting(false);
     }
@@ -257,7 +255,7 @@ export default function MonthDetail() {
                     />
                   </Box>
                   <Typography variant="body1" color="text.secondary" gutterBottom>
-                    {account.amount ? `R$ ${account.amount.toFixed(2)}` : 'Valor não definido'}
+                    {formatCurrencyBRLOrFallback(account.amount)}
                   </Typography>
                   {account.due_date && (
                     <Typography variant="body2" color="text.secondary">
@@ -433,11 +431,7 @@ export default function MonthDetail() {
                 <Typography variant="caption" color="text.secondary">
                   Valor
                 </Typography>
-                <Typography>
-                  {detailAccount.amount
-                    ? `R$ ${detailAccount.amount.toFixed(2)}`
-                    : 'Valor não definido'}
-                </Typography>
+                <Typography>{formatCurrencyBRLOrFallback(detailAccount.amount)}</Typography>
               </Box>
               {detailAccount.due_date && (
                 <Box>
@@ -517,18 +511,7 @@ export default function MonthDetail() {
         </DialogActions>
       </Dialog>
 
-      <Snackbar
-        open={!!snackbar}
-        autoHideDuration={4000}
-        onClose={() => setSnackbar(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        {snackbar ? (
-          <Alert severity={snackbar.severity} onClose={() => setSnackbar(null)}>
-            {snackbar.message}
-          </Alert>
-        ) : undefined}
-      </Snackbar>
+      <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
     </Box>
   );
 }

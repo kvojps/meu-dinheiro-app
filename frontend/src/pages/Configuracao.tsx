@@ -12,8 +12,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Alert,
-  Snackbar,
   CircularProgress,
   Divider,
   Stack,
@@ -29,6 +27,9 @@ import {
 } from '@mui/icons-material';
 import { api, DefaultAccount } from '../api/client';
 import DefaultAccountForm from '../components/DefaultAccountForm';
+import AppSnackbar from '../components/AppSnackbar';
+import { useSnackbar } from '../hooks/useSnackbar';
+import { formatCurrencyBRLOrFallback } from '../utils/format';
 
 const MONTH_NAMES = [
   'Janeiro',
@@ -52,14 +53,17 @@ export default function Configuracao() {
   const [formOpen, setFormOpen] = useState(false);
   const [editingAccount, setEditingAccount] = useState<DefaultAccount | null>(null);
 
-  const [range, setRange] = useState({ fromYear: 2026, fromMonth: 1, toYear: 2026, toMonth: 12 });
+  const currentYear = new Date().getFullYear();
+  const [range, setRange] = useState({
+    fromYear: currentYear,
+    fromMonth: 1,
+    toYear: currentYear,
+    toMonth: 12,
+  });
   const [creating, setCreating] = useState(false);
 
   const [importing, setImporting] = useState(false);
-  const [snackbar, setSnackbar] = useState<{
-    message: string;
-    severity: 'success' | 'error' | 'warning';
-  } | null>(null);
+  const { snackbar, showSnackbar, showError, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
     loadData();
@@ -71,7 +75,7 @@ export default function Configuracao() {
       d.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
       setDefaultAccounts(d);
     } catch (err) {
-      console.error(err);
+      showError(err);
     } finally {
       setLoading(false);
     }
@@ -81,26 +85,26 @@ export default function Configuracao() {
     try {
       if (editingAccount) {
         await api.updateDefaultAccount(editingAccount.id, data);
-        setSnackbar({ message: 'Conta padrão atualizada', severity: 'success' });
+        showSnackbar('Conta padrão atualizada');
       } else {
         await api.createDefaultAccount(data);
-        setSnackbar({ message: 'Conta padrão adicionada', severity: 'success' });
+        showSnackbar('Conta padrão adicionada');
       }
       setFormOpen(false);
       setEditingAccount(null);
       loadData();
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+    } catch (err) {
+      showError(err);
     }
   }
 
   async function handleDelete(id: number) {
     try {
       await api.deleteDefaultAccount(id);
-      setSnackbar({ message: 'Conta padrão removida', severity: 'success' });
+      showSnackbar('Conta padrão removida');
       loadData();
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+    } catch (err) {
+      showError(err);
     }
   }
 
@@ -125,13 +129,10 @@ export default function Configuracao() {
       );
       const msgs = [`${result.created.length} mes(es) adicionado(s)!`];
       if (result.errors.length > 0) msgs.push(...result.errors);
-      setSnackbar({
-        message: msgs.join(' | '),
-        severity: result.errors.length > 0 ? 'warning' : 'success',
-      });
+      showSnackbar(msgs.join(' | '), result.errors.length > 0 ? 'warning' : 'success');
       loadData();
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+    } catch (err) {
+      showError(err);
     } finally {
       setCreating(false);
     }
@@ -146,9 +147,9 @@ export default function Configuracao() {
       a.download = 'export-money-manager.zip';
       a.click();
       URL.revokeObjectURL(url);
-      setSnackbar({ message: 'Arquivo exportado com sucesso', severity: 'success' });
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+      showSnackbar('Arquivo exportado com sucesso');
+    } catch (err) {
+      showError(err);
     }
   }
 
@@ -156,10 +157,10 @@ export default function Configuracao() {
     setImporting(true);
     try {
       await api.importData(file);
-      setSnackbar({ message: 'Dados importados com sucesso!', severity: 'success' });
+      showSnackbar('Dados importados com sucesso!');
       loadData();
-    } catch (err: any) {
-      setSnackbar({ message: err.message, severity: 'error' });
+    } catch (err) {
+      showError(err);
     } finally {
       setImporting(false);
     }
@@ -205,7 +206,7 @@ export default function Configuracao() {
                 <ListItem key={acc.id} divider sx={{ px: 0 }}>
                   <ListItemText
                     primary={acc.name}
-                    secondary={`${acc.amount ? `R$ ${acc.amount.toFixed(2)}` : 'Valor variável'}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}`}
+                    secondary={`${formatCurrencyBRLOrFallback(acc.amount, 'Valor variável')}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}`}
                   />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" onClick={() => openEdit(acc)} sx={{ mr: 1 }}>
@@ -356,18 +357,7 @@ export default function Configuracao() {
         initial={editingAccount}
       />
 
-      <Snackbar
-        open={!!snackbar}
-        autoHideDuration={4000}
-        onClose={() => setSnackbar(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        {snackbar ? (
-          <Alert severity={snackbar.severity} onClose={() => setSnackbar(null)}>
-            {snackbar.message}
-          </Alert>
-        ) : undefined}
-      </Snackbar>
+      <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
     </Box>
   );
 }

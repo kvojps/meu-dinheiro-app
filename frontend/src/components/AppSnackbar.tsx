@@ -1,0 +1,24 @@
+import { Alert, Snackbar } from '@mui/material';
+import { SnackbarState } from '../hooks/useSnackbar';
+
+interface AppSnackbarProps {
+  snackbar: SnackbarState | null;
+  onClose: () => void;
+}
+
+export default function AppSnackbar({ snackbar, onClose }: AppSnackbarProps) {
+  return (
+    <Snackbar
+      open={!!snackbar}
+      autoHideDuration={4000}
+      onClose={onClose}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    >
+      {snackbar ? (
+        <Alert severity={snackbar.severity} onClose={onClose}>
+          {snackbar.message}
+        </Alert>
+      ) : undefined}
+    </Snackbar>
+  );
+}
