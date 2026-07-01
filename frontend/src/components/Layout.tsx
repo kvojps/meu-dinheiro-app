@@ -33,21 +33,21 @@ export default function Layout({ children }: LayoutProps) {
             onClick={() => navigate('/')}
             sx={{ fontWeight: location.pathname === '/' ? 'bold' : 'normal' }}
           >
-            Meses
+            Contas
           </Button>
           <Button
             color="inherit"
             onClick={() => navigate('/grafico')}
             sx={{ fontWeight: location.pathname === '/grafico' ? 'bold' : 'normal' }}
           >
-            Gráfico
+            Histórico de Contas
           </Button>
           <Button
             color="inherit"
             onClick={() => navigate('/configuracao')}
             sx={{ fontWeight: location.pathname === '/configuracao' ? 'bold' : 'normal' }}
           >
-            Configuração
+            Configurações
           </Button>
         </Toolbar>
       </AppBar>
