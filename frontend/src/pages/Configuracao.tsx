@@ -13,14 +13,16 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Paper,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Alert,
   Snackbar,
   CircularProgress,
   Divider,
   Stack,
 } from '@mui/material';
-import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon, PlaylistAdd as PlaylistAddIcon } from '@mui/icons-material';
+import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon, PlaylistAdd as PlaylistAddIcon, ExpandMore } from '@mui/icons-material';
 import { api, DefaultAccount } from '../api/client';
 import DefaultAccountForm from '../components/DefaultAccountForm';
 
@@ -128,53 +130,55 @@ export default function Configuracao() {
         Configuração de Pagamento
       </Typography>
 
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h6">
-            Contas Padrão
-          </Typography>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={openAdd}>
-            Adicionar
-          </Button>
-        </Box>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          Contas que serão criadas automaticamente em cada novo mês.
-        </Typography>
-        <Divider sx={{ mb: 2 }} />
-        {defaultAccounts.length === 0 ? (
-          <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
-            Nenhuma conta padrão cadastrada.
-          </Typography>
-        ) : (
-          <List>
-            {defaultAccounts.map((acc) => (
-              <ListItem key={acc.id} divider>
-                <ListItemText
-                  primary={acc.name}
-                  secondary={`R$ ${acc.amount.toFixed(2)}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}`}
-                />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" onClick={() => openEdit(acc)} sx={{ mr: 1 }}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton edge="end" onClick={() => handleDelete(acc.id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
-        )}
-      </Paper>
+      <Accordion defaultExpanded>
+        <AccordionSummary expandIcon={<ExpandMore />}>
+          <Typography variant="h6">Contas Padrão</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant="body2" color="text.secondary">
+              Contas que serão criadas automaticamente em cada novo mês.
+            </Typography>
+            <Button variant="contained" startIcon={<AddIcon />} onClick={openAdd} size="small">
+              Adicionar
+            </Button>
+          </Box>
+          <Divider sx={{ mb: 2 }} />
+          {defaultAccounts.length === 0 ? (
+            <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
+              Nenhuma conta padrão cadastrada.
+            </Typography>
+          ) : (
+            <List disablePadding>
+              {defaultAccounts.map((acc) => (
+                <ListItem key={acc.id} divider sx={{ px: 0 }}>
+                  <ListItemText
+                    primary={acc.name}
+                    secondary={`R$ ${acc.amount.toFixed(2)}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}`}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" onClick={() => openEdit(acc)} sx={{ mr: 1 }}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton edge="end" onClick={() => handleDelete(acc.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </AccordionDetails>
+      </Accordion>
 
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          Adicionar Meses
-        </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          Adicione meses passados ou futuros. As contas padrão serão copiadas automaticamente.
-        </Typography>
-
+      <Accordion defaultExpanded sx={{ mt: 2 }}>
+        <AccordionSummary expandIcon={<ExpandMore />}>
+          <Typography variant="h6">Adicionar Meses</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Adicione meses passados ou futuros. As contas padrão serão copiadas automaticamente.
+          </Typography>
           <Stack direction="row" spacing={2} alignItems="flex-end" flexWrap="wrap" useFlexGap>
             <Box>
               <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
@@ -204,7 +208,6 @@ export default function Configuracao() {
                 />
               </Stack>
             </Box>
-
             <Box>
               <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
                 Até:
@@ -233,7 +236,6 @@ export default function Configuracao() {
                 />
               </Stack>
             </Box>
-
             <Button
               variant="contained"
               onClick={handleAddRange}
@@ -241,9 +243,10 @@ export default function Configuracao() {
               startIcon={<PlaylistAddIcon />}
             >
               {creating ? 'Criando...' : 'Adicionar Meses'}
-          </Button>
+            </Button>
           </Stack>
-        </Paper>
+        </AccordionDetails>
+      </Accordion>
 
       <DefaultAccountForm
         open={formOpen}

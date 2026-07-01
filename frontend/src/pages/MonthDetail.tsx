@@ -13,6 +13,7 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  DialogContentText,
   DialogActions,
   TextField,
   Alert,
@@ -25,6 +26,7 @@ import {
   CheckCircle,
   Cancel,
   Delete as DeleteIcon,
+  DeleteOutline,
   AttachFile,
 } from '@mui/icons-material';
 import { api, MonthDetail as MonthDetailType, Account } from '../api/client';
@@ -44,6 +46,8 @@ export default function MonthDetail() {
   const [newAmount, setNewAmount] = useState('');
   const [newDueDate, setNewDueDate] = useState('');
 
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [snackbar, setSnackbar] = useState<{ message: string; severity: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
@@ -113,6 +117,20 @@ export default function MonthDetail() {
     }
   }
 
+  async function handleDeleteMonth() {
+    if (!id) return;
+    setDeleting(true);
+    try {
+      await api.deleteMonth(Number(id));
+      setDeleteDialogOpen(false);
+      navigate('/');
+    } catch (err: any) {
+      setSnackbar({ message: err.message, severity: 'error' });
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
@@ -140,11 +158,15 @@ export default function MonthDetail() {
         <IconButton onClick={() => navigate('/')}>
           <ArrowBack />
         </IconButton>
-        <Typography variant="h4">{month.label}</Typography>
+        <Typography variant="h4" sx={{ flex: 1 }}>{month.label}</Typography>
         <Chip
           label={`${paidCount}/${month.accounts.length} pagas`}
           color={paidCount === month.accounts.length && month.accounts.length > 0 ? 'success' : 'warning'}
+          sx={{ mr: 1 }}
         />
+        <IconButton color="error" onClick={() => setDeleteDialogOpen(true)}>
+          <DeleteOutline />
+        </IconButton>
       </Box>
 
       {month.accounts.length === 0 ? (
@@ -273,6 +295,22 @@ export default function MonthDetail() {
           <Button onClick={() => setAddDialogOpen(false)}>Cancelar</Button>
           <Button variant="contained" onClick={handleAddAccount} disabled={!newName.trim()}>
             Adicionar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={deleteDialogOpen} onClose={() => !deleting && setDeleteDialogOpen(false)}>
+        <DialogTitle>Excluir mês?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Tem certeza que deseja excluir <strong>{month.label}</strong>?
+            Todas as contas e pagamentos serão removidos.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)} disabled={deleting}>Cancelar</Button>
+          <Button onClick={handleDeleteMonth} color="error" variant="contained" disabled={deleting}>
+            {deleting ? 'Excluindo...' : 'Excluir'}
           </Button>
         </DialogActions>
       </Dialog>

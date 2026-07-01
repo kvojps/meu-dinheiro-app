@@ -59,6 +59,12 @@ export const api = {
     return request<Month[]>('/months');
   },
 
+  deleteMonth(id: number) {
+    return request<{ message: string }>(`/months/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
   createMonth(year?: number, month?: number) {
     return request<Month>('/months', {
       method: 'POST',

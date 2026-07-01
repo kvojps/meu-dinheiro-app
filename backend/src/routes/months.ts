@@ -78,6 +78,16 @@ router.post('/', (req: Request, res: Response) => {
   res.status(201).json(created);
 });
 
+router.delete('/:id', (req: Request, res: Response) => {
+  const db = getDatabase();
+  const existing = db.prepare('SELECT * FROM months WHERE id = ?').get(req.params.id);
+  if (!existing) {
+    return res.status(404).json({ error: 'Month not found' });
+  }
+  db.prepare('DELETE FROM months WHERE id = ?').run(req.params.id);
+  res.json({ message: 'Month deleted' });
+});
+
 router.post('/batch', (req: Request, res: Response) => {
   const { fromYear, fromMonth, toYear, toMonth } = req.body;
   const db = getDatabase();
