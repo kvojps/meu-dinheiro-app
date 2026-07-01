@@ -12,3 +12,17 @@ export function formatDateTimeBR(dateTimeStr: string): string {
   const iso = dateTimeStr.includes('T') ? dateTimeStr : `${dateTimeStr.replace(' ', 'T')}Z`;
   return new Date(iso).toLocaleDateString('pt-BR');
 }
+
+// `paid_at` agora é uma data (sem horário) definida pelo usuário, então formatamos
+// só os primeiros 10 caracteres com a mesma lógica de `formatDateOnlyBR`, cobrindo
+// tanto valores novos ("YYYY-MM-DD") quanto os antigos ("YYYY-MM-DD HH:MM:SS").
+export function formatPaidDateBR(dateTimeStr: string): string {
+  return formatDateOnlyBR(dateTimeStr.slice(0, 10));
+}
+
+export function todayDateString(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
+    now.getDate()
+  ).padStart(2, '0')}`;
+}

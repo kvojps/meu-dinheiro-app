@@ -3,27 +3,36 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
-  CardActions,
   Button,
-  CircularProgress,
   Chip,
   Grid,
   IconButton,
   Paper,
+  Stack,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Menu,
+  ListItemIcon,
+  ListItemText,
+  Pagination,
+  Skeleton,
+  InputAdornment,
   Tooltip,
 } from '@mui/material';
 import {
   ArrowBack,
-  CheckCircle,
-  Delete as DeleteIcon,
+  ArrowBackIosNew,
+  ArrowForwardIos,
   DeleteOutline,
-  Edit as EditIcon,
-  Visibility,
-  AttachFile,
+  ErrorOutline,
+  MoreVert,
+  Search,
 } from '@mui/icons-material';
 import { Account } from '../types/models';
+import AccountCard from '../components/AccountCard';
 import PayDialog from '../components/PayDialog';
 import AddAccountDialog from '../components/AddAccountDialog';
 import EditAccountDialog from '../components/EditAccountDialog';
@@ -32,8 +41,13 @@ import DeleteMonthDialog from '../components/DeleteMonthDialog';
 import ConfirmDialog from '../components/ConfirmDialog';
 import AppSnackbar from '../components/AppSnackbar';
 import { useMonth } from '../hooks/useMonth';
-import { formatDateOnlyBR, formatDateTimeBR } from '../utils/date';
-import { formatCurrencyBRLOrFallback } from '../utils/format';
+import { todayDateString } from '../utils/date';
+import { formatCurrencyBRL } from '../utils/format';
+
+const PAGE_SIZE = 12;
+
+type StatusFilter = 'all' | 'pending' | 'paid' | 'overdue';
+type SortBy = 'due_date' | 'name' | 'amount';
 
 export default function MonthDetail() {
   const { id } = useParams<{ id: string }>();
@@ -41,9 +55,14 @@ export default function MonthDetail() {
   const {
     month,
     loading,
+    notFound,
+    error,
+    prevMonthId,
+    nextMonthId,
     deleting,
     snackbar,
     closeSnackbar,
+    retry,
     pay,
     unpay,
     addAccount,
@@ -58,6 +77,7 @@ export default function MonthDetail() {
   const [addDialogOpen, setAddDialogOpen] = useState(false);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [headerMenuAnchor, setHeaderMenuAnchor] = useState<HTMLElement | null>(null);
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editingAccount, setEditingAccount] = useState<Account | null>(null);
@@ -68,6 +88,11 @@ export default function MonthDetail() {
 
   const [deleteAccountTarget, setDeleteAccountTarget] = useState<Account | null>(null);
   const [deletingAccount, setDeletingAccount] = useState(false);
+
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [sortBy, setSortBy] = useState<SortBy>('due_date');
+  const [page, setPage] = useState(1);
 
   async function handleDeleteAccount() {
     if (!deleteAccountTarget) return;
@@ -91,15 +116,57 @@ export default function MonthDetail() {
     }
   }
 
+  function handleStatusFilter(value: StatusFilter) {
+    setStatusFilter(value);
+    setPage(1);
+  }
+
+  function handleSearch(value: string) {
+    setSearch(value);
+    setPage(1);
+  }
+
+  function handleSort(value: SortBy) {
+    setSortBy(value);
+    setPage(1);
+  }
+
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
-        <CircularProgress />
+      <Box>
+        <Skeleton variant="rounded" height={48} sx={{ mb: 3 }} />
+        <Skeleton variant="rounded" height={120} sx={{ mb: 3 }} />
+        <Skeleton variant="rounded" height={72} sx={{ mb: 3 }} />
+        <Grid container spacing={2}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Grid item xs={12} sm={6} md={4} key={i}>
+              <Skeleton variant="rounded" height={180} />
+            </Grid>
+          ))}
+        </Grid>
       </Box>
     );
   }
 
-  if (!month) {
+  if (error) {
+    return (
+      <Box sx={{ textAlign: 'center', mt: 8 }}>
+        <ErrorOutline sx={{ fontSize: 48, color: 'error.main', mb: 1 }} />
+        <Typography variant="h5" gutterBottom>
+          Não foi possível carregar o mês
+        </Typography>
+        <Typography color="text.secondary" sx={{ mb: 2 }}>
+          Verifique sua conexão e tente novamente.
+        </Typography>
+        <Button variant="contained" onClick={retry}>
+          Tentar novamente
+        </Button>
+        <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
+      </Box>
+    );
+  }
+
+  if (notFound || !month) {
     return (
       <Box sx={{ textAlign: 'center', mt: 8 }}>
         <Typography variant="h5">Mês não encontrado</Typography>
@@ -112,27 +179,137 @@ export default function MonthDetail() {
   }
 
   const paidCount = month.accounts.filter((a) => a.is_paid).length;
+  const today = todayDateString();
+
+  const summary = month.accounts.reduce(
+    (acc, a) => {
+      if (a.is_paid) acc.paid += a.amount ?? 0;
+      else acc.pending += a.amount ?? 0;
+      return acc;
+    },
+    { paid: 0, pending: 0 }
+  );
+  const summaryTotal = summary.paid + summary.pending;
+  const paidPct = summaryTotal > 0 ? (summary.paid / summaryTotal) * 100 : 0;
+  const pendingPct = summaryTotal > 0 ? 100 - paidPct : 0;
+
+  const filteredAccounts = month.accounts
+    .filter((a) => a.name.toLowerCase().includes(search.trim().toLowerCase()))
+    .filter((a) => {
+      if (statusFilter === 'all') return true;
+      if (statusFilter === 'paid') return !!a.is_paid;
+      if (statusFilter === 'overdue') return !a.is_paid && !!a.due_date && a.due_date < today;
+      return !a.is_paid;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'name') return a.name.localeCompare(b.name, 'pt-BR');
+      if (sortBy === 'amount') return (b.amount ?? 0) - (a.amount ?? 0);
+      return (a.due_date || '9999-99-99').localeCompare(b.due_date || '9999-99-99');
+    });
+
+  const totalPages = Math.max(1, Math.ceil(filteredAccounts.length / PAGE_SIZE));
+  const paginatedAccounts = filteredAccounts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
         <IconButton onClick={() => navigate('/')}>
           <ArrowBack />
         </IconButton>
+        <Tooltip title="Mês anterior">
+          <span>
+            <IconButton
+              disabled={!prevMonthId}
+              onClick={() => prevMonthId && navigate(`/months/${prevMonthId}`)}
+            >
+              <ArrowBackIosNew fontSize="small" />
+            </IconButton>
+          </span>
+        </Tooltip>
         <Typography variant="h4" sx={{ flex: 1 }}>
           {month.label}
         </Typography>
+        <Tooltip title="Próximo mês">
+          <span>
+            <IconButton
+              disabled={!nextMonthId}
+              onClick={() => nextMonthId && navigate(`/months/${nextMonthId}`)}
+            >
+              <ArrowForwardIos fontSize="small" />
+            </IconButton>
+          </span>
+        </Tooltip>
         <Chip
           label={`${paidCount}/${month.accounts.length} pagas`}
           color={
             paidCount === month.accounts.length && month.accounts.length > 0 ? 'success' : 'warning'
           }
-          sx={{ mr: 1 }}
+          sx={{ ml: 1 }}
         />
-        <IconButton color="error" onClick={() => setDeleteDialogOpen(true)}>
-          <DeleteOutline />
+        <IconButton onClick={(e) => setHeaderMenuAnchor(e.currentTarget)}>
+          <MoreVert />
         </IconButton>
+        <Menu
+          anchorEl={headerMenuAnchor}
+          open={!!headerMenuAnchor}
+          onClose={() => setHeaderMenuAnchor(null)}
+        >
+          <MenuItem
+            onClick={() => {
+              setHeaderMenuAnchor(null);
+              setDeleteDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <DeleteOutline fontSize="small" color="error" />
+            </ListItemIcon>
+            <ListItemText sx={{ color: 'error.main' }}>Excluir mês</ListItemText>
+          </MenuItem>
+        </Menu>
       </Box>
+
+      {month.accounts.length > 0 && (
+        <Paper sx={{ p: 3, mb: 3 }}>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Total do mês
+          </Typography>
+          <Typography variant="h4" sx={{ fontWeight: 800 }}>
+            {formatCurrencyBRL(summaryTotal)}
+          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              height: 8,
+              borderRadius: 1,
+              overflow: 'hidden',
+              mt: 2,
+              mb: 1.5,
+              bgcolor: 'action.hover',
+            }}
+          >
+            {summaryTotal > 0 && (
+              <>
+                <Box sx={{ width: `${paidPct}%`, bgcolor: 'success.main' }} />
+                <Box sx={{ width: `${pendingPct}%`, bgcolor: 'warning.main' }} />
+              </>
+            )}
+          </Box>
+          <Stack direction="row" spacing={3} flexWrap="wrap">
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }} />
+              <Typography variant="body2" color="text.secondary">
+                Pago: <strong>{formatCurrencyBRL(summary.paid)}</strong>
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'warning.main' }} />
+              <Typography variant="body2" color="text.secondary">
+                Pendente: <strong>{formatCurrencyBRL(summary.pending)}</strong>
+              </Typography>
+            </Stack>
+          </Stack>
+        </Paper>
+      )}
 
       {month.accounts.length === 0 ? (
         <Paper sx={{ p: 6, textAlign: 'center' }}>
@@ -144,105 +321,108 @@ export default function MonthDetail() {
           </Button>
         </Paper>
       ) : (
-        <Grid container spacing={2}>
-          {month.accounts.map((account) => (
-            <Grid item xs={12} sm={6} md={4} key={account.id}>
-              <Card
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  borderLeft: '4px solid',
-                  borderLeftColor: account.is_paid ? 'success.main' : 'warning.main',
+        <>
+          <Paper sx={{ p: 2, mb: 3 }}>
+            <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" useFlexGap>
+              <TextField
+                size="small"
+                placeholder="Buscar conta..."
+                value={search}
+                onChange={(e) => handleSearch(e.target.value)}
+                sx={{ minWidth: 200 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search fontSize="small" />
+                    </InputAdornment>
+                  ),
                 }}
-              >
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
+              />
+
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                <Chip
+                  label="Todas"
+                  size="small"
+                  color={statusFilter === 'all' ? 'primary' : undefined}
+                  variant={statusFilter === 'all' ? 'filled' : 'outlined'}
+                  onClick={() => handleStatusFilter('all')}
+                />
+                <Chip
+                  label="Pendentes"
+                  size="small"
+                  color={statusFilter === 'pending' ? 'primary' : undefined}
+                  variant={statusFilter === 'pending' ? 'filled' : 'outlined'}
+                  onClick={() => handleStatusFilter('pending')}
+                />
+                <Chip
+                  label="Pagas"
+                  size="small"
+                  color={statusFilter === 'paid' ? 'primary' : undefined}
+                  variant={statusFilter === 'paid' ? 'filled' : 'outlined'}
+                  onClick={() => handleStatusFilter('paid')}
+                />
+                <Chip
+                  label="Vencidas"
+                  size="small"
+                  color={statusFilter === 'overdue' ? 'primary' : undefined}
+                  variant={statusFilter === 'overdue' ? 'filled' : 'outlined'}
+                  onClick={() => handleStatusFilter('overdue')}
+                />
+              </Stack>
+
+              <FormControl size="small" sx={{ minWidth: 160, ml: 'auto' }}>
+                <InputLabel>Ordenar por</InputLabel>
+                <Select
+                  value={sortBy}
+                  label="Ordenar por"
+                  onChange={(e) => handleSort(e.target.value as SortBy)}
+                >
+                  <MenuItem value="due_date">Vencimento</MenuItem>
+                  <MenuItem value="name">Nome</MenuItem>
+                  <MenuItem value="amount">Valor</MenuItem>
+                </Select>
+              </FormControl>
+            </Stack>
+          </Paper>
+
+          {filteredAccounts.length === 0 ? (
+            <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
+              Nenhuma conta encontrada com esses filtros.
+            </Typography>
+          ) : (
+            <Grid container spacing={2}>
+              {paginatedAccounts.map((account) => (
+                <Grid item xs={12} sm={6} md={4} key={account.id}>
+                  <AccountCard
+                    account={account}
+                    onPay={() => {
+                      setSelectedAccount(account);
+                      setPayDialogOpen(true);
                     }}
-                  >
-                    <Typography variant="h6" gutterBottom>
-                      {account.name}
-                    </Typography>
-                    <Chip
-                      label={account.is_paid ? 'Paga' : 'Pendente'}
-                      color={account.is_paid ? 'success' : 'warning'}
-                      size="small"
-                      icon={account.is_paid ? <CheckCircle /> : undefined}
-                    />
-                  </Box>
-                  <Typography variant="h5" sx={{ fontWeight: 700 }} gutterBottom>
-                    {formatCurrencyBRLOrFallback(account.amount)}
-                  </Typography>
-                  {account.due_date && (
-                    <Typography variant="body2" color="text.secondary">
-                      Vencimento: {formatDateOnlyBR(account.due_date)}
-                    </Typography>
-                  )}
-                  {account.paid_at && (
-                    <Typography variant="body2" color="text.secondary">
-                      Pago em: {formatDateTimeBR(account.paid_at)}
-                    </Typography>
-                  )}
-                  {account.receipt && (
-                    <Box sx={{ mt: 1 }}>
-                      <Button
-                        size="small"
-                        startIcon={<AttachFile />}
-                        href={`/uploads/${account.receipt}`}
-                        target="_blank"
-                      >
-                        Comprovante
-                      </Button>
-                    </Box>
-                  )}
-                </CardContent>
-                <CardActions>
-                  {account.is_paid ? (
-                    <Button size="small" color="warning" onClick={() => unpay(account.id)}>
-                      Desmarcar
-                    </Button>
-                  ) : (
-                    <Button
-                      size="small"
-                      variant="contained"
-                      onClick={() => {
-                        setSelectedAccount(account);
-                        setPayDialogOpen(true);
-                      }}
-                    >
-                      Pagar
-                    </Button>
-                  )}
-                  <Tooltip title="Ver detalhes">
-                    <IconButton
-                      size="small"
-                      onClick={() => {
-                        setDetailAccount(account);
-                        setDetailOpen(true);
-                      }}
-                    >
-                      <Visibility fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Editar">
-                    <IconButton size="small" onClick={() => openEditDialog(account)}>
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Excluir">
-                    <IconButton size="small" onClick={() => setDeleteAccountTarget(account)}>
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                </CardActions>
-              </Card>
+                    onUnpay={() => unpay(account.id)}
+                    onViewDetail={() => {
+                      setDetailAccount(account);
+                      setDetailOpen(true);
+                    }}
+                    onEdit={() => openEditDialog(account)}
+                    onDelete={() => setDeleteAccountTarget(account)}
+                  />
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
+          )}
+
+          {totalPages > 1 && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={(_, v) => setPage(v)}
+                color="primary"
+              />
+            </Box>
+          )}
+        </>
       )}
 
       <Box sx={{ mt: 3, textAlign: 'center' }}>
@@ -258,9 +438,9 @@ export default function MonthDetail() {
           setPayDialogOpen(false);
           setSelectedAccount(null);
         }}
-        onConfirm={async (file, notes) => {
+        onConfirm={async (file, notes, paidAt) => {
           if (!selectedAccount) return;
-          if (await pay(selectedAccount.id, file, notes)) {
+          if (await pay(selectedAccount.id, file, notes, paidAt)) {
             setPayDialogOpen(false);
             setSelectedAccount(null);
           }

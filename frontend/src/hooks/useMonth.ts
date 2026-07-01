@@ -6,17 +6,32 @@ import { useSnackbar } from './useSnackbar';
 export function useMonth(id: string | undefined) {
   const [month, setMonth] = useState<MonthDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [error, setError] = useState(false);
+  const [prevMonthId, setPrevMonthId] = useState<number | null>(null);
+  const [nextMonthId, setNextMonthId] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
   const { snackbar, showSnackbar, showError, closeSnackbar } = useSnackbar();
 
   async function reload() {
     if (!id) return;
     try {
-      const data = await api.getMonth(Number(id));
-      data.accounts.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+      const [data, allMonths] = await Promise.all([api.getMonth(Number(id)), api.getMonths()]);
       setMonth(data);
+      setNotFound(false);
+      setError(false);
+
+      const sorted = [...allMonths].sort((a, b) => a.year - b.year || a.month - b.month);
+      const index = sorted.findIndex((m) => m.id === data.id);
+      setPrevMonthId(index > 0 ? sorted[index - 1].id : null);
+      setNextMonthId(index >= 0 && index < sorted.length - 1 ? sorted[index + 1].id : null);
     } catch (err) {
-      showError(err);
+      if (err instanceof Error && err.message === 'Month not found') {
+        setNotFound(true);
+      } else {
+        setError(true);
+        showError(err);
+      }
     } finally {
       setLoading(false);
     }
@@ -24,11 +39,19 @@ export function useMonth(id: string | undefined) {
 
   useEffect(() => {
     reload();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  async function pay(accountId: number, file?: File, notes?: string) {
+  function retry() {
+    setLoading(true);
+    setNotFound(false);
+    setError(false);
+    reload();
+  }
+
+  async function pay(accountId: number, file?: File, notes?: string, paidAt?: string) {
     try {
-      await api.payAccount(accountId, file, notes);
+      await api.payAccount(accountId, file, notes, paidAt);
       showSnackbar('Conta marcada como paga!');
       await reload();
       return true;
@@ -107,9 +130,14 @@ export function useMonth(id: string | undefined) {
   return {
     month,
     loading,
+    notFound,
+    error,
+    prevMonthId,
+    nextMonthId,
     deleting,
     snackbar,
     closeSnackbar,
+    retry,
     pay,
     unpay,
     addAccount,

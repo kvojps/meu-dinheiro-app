@@ -15,4 +15,5 @@ export const updateAccountSchema = z.object({
 
 export const payAccountSchema = z.object({
   notes: z.string().optional(),
+  paid_at: z.string().optional(),
 });

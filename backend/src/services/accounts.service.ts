@@ -94,17 +94,30 @@ export function deleteAccount(db: Database.Database, id: number) {
   db.prepare('DELETE FROM accounts WHERE id = ?').run(id);
 }
 
+function todayLocalDate(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
+    now.getDate()
+  ).padStart(2, '0')}`;
+}
+
 export function payAccount(
   db: Database.Database,
   id: number,
   receipt: string | undefined,
-  notes: string | undefined
+  notes: string | undefined,
+  paidAt: string | undefined
 ): AccountRow {
   const existing = getAccountById(db, id);
 
   db.prepare(
-    "UPDATE accounts SET is_paid = 1, paid_at = datetime('now'), receipt = ?, notes = ? WHERE id = ?"
-  ).run(receipt ?? existing.receipt, notes !== undefined ? notes : existing.notes, id);
+    'UPDATE accounts SET is_paid = 1, paid_at = ?, receipt = ?, notes = ? WHERE id = ?'
+  ).run(
+    paidAt || todayLocalDate(),
+    receipt ?? existing.receipt,
+    notes !== undefined ? notes : existing.notes,
+    id
+  );
 
   return getAccountById(db, id);
 }

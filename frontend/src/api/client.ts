@@ -97,10 +97,11 @@ export const api = {
     });
   },
 
-  async payAccount(id: number, file?: File, notes?: string) {
+  async payAccount(id: number, file?: File, notes?: string, paidAt?: string) {
     const formData = new FormData();
     if (file) formData.append('receipt', file);
     if (notes) formData.append('notes', notes);
+    if (paidAt) formData.append('paid_at', paidAt);
 
     const res = await fetch(`${API_BASE}/accounts/${id}/pay`, {
       method: 'PUT',

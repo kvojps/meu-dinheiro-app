@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { AttachFile } from '@mui/icons-material';
 import { Account } from '../types/models';
-import { formatDateOnlyBR, formatDateTimeBR } from '../utils/date';
+import { formatDateOnlyBR, formatPaidDateBR } from '../utils/date';
 import { formatCurrencyBRLOrFallback } from '../utils/format';
 
 interface AccountDetailDialogProps {
@@ -56,7 +56,7 @@ export default function AccountDetailDialog({ open, account, onClose }: AccountD
                 <Typography variant="caption" color="text.secondary">
                   Pago em
                 </Typography>
-                <Typography>{formatDateTimeBR(account.paid_at)}</Typography>
+                <Typography>{formatPaidDateBR(account.paid_at)}</Typography>
               </Box>
             )}
             {account.receipt && (
