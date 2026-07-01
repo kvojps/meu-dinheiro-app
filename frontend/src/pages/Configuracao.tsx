@@ -51,6 +51,7 @@ export default function Configuracao() {
   async function loadData() {
     try {
       const d = await api.getDefaultAccounts();
+      d.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
       setDefaultAccounts(d);
     } catch (err) {
       console.error(err);

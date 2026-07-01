@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/', (req: Request, res: Response) => {
   const db = getDatabase();
-  const accounts = db.prepare('SELECT * FROM default_accounts ORDER BY name COLLATE NOCASE').all();
+  const accounts = db.prepare('SELECT * FROM default_accounts ORDER BY name').all();
   res.json(accounts);
 });
 
