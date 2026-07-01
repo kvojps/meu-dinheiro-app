@@ -114,6 +114,13 @@ export const api = {
     });
   },
 
+  updateAccount(id: number, data: { name?: string; due_date?: string; amount?: number }) {
+    return request<Account>(`/accounts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
   deleteAccount(id: number) {
     return request<{ message: string }>(`/accounts/${id}`, {
       method: 'DELETE',

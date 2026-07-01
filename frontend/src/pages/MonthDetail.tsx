@@ -27,6 +27,7 @@ import {
   Cancel,
   Delete as DeleteIcon,
   DeleteOutline,
+  Edit as EditIcon,
   AttachFile,
 } from '@mui/icons-material';
 import { api, MonthDetail as MonthDetailType, Account } from '../api/client';
@@ -48,6 +49,13 @@ export default function MonthDetail() {
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingAccount, setEditingAccount] = useState<Account | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editAmount, setEditAmount] = useState('');
+  const [editDueDate, setEditDueDate] = useState('');
+
   const [snackbar, setSnackbar] = useState<{ message: string; severity: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
@@ -111,6 +119,31 @@ export default function MonthDetail() {
     try {
       await api.deleteAccount(accountId);
       setSnackbar({ message: 'Conta removida', severity: 'success' });
+      if (id) loadMonth(Number(id));
+    } catch (err: any) {
+      setSnackbar({ message: err.message, severity: 'error' });
+    }
+  }
+
+  function openEditDialog(account: Account) {
+    setEditingAccount(account);
+    setEditName(account.name);
+    setEditAmount(account.amount ? String(account.amount) : '');
+    setEditDueDate(account.due_date || '');
+    setEditDialogOpen(true);
+  }
+
+  async function handleEditAccount() {
+    if (!editingAccount) return;
+    try {
+      await api.updateAccount(editingAccount.id, {
+        name: editName.trim(),
+        amount: editAmount ? Number(editAmount) : 0,
+        due_date: editDueDate || undefined,
+      });
+      setEditDialogOpen(false);
+      setEditingAccount(null);
+      setSnackbar({ message: 'Conta atualizada', severity: 'success' });
       if (id) loadMonth(Number(id));
     } catch (err: any) {
       setSnackbar({ message: err.message, severity: 'error' });
@@ -196,7 +229,7 @@ export default function MonthDetail() {
                     />
                   </Box>
                   <Typography variant="body1" color="text.secondary" gutterBottom>
-                    R$ {account.amount.toFixed(2)}
+                    {account.amount ? `R$ ${account.amount.toFixed(2)}` : 'Valor não definido'}
                   </Typography>
                   {account.due_date && (
                     <Typography variant="body2" color="text.secondary">
@@ -240,7 +273,10 @@ export default function MonthDetail() {
                       Pagar
                     </Button>
                   )}
-                  <IconButton size="small" onClick={() => handleDeleteAccount(account.id)} sx={{ ml: 'auto' }}>
+                  <IconButton size="small" onClick={() => openEditDialog(account)}>
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton size="small" onClick={() => handleDeleteAccount(account.id)}>
                     <DeleteIcon fontSize="small" />
                   </IconButton>
                 </CardActions>
@@ -295,6 +331,43 @@ export default function MonthDetail() {
           <Button onClick={() => setAddDialogOpen(false)}>Cancelar</Button>
           <Button variant="contained" onClick={handleAddAccount} disabled={!newName.trim()}>
             Adicionar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>Editar Conta</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            label="Nome"
+            fullWidth
+            value={editName}
+            onChange={(e) => setEditName(e.target.value)}
+            sx={{ mt: 1, mb: 2 }}
+          />
+          <TextField
+            label="Valor (R$)"
+            type="number"
+            fullWidth
+            value={editAmount}
+            onChange={(e) => setEditAmount(e.target.value)}
+            helperText="Deixe em branco para valor variável."
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Data de vencimento"
+            type="date"
+            fullWidth
+            value={editDueDate}
+            onChange={(e) => setEditDueDate(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditDialogOpen(false)}>Cancelar</Button>
+          <Button variant="contained" onClick={handleEditAccount} disabled={!editName.trim()}>
+            Salvar
           </Button>
         </DialogActions>
       </Dialog>

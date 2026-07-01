@@ -57,11 +57,12 @@ export default function DefaultAccountForm({ open, onClose, onSave, initial }: D
           sx={{ mt: 1, mb: 2 }}
         />
         <TextField
-          label="Valor (R$)"
+          label="Valor (R$) - opcional"
           type="number"
           fullWidth
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
+          helperText="Deixe em branco para contas de valor variável."
           sx={{ mb: 2 }}
         />
         <TextField

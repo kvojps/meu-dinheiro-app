@@ -154,7 +154,7 @@ export default function Configuracao() {
                 <ListItem key={acc.id} divider sx={{ px: 0 }}>
                   <ListItemText
                     primary={acc.name}
-                    secondary={`R$ ${acc.amount.toFixed(2)}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}`}
+                    secondary={`${acc.amount ? `R$ ${acc.amount.toFixed(2)}` : 'Valor variável'}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}`}
                   />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" onClick={() => openEdit(acc)} sx={{ mr: 1 }}>
