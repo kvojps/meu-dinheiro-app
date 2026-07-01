@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Grid,
@@ -6,7 +6,6 @@ import {
   CardContent,
   CardActionArea,
   Typography,
-  CircularProgress,
   Box,
   Chip,
   Paper,
@@ -15,58 +14,115 @@ import {
   Select,
   MenuItem,
   Stack,
-  Pagination,
+  Button,
   LinearProgress,
+  Skeleton,
 } from '@mui/material';
+import { ErrorOutline, ReportProblemOutlined } from '@mui/icons-material';
 import { api } from '../api/client';
 import { Month } from '../types/models';
 import AppSnackbar from '../components/AppSnackbar';
 import { useSnackbar } from '../hooks/useSnackbar';
 import { formatCurrencyBRL } from '../utils/format';
 
-const PAGE_SIZE = 12;
+const INITIAL_VISIBLE = 12;
+const LOAD_MORE_STEP = 12;
+
+function monthKey(year: number, month: number) {
+  return `${year}-${String(month).padStart(2, '0')}`;
+}
 
 export default function Dashboard() {
   const [months, setMonths] = useState<Month[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [fromOverride, setFromOverride] = useState('');
   const [toOverride, setToOverride] = useState('');
-  const [page, setPage] = useState(1);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
   const navigate = useNavigate();
   const { snackbar, showError, closeSnackbar } = useSnackbar();
 
-  useEffect(() => {
+  const loadMonths = useCallback(() => {
     api
       .getMonths()
-      .then((data) => setMonths(data))
-      .catch(showError)
+      .then((data) => {
+        setMonths(data);
+        setError(false);
+      })
+      .catch((err) => {
+        setError(true);
+        showError(err);
+      })
       .finally(() => setLoading(false));
   }, [showError]);
+
+  useEffect(() => {
+    loadMonths();
+  }, [loadMonths]);
+
+  function handleRetry() {
+    setLoading(true);
+    setError(false);
+    loadMonths();
+  }
 
   const monthOptions = useMemo(() => {
     return [...months]
       .sort((a, b) => a.year - b.year || a.month - b.month)
       .map((m) => ({
         label: m.label,
-        value: `${m.year}-${String(m.month).padStart(2, '0')}`,
+        value: monthKey(m.year, m.month),
       }));
   }, [months]);
 
-  const fromValue = fromOverride || monthOptions[0]?.value || '';
-  const toValue = toOverride || monthOptions[monthOptions.length - 1]?.value || '';
+  const firstOption = monthOptions[0]?.value ?? '';
+  const lastOption = monthOptions[monthOptions.length - 1]?.value ?? '';
+  const fromValue = fromOverride || firstOption;
+  const toValue = toOverride || lastOption;
+  const isFiltered = fromValue !== firstOption || toValue !== lastOption;
+
+  function applyRange(from: string, to: string) {
+    setFromOverride(from);
+    setToOverride(to);
+    setVisibleCount(INITIAL_VISIBLE);
+  }
+
+  function handleFromChange(value: string) {
+    applyRange(value, value > toValue ? value : toOverride);
+  }
+
+  function handleToChange(value: string) {
+    applyRange(value < fromValue ? value : fromOverride, value);
+  }
+
+  function handleClearRange() {
+    applyRange('', '');
+  }
+
+  function handleQuickLast3() {
+    if (monthOptions.length === 0) return;
+    const start = monthOptions[Math.max(0, monthOptions.length - 3)].value;
+    applyRange(start, lastOption);
+  }
+
+  function handleQuickThisYear() {
+    const now = new Date();
+    const yearOptions = monthOptions.filter((opt) => opt.value.startsWith(`${now.getFullYear()}`));
+    if (yearOptions.length === 0) return;
+    applyRange(yearOptions[0].value, yearOptions[yearOptions.length - 1].value);
+  }
 
   const filteredMonths = useMemo(() => {
-    return months.filter((m) => {
-      const key = `${m.year}-${String(m.month).padStart(2, '0')}`;
-      return key >= fromValue && key <= toValue;
-    });
+    return months
+      .filter((m) => {
+        const key = monthKey(m.year, m.month);
+        return key >= fromValue && key <= toValue;
+      })
+      .sort((a, b) => b.year - a.year || b.month - a.month);
   }, [months, fromValue, toValue]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredMonths.length / PAGE_SIZE));
-  const paginatedMonths = useMemo(() => {
-    const start = (page - 1) * PAGE_SIZE;
-    return filteredMonths.slice(start, start + PAGE_SIZE);
-  }, [filteredMonths, page]);
+  const visibleMonths = filteredMonths.slice(0, visibleCount);
+  const hasMore = filteredMonths.length > visibleCount;
 
   const summary = useMemo(
     () =>
@@ -80,10 +136,43 @@ export default function Dashboard() {
     [filteredMonths]
   );
 
+  const summaryTotal = summary.paid + summary.pending;
+  const paidPct = summaryTotal > 0 ? (summary.paid / summaryTotal) * 100 : 0;
+  const pendingPct = summaryTotal > 0 ? 100 - paidPct : 0;
+
+  const now = new Date();
+  const currentKey = monthKey(now.getFullYear(), now.getMonth() + 1);
+
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
-        <CircularProgress />
+      <Box>
+        <Skeleton variant="rounded" height={148} sx={{ mb: 3 }} />
+        <Skeleton variant="rounded" height={72} sx={{ mb: 3 }} />
+        <Grid container spacing={3}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Grid item xs={12} sm={6} md={4} key={i}>
+              <Skeleton variant="rounded" height={150} />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ textAlign: 'center', mt: 8 }}>
+        <ErrorOutline sx={{ fontSize: 48, color: 'error.main', mb: 1 }} />
+        <Typography variant="h5" gutterBottom>
+          Não foi possível carregar os meses
+        </Typography>
+        <Typography color="text.secondary" sx={{ mb: 2 }}>
+          Verifique sua conexão e tente novamente.
+        </Typography>
+        <Button variant="contained" onClick={handleRetry}>
+          Tentar novamente
+        </Button>
+        <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
       </Box>
     );
   }
@@ -104,41 +193,51 @@ export default function Dashboard() {
 
   return (
     <Box>
-      <Grid container spacing={2} sx={{ mb: 3 }}>
-        <Grid item xs={6} sm={4}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              Pago no período
+      <Paper sx={{ p: 3, mb: 3 }}>
+        <Typography variant="body2" color="text.secondary" gutterBottom>
+          Total no período
+        </Typography>
+        <Typography variant="h3" sx={{ fontWeight: 800 }}>
+          {formatCurrencyBRL(summaryTotal)}
+        </Typography>
+
+        <Box
+          sx={{
+            display: 'flex',
+            height: 8,
+            borderRadius: 1,
+            overflow: 'hidden',
+            mt: 2.5,
+            mb: 1.5,
+            bgcolor: 'action.hover',
+          }}
+        >
+          {summaryTotal > 0 && (
+            <>
+              <Box sx={{ width: `${paidPct}%`, bgcolor: 'success.main' }} />
+              <Box sx={{ width: `${pendingPct}%`, bgcolor: 'warning.main' }} />
+            </>
+          )}
+        </Box>
+
+        <Stack direction="row" spacing={3} flexWrap="wrap">
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }} />
+            <Typography variant="body2" color="text.secondary">
+              Pago: <strong>{formatCurrencyBRL(summary.paid)}</strong>
             </Typography>
-            <Typography variant="h5" sx={{ fontWeight: 700 }} color="success.main">
-              {formatCurrencyBRL(summary.paid)}
+          </Stack>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'warning.main' }} />
+            <Typography variant="body2" color="text.secondary">
+              Pendente: <strong>{formatCurrencyBRL(summary.pending)}</strong>
             </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={6} sm={4}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              Pendente no período
-            </Typography>
-            <Typography variant="h5" sx={{ fontWeight: 700 }} color="warning.main">
-              {formatCurrencyBRL(summary.pending)}
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              Total no período
-            </Typography>
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>
-              {formatCurrencyBRL(summary.paid + summary.pending)}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
+          </Stack>
+        </Stack>
+      </Paper>
 
       <Paper sx={{ p: 2, mb: 3 }}>
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" useFlexGap>
           <Typography variant="subtitle1" sx={{ minWidth: 80 }}>
             Exibir meses:
           </Typography>
@@ -147,10 +246,7 @@ export default function Dashboard() {
             <Select
               value={fromValue}
               label="De"
-              onChange={(e) => {
-                setFromOverride(e.target.value);
-                setPage(1);
-              }}
+              onChange={(e) => handleFromChange(e.target.value)}
             >
               {monthOptions.map((opt) => (
                 <MenuItem key={opt.value} value={opt.value}>
@@ -161,14 +257,7 @@ export default function Dashboard() {
           </FormControl>
           <FormControl size="small" sx={{ minWidth: 180 }}>
             <InputLabel>Até</InputLabel>
-            <Select
-              value={toValue}
-              label="Até"
-              onChange={(e) => {
-                setToOverride(e.target.value);
-                setPage(1);
-              }}
-            >
+            <Select value={toValue} label="Até" onChange={(e) => handleToChange(e.target.value)}>
               {monthOptions.map((opt) => (
                 <MenuItem key={opt.value} value={opt.value}>
                   {opt.label}
@@ -176,18 +265,42 @@ export default function Dashboard() {
               ))}
             </Select>
           </FormControl>
+
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            <Chip label="Últimos 3 meses" size="small" variant="outlined" onClick={handleQuickLast3} />
+            <Chip label="Este ano" size="small" variant="outlined" onClick={handleQuickThisYear} />
+            <Chip label="Tudo" size="small" variant="outlined" onClick={handleClearRange} />
+          </Stack>
+
+          {isFiltered && (
+            <Button size="small" onClick={handleClearRange} sx={{ ml: 'auto' }}>
+              Limpar filtro
+            </Button>
+          )}
         </Stack>
       </Paper>
 
       <Grid container spacing={3}>
-        {paginatedMonths.map((month) => {
+        {visibleMonths.map((month) => {
           const total = month.total_accounts ?? 0;
           const paid = month.paid_accounts ?? 0;
+          const overdue = month.overdue_accounts ?? 0;
           const allPaid = total > 0 && paid === total;
+          const isCurrent = monthKey(month.year, month.month) === currentKey;
+
+          let statusColor: 'success' | 'warning' | 'default' = 'default';
+          if (total > 0) {
+            statusColor = allPaid ? 'success' : paid > 0 ? 'warning' : 'default';
+          }
 
           return (
             <Grid item xs={12} sm={6} md={4} key={month.id}>
-              <Card>
+              <Card
+                sx={{
+                  borderLeft: isCurrent ? '4px solid' : undefined,
+                  borderLeftColor: isCurrent ? 'primary.main' : undefined,
+                }}
+              >
                 <CardActionArea onClick={() => navigate(`/months/${month.id}`)}>
                   <CardContent>
                     <Box
@@ -196,20 +309,30 @@ export default function Dashboard() {
                         justifyContent: 'space-between',
                         alignItems: 'flex-start',
                         mb: 1.5,
+                        gap: 1,
                       }}
                     >
-                      <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                        {month.label}
-                      </Typography>
-                      {total > 0 ? (
-                        <Chip
-                          label={`${paid}/${total} pagas`}
-                          color={allPaid ? 'success' : 'warning'}
-                          size="small"
-                        />
-                      ) : (
-                        <Chip label="Sem contas" size="small" />
-                      )}
+                      <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                          {month.label}
+                        </Typography>
+                        {isCurrent && <Chip label="Atual" color="primary" size="small" />}
+                      </Stack>
+                      <Stack direction="row" spacing={0.5} flexWrap="wrap" justifyContent="flex-end">
+                        {total > 0 ? (
+                          <Chip label={`${paid}/${total} pagas`} color={statusColor} size="small" />
+                        ) : (
+                          <Chip label="Sem contas" size="small" />
+                        )}
+                        {overdue > 0 && (
+                          <Chip
+                            icon={<ReportProblemOutlined fontSize="small" />}
+                            label={`${overdue} vencida${overdue > 1 ? 's' : ''}`}
+                            color="error"
+                            size="small"
+                          />
+                        )}
+                      </Stack>
                     </Box>
 
                     <Typography
@@ -247,15 +370,11 @@ export default function Dashboard() {
         </Typography>
       )}
 
-      {totalPages > 1 && (
+      {hasMore && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={(_, v) => setPage(v)}
-            color="primary"
-            size="large"
-          />
+          <Button variant="outlined" onClick={() => setVisibleCount((v) => v + LOAD_MORE_STEP)}>
+            Carregar mais meses
+          </Button>
         </Box>
       )}
 

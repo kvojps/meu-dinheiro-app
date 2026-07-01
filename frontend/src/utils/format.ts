@@ -1,5 +1,10 @@
+const currencyFormatter = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+});
+
 export function formatCurrencyBRL(amount: number): string {
-  return `R$ ${amount.toFixed(2)}`;
+  return currencyFormatter.format(amount);
 }
 
 export function formatCurrencyBRLOrFallback(
