@@ -15,14 +15,18 @@ import {
   Select,
   MenuItem,
   Stack,
+  Pagination,
 } from '@mui/material';
 import { api, Month } from '../api/client';
+
+const PAGE_SIZE = 12;
 
 export default function Dashboard() {
   const [months, setMonths] = useState<Month[]>([]);
   const [loading, setLoading] = useState(true);
   const [fromValue, setFromValue] = useState('');
   const [toValue, setToValue] = useState('');
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,6 +58,16 @@ export default function Dashboard() {
       return key >= fromValue && key <= toValue;
     });
   }, [months, fromValue, toValue]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredMonths.length / PAGE_SIZE));
+  const paginatedMonths = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return filteredMonths.slice(start, start + PAGE_SIZE);
+  }, [filteredMonths, page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [fromValue, toValue]);
 
   if (loading) {
     return (
@@ -115,7 +129,7 @@ export default function Dashboard() {
       </Paper>
 
       <Grid container spacing={3}>
-        {filteredMonths.map((month) => {
+        {paginatedMonths.map((month) => {
           const total = month.total_accounts ?? 0;
           const paid = month.paid_accounts ?? 0;
           const allPaid = total > 0 && paid === total;
@@ -156,6 +170,18 @@ export default function Dashboard() {
         <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
           Nenhum mês encontrado no intervalo selecionado.
         </Typography>
+      )}
+
+      {totalPages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={(_, v) => setPage(v)}
+            color="primary"
+            size="large"
+          />
+        </Box>
       )}
     </Box>
   );
