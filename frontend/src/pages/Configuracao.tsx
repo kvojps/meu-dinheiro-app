@@ -9,10 +9,6 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -22,13 +18,31 @@ import {
   Divider,
   Stack,
 } from '@mui/material';
-import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon, PlaylistAdd as PlaylistAddIcon, FileUpload as FileUploadIcon, FileDownload as FileDownloadIcon, ExpandMore } from '@mui/icons-material';
+import {
+  Add as AddIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  PlaylistAdd as PlaylistAddIcon,
+  FileUpload as FileUploadIcon,
+  FileDownload as FileDownloadIcon,
+  ExpandMore,
+} from '@mui/icons-material';
 import { api, DefaultAccount } from '../api/client';
 import DefaultAccountForm from '../components/DefaultAccountForm';
 
 const MONTH_NAMES = [
-  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+  'Janeiro',
+  'Fevereiro',
+  'Março',
+  'Abril',
+  'Maio',
+  'Junho',
+  'Julho',
+  'Agosto',
+  'Setembro',
+  'Outubro',
+  'Novembro',
+  'Dezembro',
 ];
 
 export default function Configuracao() {
@@ -42,7 +56,10 @@ export default function Configuracao() {
   const [creating, setCreating] = useState(false);
 
   const [importing, setImporting] = useState(false);
-  const [snackbar, setSnackbar] = useState<{ message: string; severity: 'success' | 'error' | 'warning' } | null>(null);
+  const [snackbar, setSnackbar] = useState<{
+    message: string;
+    severity: 'success' | 'error' | 'warning';
+  } | null>(null);
 
   useEffect(() => {
     loadData();
@@ -101,8 +118,10 @@ export default function Configuracao() {
     setCreating(true);
     try {
       const result = await api.createMonthsBatch(
-        range.fromYear, range.fromMonth,
-        range.toYear, range.toMonth
+        range.fromYear,
+        range.fromMonth,
+        range.toYear,
+        range.toMonth
       );
       const msgs = [`${result.created.length} mes(es) adicionado(s)!`];
       if (result.errors.length > 0) msgs.push(...result.errors);
@@ -165,7 +184,9 @@ export default function Configuracao() {
           <Typography variant="h6">Contas Padrão</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Box
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
+          >
             <Typography variant="body2" color="text.secondary">
               Contas que serão criadas automaticamente em cada novo mês.
             </Typography>
@@ -211,7 +232,11 @@ export default function Configuracao() {
           </Typography>
           <Stack direction="row" spacing={2} alignItems="flex-end" flexWrap="wrap" useFlexGap>
             <Box>
-              <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ mb: 0.5, display: 'block' }}
+              >
                 De:
               </Typography>
               <Stack direction="row" spacing={1}>
@@ -225,7 +250,9 @@ export default function Configuracao() {
                   size="small"
                 >
                   {MONTH_NAMES.map((n, i) => (
-                    <option key={i} value={i + 1}>{n}</option>
+                    <option key={i} value={i + 1}>
+                      {n}
+                    </option>
                   ))}
                 </TextField>
                 <TextField
@@ -239,7 +266,11 @@ export default function Configuracao() {
               </Stack>
             </Box>
             <Box>
-              <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ mb: 0.5, display: 'block' }}
+              >
                 Até:
               </Typography>
               <Stack direction="row" spacing={1}>
@@ -253,7 +284,9 @@ export default function Configuracao() {
                   size="small"
                 >
                   {MONTH_NAMES.map((n, i) => (
-                    <option key={i} value={i + 1}>{n}</option>
+                    <option key={i} value={i + 1}>
+                      {n}
+                    </option>
                   ))}
                 </TextField>
                 <TextField
@@ -284,8 +317,8 @@ export default function Configuracao() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Exporta todos os meses, contas e comprovantes em um arquivo ZIP.
-            A importação substitui todos os dados atuais.
+            Exporta todos os meses, contas e comprovantes em um arquivo ZIP. A importação substitui
+            todos os dados atuais.
           </Typography>
           <Stack direction="row" spacing={2}>
             <Button variant="outlined" startIcon={<FileDownloadIcon />} onClick={handleExport}>
@@ -315,7 +348,10 @@ export default function Configuracao() {
 
       <DefaultAccountForm
         open={formOpen}
-        onClose={() => { setFormOpen(false); setEditingAccount(null); }}
+        onClose={() => {
+          setFormOpen(false);
+          setEditingAccount(null);
+        }}
         onSave={handleSaveDefault}
         initial={editingAccount}
       />

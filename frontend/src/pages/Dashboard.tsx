@@ -30,7 +30,8 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.getMonths()
+    api
+      .getMonths()
       .then((data) => setMonths(data))
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -99,11 +100,7 @@ export default function Dashboard() {
           </Typography>
           <FormControl size="small" sx={{ minWidth: 180 }}>
             <InputLabel>De</InputLabel>
-            <Select
-              value={fromValue}
-              label="De"
-              onChange={(e) => setFromValue(e.target.value)}
-            >
+            <Select value={fromValue} label="De" onChange={(e) => setFromValue(e.target.value)}>
               {monthOptions.map((opt) => (
                 <MenuItem key={opt.value} value={opt.value}>
                   {opt.label}
@@ -113,11 +110,7 @@ export default function Dashboard() {
           </FormControl>
           <FormControl size="small" sx={{ minWidth: 180 }}>
             <InputLabel>Até</InputLabel>
-            <Select
-              value={toValue}
-              label="Até"
-              onChange={(e) => setToValue(e.target.value)}
-            >
+            <Select value={toValue} label="Até" onChange={(e) => setToValue(e.target.value)}>
               {monthOptions.map((opt) => (
                 <MenuItem key={opt.value} value={opt.value}>
                   {opt.label}

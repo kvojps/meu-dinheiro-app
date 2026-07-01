@@ -25,7 +25,11 @@ export function createDefaultAccount(
 
     const defaultId = result.lastInsertRowid as number;
 
-    const months = db.prepare('SELECT * FROM months').all() as { id: number; year: number; month: number }[];
+    const months = db.prepare('SELECT * FROM months').all() as {
+      id: number;
+      year: number;
+      month: number;
+    }[];
     const insertAccount = db.prepare(
       'INSERT INTO accounts (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)'
     );
@@ -42,13 +46,14 @@ export function createDefaultAccount(
   });
 
   const defaultId = create();
-  return db.prepare('SELECT * FROM default_accounts WHERE id = ?').get(defaultId) as DefaultAccountRow;
+  return db
+    .prepare('SELECT * FROM default_accounts WHERE id = ?')
+    .get(defaultId) as DefaultAccountRow;
 }
 
 export function getDefaultAccountById(db: Database.Database, id: number): DefaultAccountRow {
   const existing = db.prepare('SELECT * FROM default_accounts WHERE id = ?').get(id) as
-    | DefaultAccountRow
-    | undefined;
+    DefaultAccountRow | undefined;
   if (!existing) {
     throw new AppError(404, 'Default account not found');
   }
@@ -62,9 +67,7 @@ export function updateDefaultAccount(
 ): DefaultAccountRow {
   const existing = getDefaultAccountById(db, id);
 
-  db.prepare(
-    'UPDATE default_accounts SET name = ?, due_day = ?, amount = ? WHERE id = ?'
-  ).run(
+  db.prepare('UPDATE default_accounts SET name = ?, due_day = ?, amount = ? WHERE id = ?').run(
     data.name ?? existing.name,
     data.due_day !== undefined ? data.due_day : existing.due_day,
     data.amount !== undefined ? data.amount : existing.amount,

@@ -7,10 +7,14 @@ import { runSetup } from '../services/setup.service';
 
 const router = Router();
 
-router.post('/setup', validateBody(setupSchema), asyncHandler(async (req: Request, res: Response) => {
-  const db = getDatabase();
-  const months = runSetup(db, req.body.initialYear, req.body.initialMonth);
-  res.json({ months });
-}));
+router.post(
+  '/setup',
+  validateBody(setupSchema),
+  asyncHandler(async (req: Request, res: Response) => {
+    const db = getDatabase();
+    const months = runSetup(db, req.body.initialYear, req.body.initialMonth);
+    res.json({ months });
+  })
+);
 
 export default router;

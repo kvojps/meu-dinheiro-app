@@ -55,11 +55,7 @@ export default function PayDialog({ open, account, onClose, onConfirm }: PayDial
         )}
 
         <Box sx={{ mt: 3, mb: 2 }}>
-          <Button
-            variant="outlined"
-            component="label"
-            startIcon={<span>📎</span>}
-          >
+          <Button variant="outlined" component="label" startIcon={<span>📎</span>}>
             {file ? file.name : 'Selecionar Comprovante'}
             <input
               ref={fileRef}
@@ -73,7 +69,10 @@ export default function PayDialog({ open, account, onClose, onConfirm }: PayDial
             <Button
               size="small"
               color="error"
-              onClick={() => { setFile(null); if (fileRef.current) fileRef.current.value = ''; }}
+              onClick={() => {
+                setFile(null);
+                if (fileRef.current) fileRef.current.value = '';
+              }}
               sx={{ ml: 1 }}
             >
               Remover

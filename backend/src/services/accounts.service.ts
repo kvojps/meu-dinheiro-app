@@ -25,7 +25,8 @@ export function listAccountsForMonth(db: Database.Database, monthId: number) {
 }
 
 export function getAccountById(db: Database.Database, id: number): AccountRow {
-  const account = db.prepare('SELECT * FROM accounts WHERE id = ?').get(id) as AccountRow | undefined;
+  const account = db.prepare('SELECT * FROM accounts WHERE id = ?').get(id) as
+    AccountRow | undefined;
   if (!account) {
     throw new AppError(404, 'Account not found');
   }
@@ -34,7 +35,9 @@ export function getAccountById(db: Database.Database, id: number): AccountRow {
 
 export function getAccountForFilename(db: Database.Database, id: number | string) {
   return db
-    .prepare('SELECT a.*, m.label as month_label FROM accounts a JOIN months m ON a.month_id = m.id WHERE a.id = ?')
+    .prepare(
+      'SELECT a.*, m.label as month_label FROM accounts a JOIN months m ON a.month_id = m.id WHERE a.id = ?'
+    )
     .get(id) as (AccountRow & { month_label: string }) | undefined;
 }
 
@@ -52,7 +55,9 @@ export function createAccount(
     .prepare('INSERT INTO accounts (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)')
     .run(monthId, data.name, data.due_date || null, data.amount || 0);
 
-  return db.prepare('SELECT * FROM accounts WHERE id = ?').get(result.lastInsertRowid) as AccountRow;
+  return db
+    .prepare('SELECT * FROM accounts WHERE id = ?')
+    .get(result.lastInsertRowid) as AccountRow;
 }
 
 export function updateAccount(
@@ -62,9 +67,7 @@ export function updateAccount(
 ): AccountRow {
   const existing = getAccountById(db, id);
 
-  db.prepare(
-    'UPDATE accounts SET name = ?, due_date = ?, amount = ?, notes = ? WHERE id = ?'
-  ).run(
+  db.prepare('UPDATE accounts SET name = ?, due_date = ?, amount = ?, notes = ? WHERE id = ?').run(
     data.name ?? existing.name,
     data.due_date !== undefined ? data.due_date : existing.due_date,
     data.amount !== undefined ? data.amount : existing.amount,
@@ -110,7 +113,9 @@ export function unpayAccount(db: Database.Database, id: number): AccountRow {
   const existing = getAccountById(db, id);
   deleteReceiptFile(existing.receipt);
 
-  db.prepare('UPDATE accounts SET is_paid = 0, paid_at = NULL, receipt = NULL WHERE id = ?').run(id);
+  db.prepare('UPDATE accounts SET is_paid = 0, paid_at = NULL, receipt = NULL WHERE id = ?').run(
+    id
+  );
 
   return getAccountById(db, id);
 }

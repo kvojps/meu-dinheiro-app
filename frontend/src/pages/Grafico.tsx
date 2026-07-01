@@ -1,7 +1,16 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Box, Typography, CircularProgress, IconButton, Paper } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  CartesianGrid,
+  ResponsiveContainer,
+} from 'recharts';
 import { api, Month } from '../api/client';
 
 export default function Grafico() {
@@ -9,7 +18,8 @@ export default function Grafico() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.getMonths()
+    api
+      .getMonths()
       .then(setData)
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -31,9 +41,7 @@ export default function Grafico() {
   const currentIndex = years.indexOf(selectedYear);
 
   const yearMonths = useMemo(() => {
-    return [...data]
-      .filter((m) => m.year === selectedYear)
-      .sort((a, b) => a.month - b.month);
+    return [...data].filter((m) => m.year === selectedYear).sort((a, b) => a.month - b.month);
   }, [data, selectedYear]);
 
   const chartData = yearMonths.map((m) => ({
@@ -56,7 +64,16 @@ export default function Grafico() {
         Histórico Mensal
       </Typography>
 
-      <Paper sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, p: 2, mb: 3 }}>
+      <Paper
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 2,
+          p: 2,
+          mb: 3,
+        }}
+      >
         <IconButton
           disabled={currentIndex >= years.length - 1}
           onClick={() => setSelectedYear(years[currentIndex + 1])}

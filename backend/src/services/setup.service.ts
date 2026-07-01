@@ -2,7 +2,11 @@ import Database from 'better-sqlite3';
 import { AppError } from '../errors/AppError';
 import { createMonthWithDefaults, MonthRow } from './months.service';
 
-export function runSetup(db: Database.Database, initialYear: number, initialMonth: number): MonthRow[] {
+export function runSetup(
+  db: Database.Database,
+  initialYear: number,
+  initialMonth: number
+): MonthRow[] {
   const existing = db.prepare('SELECT COUNT(*) as count FROM months').get() as { count: number };
   if (existing.count > 0) {
     throw new AppError(400, 'Setup already completed. Months already exist.');

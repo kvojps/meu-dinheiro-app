@@ -24,7 +24,6 @@ import {
 import {
   ArrowBack,
   CheckCircle,
-  Cancel,
   Delete as DeleteIcon,
   DeleteOutline,
   Edit as EditIcon,
@@ -62,7 +61,10 @@ export default function MonthDetail() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailAccount, setDetailAccount] = useState<Account | null>(null);
 
-  const [snackbar, setSnackbar] = useState<{ message: string; severity: 'success' | 'error' } | null>(null);
+  const [snackbar, setSnackbar] = useState<{
+    message: string;
+    severity: 'success' | 'error';
+  } | null>(null);
 
   useEffect(() => {
     if (id) loadMonth(Number(id));
@@ -200,10 +202,14 @@ export default function MonthDetail() {
         <IconButton onClick={() => navigate('/')}>
           <ArrowBack />
         </IconButton>
-        <Typography variant="h4" sx={{ flex: 1 }}>{month.label}</Typography>
+        <Typography variant="h4" sx={{ flex: 1 }}>
+          {month.label}
+        </Typography>
         <Chip
           label={`${paidCount}/${month.accounts.length} pagas`}
-          color={paidCount === month.accounts.length && month.accounts.length > 0 ? 'success' : 'warning'}
+          color={
+            paidCount === month.accounts.length && month.accounts.length > 0 ? 'success' : 'warning'
+          }
           sx={{ mr: 1 }}
         />
         <IconButton color="error" onClick={() => setDeleteDialogOpen(true)}>
@@ -224,9 +230,22 @@ export default function MonthDetail() {
         <Grid container spacing={2}>
           {month.accounts.map((account) => (
             <Grid item xs={12} sm={6} md={4} key={account.id}>
-              <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', opacity: account.is_paid ? 0.85 : 1 }}>
+              <Card
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  opacity: account.is_paid ? 0.85 : 1,
+                }}
+              >
                 <CardContent sx={{ flexGrow: 1 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                    }}
+                  >
                     <Typography variant="h6" gutterBottom>
                       {account.name}
                     </Typography>
@@ -272,12 +291,21 @@ export default function MonthDetail() {
                     <Button
                       size="small"
                       variant="contained"
-                      onClick={() => { setSelectedAccount(account); setPayDialogOpen(true); }}
+                      onClick={() => {
+                        setSelectedAccount(account);
+                        setPayDialogOpen(true);
+                      }}
                     >
                       Pagar
                     </Button>
                   )}
-                  <IconButton size="small" onClick={() => { setDetailAccount(account); setDetailOpen(true); }}>
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      setDetailAccount(account);
+                      setDetailOpen(true);
+                    }}
+                  >
                     <Visibility fontSize="small" />
                   </IconButton>
                   <IconButton size="small" onClick={() => openEditDialog(account)}>
@@ -302,7 +330,10 @@ export default function MonthDetail() {
       <PayDialog
         open={payDialogOpen}
         account={selectedAccount}
-        onClose={() => { setPayDialogOpen(false); setSelectedAccount(null); }}
+        onClose={() => {
+          setPayDialogOpen(false);
+          setSelectedAccount(null);
+        }}
         onConfirm={handlePay}
       />
 
@@ -342,7 +373,12 @@ export default function MonthDetail() {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)} maxWidth="sm" fullWidth>
+      <Dialog
+        open={editDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle>Editar Conta</DialogTitle>
         <DialogContent>
           <TextField
@@ -394,17 +430,27 @@ export default function MonthDetail() {
           {detailAccount && (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, py: 1 }}>
               <Box>
-                <Typography variant="caption" color="text.secondary">Valor</Typography>
-                <Typography>{detailAccount.amount ? `R$ ${detailAccount.amount.toFixed(2)}` : 'Valor não definido'}</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Valor
+                </Typography>
+                <Typography>
+                  {detailAccount.amount
+                    ? `R$ ${detailAccount.amount.toFixed(2)}`
+                    : 'Valor não definido'}
+                </Typography>
               </Box>
               {detailAccount.due_date && (
                 <Box>
-                  <Typography variant="caption" color="text.secondary">Vencimento</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Vencimento
+                  </Typography>
                   <Typography>{formatDateOnlyBR(detailAccount.due_date)}</Typography>
                 </Box>
               )}
               <Box>
-                <Typography variant="caption" color="text.secondary">Status</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Status
+                </Typography>
                 <Chip
                   label={detailAccount.is_paid ? 'Paga' : 'Pendente'}
                   color={detailAccount.is_paid ? 'success' : 'default'}
@@ -414,15 +460,24 @@ export default function MonthDetail() {
               </Box>
               {detailAccount.paid_at && (
                 <Box>
-                  <Typography variant="caption" color="text.secondary">Pago em</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Pago em
+                  </Typography>
                   <Typography>{formatDateTimeBR(detailAccount.paid_at)}</Typography>
                 </Box>
               )}
               {detailAccount.receipt && (
                 <Box>
-                  <Typography variant="caption" color="text.secondary">Comprovante</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Comprovante
+                  </Typography>
                   <Box>
-                    <Button size="small" startIcon={<AttachFile />} href={`/uploads/${detailAccount.receipt}`} target="_blank">
+                    <Button
+                      size="small"
+                      startIcon={<AttachFile />}
+                      href={`/uploads/${detailAccount.receipt}`}
+                      target="_blank"
+                    >
                       Abrir comprovante
                     </Button>
                   </Box>
@@ -430,7 +485,9 @@ export default function MonthDetail() {
               )}
               {detailAccount.notes && (
                 <Box>
-                  <Typography variant="caption" color="text.secondary">Observação</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Observação
+                  </Typography>
                   <Typography sx={{ fontStyle: 'italic' }}>"{detailAccount.notes}"</Typography>
                 </Box>
               )}
@@ -446,12 +503,14 @@ export default function MonthDetail() {
         <DialogTitle>Excluir mês?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Tem certeza que deseja excluir <strong>{month.label}</strong>?
-            Todas as contas e pagamentos serão removidos.
+            Tem certeza que deseja excluir <strong>{month.label}</strong>? Todas as contas e
+            pagamentos serão removidos.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)} disabled={deleting}>Cancelar</Button>
+          <Button onClick={() => setDeleteDialogOpen(false)} disabled={deleting}>
+            Cancelar
+          </Button>
           <Button onClick={handleDeleteMonth} color="error" variant="contained" disabled={deleting}>
             {deleting ? 'Excluindo...' : 'Excluir'}
           </Button>

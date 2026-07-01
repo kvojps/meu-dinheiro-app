@@ -16,7 +16,12 @@ interface DefaultAccountFormProps {
   initial?: DefaultAccount | null;
 }
 
-export default function DefaultAccountForm({ open, onClose, onSave, initial }: DefaultAccountFormProps) {
+export default function DefaultAccountForm({
+  open,
+  onClose,
+  onSave,
+  initial,
+}: DefaultAccountFormProps) {
   const [name, setName] = useState('');
   const [dueDay, setDueDay] = useState('');
   const [amount, setAmount] = useState('');
@@ -44,9 +49,7 @@ export default function DefaultAccountForm({ open, onClose, onSave, initial }: D
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        {initial ? 'Editar Conta Padrão' : 'Nova Conta Padrão'}
-      </DialogTitle>
+      <DialogTitle>{initial ? 'Editar Conta Padrão' : 'Nova Conta Padrão'}</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus

@@ -17,7 +17,12 @@ interface DefaultAccountRow {
   amount: number;
 }
 
-function insertAccountsFromDefaults(db: Database.Database, monthId: number, year: number, month: number) {
+function insertAccountsFromDefaults(
+  db: Database.Database,
+  monthId: number,
+  year: number,
+  month: number
+) {
   const defaults = db.prepare('SELECT * FROM default_accounts').all() as DefaultAccountRow[];
   const insertAccount = db.prepare(
     'INSERT INTO accounts (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)'
@@ -29,11 +34,14 @@ function insertAccountsFromDefaults(db: Database.Database, monthId: number, year
 
 export function findMonthByYearMonth(db: Database.Database, year: number, month: number) {
   return db.prepare('SELECT id FROM months WHERE year = ? AND month = ?').get(year, month) as
-    | { id: number }
-    | undefined;
+    { id: number } | undefined;
 }
 
-export function createMonthWithDefaults(db: Database.Database, year: number, month: number): MonthRow {
+export function createMonthWithDefaults(
+  db: Database.Database,
+  year: number,
+  month: number
+): MonthRow {
   const label = monthLabel(year, month);
 
   const create = db.transaction(() => {
@@ -61,7 +69,9 @@ export function ensureCurrentMonthExists(db: Database.Database) {
 export function listMonths(db: Database.Database) {
   ensureCurrentMonthExists(db);
 
-  return db.prepare(`
+  return db
+    .prepare(
+      `
     SELECT m.*,
       COUNT(a.id) as total_accounts,
       COALESCE(SUM(CASE WHEN a.is_paid = 1 THEN 1 ELSE 0 END), 0) as paid_accounts,
@@ -72,7 +82,9 @@ export function listMonths(db: Database.Database) {
     LEFT JOIN accounts a ON a.month_id = m.id
     GROUP BY m.id
     ORDER BY m.year DESC, m.month DESC
-  `).all();
+  `
+    )
+    .all();
 }
 
 export function getMonthWithAccounts(db: Database.Database, id: number) {

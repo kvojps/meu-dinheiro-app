@@ -62,7 +62,15 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
         );
         for (const a of data.accounts) {
           insertAccount.run(
-            a.id, a.month_id, a.name, a.due_date, a.amount, a.is_paid, a.paid_at, a.receipt, a.notes
+            a.id,
+            a.month_id,
+            a.name,
+            a.due_date,
+            a.amount,
+            a.is_paid,
+            a.paid_at,
+            a.receipt,
+            a.notes
           );
         }
       });
