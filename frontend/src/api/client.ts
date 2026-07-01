@@ -114,7 +114,7 @@ export const api = {
     });
   },
 
-  updateAccount(id: number, data: { name?: string; due_date?: string; amount?: number }) {
+  updateAccount(id: number, data: { name?: string; due_date?: string; amount?: number; notes?: string }) {
     return request<Account>(`/accounts/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),

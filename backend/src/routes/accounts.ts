@@ -66,7 +66,7 @@ router.post('/months/:monthId/accounts', (req: Request, res: Response) => {
 });
 
 router.put('/accounts/:id', (req: Request, res: Response) => {
-  const { name, due_date, amount } = req.body;
+  const { name, due_date, amount, notes } = req.body;
   const db = getDatabase();
 
   const existing = db.prepare('SELECT * FROM accounts WHERE id = ?').get(req.params.id);
@@ -75,11 +75,12 @@ router.put('/accounts/:id', (req: Request, res: Response) => {
   }
 
   db.prepare(
-    'UPDATE accounts SET name = ?, due_date = ?, amount = ? WHERE id = ?'
+    'UPDATE accounts SET name = ?, due_date = ?, amount = ?, notes = ? WHERE id = ?'
   ).run(
     name ?? (existing as any).name,
     due_date !== undefined ? due_date : (existing as any).due_date,
     amount !== undefined ? amount : (existing as any).amount,
+    notes !== undefined ? notes : (existing as any).notes,
     req.params.id
   );
 

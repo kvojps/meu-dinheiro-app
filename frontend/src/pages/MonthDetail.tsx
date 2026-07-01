@@ -55,6 +55,7 @@ export default function MonthDetail() {
   const [editName, setEditName] = useState('');
   const [editAmount, setEditAmount] = useState('');
   const [editDueDate, setEditDueDate] = useState('');
+  const [editNotes, setEditNotes] = useState('');
 
   const [snackbar, setSnackbar] = useState<{ message: string; severity: 'success' | 'error' } | null>(null);
 
@@ -130,6 +131,7 @@ export default function MonthDetail() {
     setEditName(account.name);
     setEditAmount(account.amount ? String(account.amount) : '');
     setEditDueDate(account.due_date || '');
+    setEditNotes(account.notes || '');
     setEditDialogOpen(true);
   }
 
@@ -140,6 +142,7 @@ export default function MonthDetail() {
         name: editName.trim(),
         amount: editAmount ? Number(editAmount) : 0,
         due_date: editDueDate || undefined,
+        notes: editNotes || undefined,
       });
       setEditDialogOpen(false);
       setEditingAccount(null);
@@ -215,8 +218,8 @@ export default function MonthDetail() {
         <Grid container spacing={2}>
           {month.accounts.map((account) => (
             <Grid item xs={12} sm={6} md={4} key={account.id}>
-              <Card sx={{ opacity: account.is_paid ? 0.85 : 1 }}>
-                <CardContent>
+              <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', opacity: account.is_paid ? 0.85 : 1 }}>
+                <CardContent sx={{ flexGrow: 1 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <Typography variant="h6" gutterBottom>
                       {account.name}
@@ -252,11 +255,6 @@ export default function MonthDetail() {
                         Comprovante
                       </Button>
                     </Box>
-                  )}
-                  {account.notes && (
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1, fontStyle: 'italic' }}>
-                      "{account.notes}"
-                    </Typography>
                   )}
                 </CardContent>
                 <CardActions>
@@ -362,6 +360,15 @@ export default function MonthDetail() {
             value={editDueDate}
             onChange={(e) => setEditDueDate(e.target.value)}
             InputLabelProps={{ shrink: true }}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Observação"
+            fullWidth
+            multiline
+            rows={2}
+            value={editNotes}
+            onChange={(e) => setEditNotes(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
