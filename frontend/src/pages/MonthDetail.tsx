@@ -66,6 +66,7 @@ export default function MonthDetail() {
   async function loadMonth(monthId: number) {
     try {
       const data = await api.getMonth(monthId);
+      data.accounts.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
       setMonth(data);
     } catch (err: any) {
       setSnackbar({ message: err.message, severity: 'error' });
