@@ -26,15 +26,15 @@ export default function Layout({ children }: LayoutProps) {
           </Button>
           <Button
             color="inherit"
-            onClick={() => navigate('/grafico')}
-            sx={{ fontWeight: location.pathname === '/grafico' ? 'bold' : 'normal' }}
+            onClick={() => navigate('/history')}
+            sx={{ fontWeight: location.pathname === '/history' ? 'bold' : 'normal' }}
           >
             Histórico de Contas
           </Button>
           <Button
             color="inherit"
-            onClick={() => navigate('/configuracao')}
-            sx={{ fontWeight: location.pathname === '/configuracao' ? 'bold' : 'normal' }}
+            onClick={() => navigate('/settings')}
+            sx={{ fontWeight: location.pathname === '/settings' ? 'bold' : 'normal' }}
           >
             Configurações
           </Button>

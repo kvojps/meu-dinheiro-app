@@ -35,7 +35,7 @@ import { useMonthRangeCreator } from '../hooks/useMonthRangeCreator';
 import { useDataTransfer } from '../hooks/useDataTransfer';
 import { formatCurrencyBRLOrFallback } from '../utils/format';
 
-export default function Configuracao() {
+export default function Settings() {
   const { snackbar, showSnackbar, showError, closeSnackbar } = useSnackbar();
   const { defaultAccounts, loading, save, remove, reload } = useDefaultAccounts(
     showError,

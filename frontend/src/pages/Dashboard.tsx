@@ -142,7 +142,7 @@ export default function Dashboard() {
           return (
             <Grid item xs={12} sm={6} md={4} key={month.id}>
               <Card>
-                <CardActionArea onClick={() => navigate(`/meses/${month.id}`)}>
+                <CardActionArea onClick={() => navigate(`/months/${month.id}`)}>
                   <CardContent>
                     <Typography variant="h5" gutterBottom>
                       {month.label}

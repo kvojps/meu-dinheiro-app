@@ -16,7 +16,7 @@ import { Month } from '../types/models';
 import AppSnackbar from '../components/AppSnackbar';
 import { useSnackbar } from '../hooks/useSnackbar';
 
-export default function Grafico() {
+export default function History() {
   const [data, setData] = useState<Month[]>([]);
   const [loading, setLoading] = useState(true);
   const { snackbar, showError, closeSnackbar } = useSnackbar();
