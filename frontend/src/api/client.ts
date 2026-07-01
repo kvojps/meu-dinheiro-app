@@ -8,6 +8,7 @@ export interface Month {
   created_at: string;
   total_accounts?: number;
   paid_accounts?: number;
+  total_amount?: number;
 }
 
 export interface MonthDetail extends Month {

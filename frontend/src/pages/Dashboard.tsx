@@ -142,7 +142,7 @@ export default function Dashboard() {
                     <Typography variant="h5" gutterBottom>
                       {month.label}
                     </Typography>
-                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
                       {total > 0 ? (
                         <>
                           <Chip
@@ -158,6 +158,9 @@ export default function Dashboard() {
                         <Chip label="Sem contas" size="small" />
                       )}
                     </Box>
+                    <Typography variant="body1" color="primary">
+                      Total: R$ {(month.total_amount ?? 0).toFixed(2)}
+                    </Typography>
                   </CardContent>
                 </CardActionArea>
               </Card>

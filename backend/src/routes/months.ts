@@ -24,7 +24,8 @@ router.get('/', (req: Request, res: Response) => {
   const months = db.prepare(`
     SELECT m.*,
       COUNT(a.id) as total_accounts,
-      COALESCE(SUM(CASE WHEN a.is_paid = 1 THEN 1 ELSE 0 END), 0) as paid_accounts
+      COALESCE(SUM(CASE WHEN a.is_paid = 1 THEN 1 ELSE 0 END), 0) as paid_accounts,
+      COALESCE(SUM(a.amount), 0) as total_amount
     FROM months m
     LEFT JOIN accounts a ON a.month_id = m.id
     GROUP BY m.id
