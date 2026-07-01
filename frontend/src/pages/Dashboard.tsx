@@ -17,7 +17,8 @@ import {
   Stack,
   Pagination,
 } from '@mui/material';
-import { api, Month } from '../api/client';
+import { api } from '../api/client';
+import { Month } from '../types/models';
 import AppSnackbar from '../components/AppSnackbar';
 import { useSnackbar } from '../hooks/useSnackbar';
 import { formatCurrencyBRL } from '../utils/format';
@@ -27,8 +28,8 @@ const PAGE_SIZE = 12;
 export default function Dashboard() {
   const [months, setMonths] = useState<Month[]>([]);
   const [loading, setLoading] = useState(true);
-  const [fromValue, setFromValue] = useState('');
-  const [toValue, setToValue] = useState('');
+  const [fromOverride, setFromOverride] = useState('');
+  const [toOverride, setToOverride] = useState('');
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const { snackbar, showError, closeSnackbar } = useSnackbar();
@@ -50,12 +51,8 @@ export default function Dashboard() {
       }));
   }, [months]);
 
-  useEffect(() => {
-    if (monthOptions.length > 0) {
-      if (!fromValue) setFromValue(monthOptions[0].value);
-      if (!toValue) setToValue(monthOptions[monthOptions.length - 1].value);
-    }
-  }, [monthOptions]);
+  const fromValue = fromOverride || monthOptions[0]?.value || '';
+  const toValue = toOverride || monthOptions[monthOptions.length - 1]?.value || '';
 
   const filteredMonths = useMemo(() => {
     return months.filter((m) => {
@@ -69,10 +66,6 @@ export default function Dashboard() {
     const start = (page - 1) * PAGE_SIZE;
     return filteredMonths.slice(start, start + PAGE_SIZE);
   }, [filteredMonths, page]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [fromValue, toValue]);
 
   if (loading) {
     return (
@@ -105,7 +98,14 @@ export default function Dashboard() {
           </Typography>
           <FormControl size="small" sx={{ minWidth: 180 }}>
             <InputLabel>De</InputLabel>
-            <Select value={fromValue} label="De" onChange={(e) => setFromValue(e.target.value)}>
+            <Select
+              value={fromValue}
+              label="De"
+              onChange={(e) => {
+                setFromOverride(e.target.value);
+                setPage(1);
+              }}
+            >
               {monthOptions.map((opt) => (
                 <MenuItem key={opt.value} value={opt.value}>
                   {opt.label}
@@ -115,7 +115,14 @@ export default function Dashboard() {
           </FormControl>
           <FormControl size="small" sx={{ minWidth: 180 }}>
             <InputLabel>Até</InputLabel>
-            <Select value={toValue} label="Até" onChange={(e) => setToValue(e.target.value)}>
+            <Select
+              value={toValue}
+              label="Até"
+              onChange={(e) => {
+                setToOverride(e.target.value);
+                setPage(1);
+              }}
+            >
               {monthOptions.map((opt) => (
                 <MenuItem key={opt.value} value={opt.value}>
                   {opt.label}

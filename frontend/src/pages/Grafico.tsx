@@ -11,7 +11,8 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts';
-import { api, Month } from '../api/client';
+import { api } from '../api/client';
+import { Month } from '../types/models';
 import AppSnackbar from '../components/AppSnackbar';
 import { useSnackbar } from '../hooks/useSnackbar';
 
@@ -33,13 +34,9 @@ export default function Grafico() {
     return Array.from(set).sort((a, b) => b - a);
   }, [data]);
 
-  const [selectedYear, setSelectedYear] = useState(0);
-
-  useEffect(() => {
-    if (years.length > 0 && !years.includes(selectedYear)) {
-      setSelectedYear(years[0]);
-    }
-  }, [years, selectedYear]);
+  const [yearOverride, setYearOverride] = useState<number | null>(null);
+  const selectedYear =
+    yearOverride !== null && years.includes(yearOverride) ? yearOverride : (years[0] ?? 0);
 
   const currentIndex = years.indexOf(selectedYear);
 
@@ -79,14 +76,14 @@ export default function Grafico() {
       >
         <IconButton
           disabled={currentIndex >= years.length - 1}
-          onClick={() => setSelectedYear(years[currentIndex + 1])}
+          onClick={() => setYearOverride(years[currentIndex + 1])}
         >
           <ChevronLeft />
         </IconButton>
         <Typography variant="h6">{selectedYear}</Typography>
         <IconButton
           disabled={currentIndex <= 0}
-          onClick={() => setSelectedYear(years[currentIndex - 1])}
+          onClick={() => setYearOverride(years[currentIndex - 1])}
         >
           <ChevronRight />
         </IconButton>

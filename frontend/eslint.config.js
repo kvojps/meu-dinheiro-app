@@ -23,9 +23,10 @@ export default tseslint.config(
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
-      '@typescript-eslint/no-explicit-any': 'off',
-      // Regra nova (voltada ao React Compiler) pega setState direto em efeito — um padrão
-      // já usado no código que não é bug de correção; avisa em vez de bloquear o lint.
+      // Regra experimental (voltada ao React Compiler): dá falso positivo em qualquer
+      // função async chamada de um efeito para popular estado (ex: reload() dentro de
+      // useEffect em um hook), mesmo quando o setState só ocorre depois do await — o
+      // padrão seguro de fetch-on-mount usado neste projeto. Mantida em warn.
       'react-hooks/set-state-in-effect': 'warn',
     },
   }

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -9,7 +9,8 @@ import {
   Box,
   TextField,
 } from '@mui/material';
-import { Account } from '../api/client';
+import { Account } from '../types/models';
+import FileUploadButton from './FileUploadButton';
 import { formatDateOnlyBR } from '../utils/date';
 import { formatCurrencyBRL } from '../utils/format';
 
@@ -23,7 +24,6 @@ interface PayDialogProps {
 export default function PayDialog({ open, account, onClose, onConfirm }: PayDialogProps) {
   const [file, setFile] = useState<File | null>(null);
   const [notes, setNotes] = useState('');
-  const fileRef = useRef<HTMLInputElement>(null);
 
   function handleClose() {
     setFile(null);
@@ -56,26 +56,14 @@ export default function PayDialog({ open, account, onClose, onConfirm }: PayDial
         )}
 
         <Box sx={{ mt: 3, mb: 2 }}>
-          <Button variant="outlined" component="label" startIcon={<span>📎</span>}>
-            {file ? file.name : 'Selecionar Comprovante'}
-            <input
-              ref={fileRef}
-              type="file"
-              hidden
-              accept="image/*,application/pdf"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
-            />
-          </Button>
+          <FileUploadButton
+            label={file ? file.name : 'Selecionar Comprovante'}
+            accept="image/*,application/pdf"
+            startIcon={<span>📎</span>}
+            onFileSelected={setFile}
+          />
           {file && (
-            <Button
-              size="small"
-              color="error"
-              onClick={() => {
-                setFile(null);
-                if (fileRef.current) fileRef.current.value = '';
-              }}
-              sx={{ ml: 1 }}
-            >
+            <Button size="small" color="error" onClick={() => setFile(null)} sx={{ ml: 1 }}>
               Remover
             </Button>
           )}

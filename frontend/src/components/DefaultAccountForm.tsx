@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -7,7 +7,7 @@ import {
   TextField,
   Button,
 } from '@mui/material';
-import { DefaultAccount } from '../api/client';
+import { DefaultAccount } from '../types/models';
 
 interface DefaultAccountFormProps {
   open: boolean;
@@ -22,21 +22,9 @@ export default function DefaultAccountForm({
   onSave,
   initial,
 }: DefaultAccountFormProps) {
-  const [name, setName] = useState('');
-  const [dueDay, setDueDay] = useState('');
-  const [amount, setAmount] = useState('');
-
-  useEffect(() => {
-    if (initial) {
-      setName(initial.name);
-      setDueDay(initial.due_day ? String(initial.due_day) : '');
-      setAmount(String(initial.amount));
-    } else {
-      setName('');
-      setDueDay('');
-      setAmount('');
-    }
-  }, [initial, open]);
+  const [name, setName] = useState(initial?.name ?? '');
+  const [dueDay, setDueDay] = useState(initial?.due_day ? String(initial.due_day) : '');
+  const [amount, setAmount] = useState(initial ? String(initial.amount) : '');
 
   function handleSubmit() {
     if (!name.trim()) return;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -10,12 +10,6 @@ import {
   CircularProgress,
   Chip,
   Grid,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  TextField,
   IconButton,
   Paper,
 } from '@mui/material';
@@ -28,148 +22,58 @@ import {
   Visibility,
   AttachFile,
 } from '@mui/icons-material';
-import { api, MonthDetail as MonthDetailType, Account } from '../api/client';
+import { Account } from '../types/models';
 import PayDialog from '../components/PayDialog';
+import AddAccountDialog from '../components/AddAccountDialog';
+import EditAccountDialog from '../components/EditAccountDialog';
+import AccountDetailDialog from '../components/AccountDetailDialog';
+import DeleteMonthDialog from '../components/DeleteMonthDialog';
 import AppSnackbar from '../components/AppSnackbar';
-import { useSnackbar } from '../hooks/useSnackbar';
+import { useMonth } from '../hooks/useMonth';
 import { formatDateOnlyBR, formatDateTimeBR } from '../utils/date';
 import { formatCurrencyBRLOrFallback } from '../utils/format';
 
 export default function MonthDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [month, setMonth] = useState<MonthDetailType | null>(null);
-  const [loading, setLoading] = useState(true);
+  const {
+    month,
+    loading,
+    deleting,
+    snackbar,
+    closeSnackbar,
+    pay,
+    unpay,
+    addAccount,
+    editAccount,
+    deleteAccount,
+    deleteMonth,
+  } = useMonth(id);
 
   const [payDialogOpen, setPayDialogOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
   const [addDialogOpen, setAddDialogOpen] = useState(false);
-  const [newName, setNewName] = useState('');
-  const [newAmount, setNewAmount] = useState('');
-  const [newDueDate, setNewDueDate] = useState('');
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleting, setDeleting] = useState(false);
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editingAccount, setEditingAccount] = useState<Account | null>(null);
-  const [editName, setEditName] = useState('');
-  const [editAmount, setEditAmount] = useState('');
-  const [editDueDate, setEditDueDate] = useState('');
-  const [editNotes, setEditNotes] = useState('');
+  const [editKey, setEditKey] = useState(0);
 
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailAccount, setDetailAccount] = useState<Account | null>(null);
 
-  const { snackbar, showSnackbar, showError, closeSnackbar } = useSnackbar();
-
-  useEffect(() => {
-    if (id) loadMonth(Number(id));
-  }, [id]);
-
-  async function loadMonth(monthId: number) {
-    try {
-      const data = await api.getMonth(monthId);
-      data.accounts.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
-      setMonth(data);
-    } catch (err) {
-      showError(err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handlePay(file?: File, notes?: string) {
-    if (!selectedAccount) return;
-    try {
-      await api.payAccount(selectedAccount.id, file, notes);
-      setPayDialogOpen(false);
-      setSelectedAccount(null);
-      showSnackbar('Conta marcada como paga!');
-      if (id) loadMonth(Number(id));
-    } catch (err) {
-      showError(err);
-    }
-  }
-
-  async function handleUnpay(accountId: number) {
-    try {
-      await api.unpayAccount(accountId);
-      showSnackbar('Pagamento desmarcado');
-      if (id) loadMonth(Number(id));
-    } catch (err) {
-      showError(err);
-    }
-  }
-
-  async function handleAddAccount() {
-    if (!id || !newName.trim()) return;
-    try {
-      await api.createAccount(Number(id), {
-        name: newName.trim(),
-        amount: Number(newAmount) || 0,
-        due_date: newDueDate || undefined,
-      });
-      setAddDialogOpen(false);
-      setNewName('');
-      setNewAmount('');
-      setNewDueDate('');
-      showSnackbar('Conta adicionada');
-      loadMonth(Number(id));
-    } catch (err) {
-      showError(err);
-    }
-  }
-
-  async function handleDeleteAccount(accountId: number) {
-    try {
-      await api.deleteAccount(accountId);
-      showSnackbar('Conta removida');
-      if (id) loadMonth(Number(id));
-    } catch (err) {
-      showError(err);
-    }
-  }
-
   function openEditDialog(account: Account) {
     setEditingAccount(account);
-    setEditName(account.name);
-    setEditAmount(account.amount ? String(account.amount) : '');
-    setEditDueDate(account.due_date || '');
-    setEditNotes(account.notes || '');
+    setEditKey((k) => k + 1);
     setEditDialogOpen(true);
   }
 
-  async function handleEditAccount() {
-    if (!editingAccount) return;
-    try {
-      await api.updateAccount(editingAccount.id, {
-        name: editName.trim(),
-        amount: editAmount ? Number(editAmount) : 0,
-        due_date: editDueDate || undefined,
-        notes: editNotes || undefined,
-      });
-      setEditDialogOpen(false);
-      setEditingAccount(null);
-      showSnackbar('Conta atualizada');
-      if (id) loadMonth(Number(id));
-    } catch (err) {
-      showError(err);
-    }
-  }
-
   async function handleDeleteMonth() {
-    if (!id) return;
-    setDeleting(true);
-    try {
-      await api.deleteMonth(Number(id));
+    if (await deleteMonth()) {
       setDeleteDialogOpen(false);
       navigate('/');
-    } catch (err) {
-      showError(err);
-    } finally {
-      setDeleting(false);
     }
   }
 
@@ -188,6 +92,7 @@ export default function MonthDetail() {
         <Button startIcon={<ArrowBack />} onClick={() => navigate('/')} sx={{ mt: 2 }}>
           Voltar
         </Button>
+        <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
       </Box>
     );
   }
@@ -282,7 +187,7 @@ export default function MonthDetail() {
                 </CardContent>
                 <CardActions>
                   {account.is_paid ? (
-                    <Button size="small" color="warning" onClick={() => handleUnpay(account.id)}>
+                    <Button size="small" color="warning" onClick={() => unpay(account.id)}>
                       Desmarcar
                     </Button>
                   ) : (
@@ -309,7 +214,7 @@ export default function MonthDetail() {
                   <IconButton size="small" onClick={() => openEditDialog(account)}>
                     <EditIcon fontSize="small" />
                   </IconButton>
-                  <IconButton size="small" onClick={() => handleDeleteAccount(account.id)}>
+                  <IconButton size="small" onClick={() => deleteAccount(account.id)}>
                     <DeleteIcon fontSize="small" />
                   </IconButton>
                 </CardActions>
@@ -332,184 +237,47 @@ export default function MonthDetail() {
           setPayDialogOpen(false);
           setSelectedAccount(null);
         }}
-        onConfirm={handlePay}
+        onConfirm={async (file, notes) => {
+          if (!selectedAccount) return;
+          if (await pay(selectedAccount.id, file, notes)) {
+            setPayDialogOpen(false);
+            setSelectedAccount(null);
+          }
+        }}
       />
 
-      <Dialog open={addDialogOpen} onClose={() => setAddDialogOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>Nova Conta</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            label="Nome"
-            fullWidth
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            sx={{ mt: 1, mb: 2 }}
-          />
-          <TextField
-            label="Valor (R$)"
-            type="number"
-            fullWidth
-            value={newAmount}
-            onChange={(e) => setNewAmount(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Data de vencimento"
-            type="date"
-            fullWidth
-            value={newDueDate}
-            onChange={(e) => setNewDueDate(e.target.value)}
-            InputLabelProps={{ shrink: true }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setAddDialogOpen(false)}>Cancelar</Button>
-          <Button variant="contained" onClick={handleAddAccount} disabled={!newName.trim()}>
-            Adicionar
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <AddAccountDialog
+        open={addDialogOpen}
+        onClose={() => setAddDialogOpen(false)}
+        onSubmit={addAccount}
+      />
 
-      <Dialog
-        open={editDialogOpen}
-        onClose={() => setEditDialogOpen(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>Editar Conta</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            label="Nome"
-            fullWidth
-            value={editName}
-            onChange={(e) => setEditName(e.target.value)}
-            sx={{ mt: 1, mb: 2 }}
-          />
-          <TextField
-            label="Valor (R$)"
-            type="number"
-            fullWidth
-            value={editAmount}
-            onChange={(e) => setEditAmount(e.target.value)}
-            helperText="Deixe em branco para valor variável."
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Data de vencimento"
-            type="date"
-            fullWidth
-            value={editDueDate}
-            onChange={(e) => setEditDueDate(e.target.value)}
-            InputLabelProps={{ shrink: true }}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Observação"
-            fullWidth
-            multiline
-            rows={2}
-            value={editNotes}
-            onChange={(e) => setEditNotes(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditDialogOpen(false)}>Cancelar</Button>
-          <Button variant="contained" onClick={handleEditAccount} disabled={!editName.trim()}>
-            Salvar
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {editingAccount && (
+        <EditAccountDialog
+          key={editKey}
+          open={editDialogOpen}
+          account={editingAccount}
+          onClose={() => {
+            setEditDialogOpen(false);
+            setEditingAccount(null);
+          }}
+          onSubmit={(data) => editAccount(editingAccount.id, data)}
+        />
+      )}
 
-      <Dialog open={detailOpen} onClose={() => setDetailOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>{detailAccount?.name}</DialogTitle>
-        <DialogContent dividers>
-          {detailAccount && (
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, py: 1 }}>
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  Valor
-                </Typography>
-                <Typography>{formatCurrencyBRLOrFallback(detailAccount.amount)}</Typography>
-              </Box>
-              {detailAccount.due_date && (
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    Vencimento
-                  </Typography>
-                  <Typography>{formatDateOnlyBR(detailAccount.due_date)}</Typography>
-                </Box>
-              )}
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  Status
-                </Typography>
-                <Chip
-                  label={detailAccount.is_paid ? 'Paga' : 'Pendente'}
-                  color={detailAccount.is_paid ? 'success' : 'default'}
-                  size="small"
-                  sx={{ mt: 0.5 }}
-                />
-              </Box>
-              {detailAccount.paid_at && (
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    Pago em
-                  </Typography>
-                  <Typography>{formatDateTimeBR(detailAccount.paid_at)}</Typography>
-                </Box>
-              )}
-              {detailAccount.receipt && (
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    Comprovante
-                  </Typography>
-                  <Box>
-                    <Button
-                      size="small"
-                      startIcon={<AttachFile />}
-                      href={`/uploads/${detailAccount.receipt}`}
-                      target="_blank"
-                    >
-                      Abrir comprovante
-                    </Button>
-                  </Box>
-                </Box>
-              )}
-              {detailAccount.notes && (
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    Observação
-                  </Typography>
-                  <Typography sx={{ fontStyle: 'italic' }}>"{detailAccount.notes}"</Typography>
-                </Box>
-              )}
-            </Box>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDetailOpen(false)}>Fechar</Button>
-        </DialogActions>
-      </Dialog>
+      <AccountDetailDialog
+        open={detailOpen}
+        account={detailAccount}
+        onClose={() => setDetailOpen(false)}
+      />
 
-      <Dialog open={deleteDialogOpen} onClose={() => !deleting && setDeleteDialogOpen(false)}>
-        <DialogTitle>Excluir mês?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Tem certeza que deseja excluir <strong>{month.label}</strong>? Todas as contas e
-            pagamentos serão removidos.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)} disabled={deleting}>
-            Cancelar
-          </Button>
-          <Button onClick={handleDeleteMonth} color="error" variant="contained" disabled={deleting}>
-            {deleting ? 'Excluindo...' : 'Excluir'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteMonthDialog
+        open={deleteDialogOpen}
+        monthLabel={month.label}
+        deleting={deleting}
+        onClose={() => setDeleteDialogOpen(false)}
+        onConfirm={handleDeleteMonth}
+      />
 
       <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
     </Box>
