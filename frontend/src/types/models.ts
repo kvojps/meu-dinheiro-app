@@ -10,6 +10,7 @@ export interface Month {
   unpaid_amount?: number;
   total_amount?: number;
   overdue_accounts?: number;
+  overdue_amount?: number;
 }
 
 export interface MonthDetail extends Month {

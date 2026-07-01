@@ -78,7 +78,8 @@ export function listMonths(db: Database.Database) {
       COALESCE(SUM(CASE WHEN a.is_paid = 1 THEN a.amount ELSE 0 END), 0) as paid_amount,
       COALESCE(SUM(CASE WHEN a.is_paid = 0 THEN a.amount ELSE 0 END), 0) as unpaid_amount,
       COALESCE(SUM(a.amount), 0) as total_amount,
-      COALESCE(SUM(CASE WHEN a.is_paid = 0 AND a.due_date IS NOT NULL AND a.due_date < date('now') THEN 1 ELSE 0 END), 0) as overdue_accounts
+      COALESCE(SUM(CASE WHEN a.is_paid = 0 AND a.due_date IS NOT NULL AND a.due_date < date('now') THEN 1 ELSE 0 END), 0) as overdue_accounts,
+      COALESCE(SUM(CASE WHEN a.is_paid = 0 AND a.due_date IS NOT NULL AND a.due_date < date('now') THEN a.amount ELSE 0 END), 0) as overdue_amount
     FROM months m
     LEFT JOIN accounts a ON a.month_id = m.id
     GROUP BY m.id
