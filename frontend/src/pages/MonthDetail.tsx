@@ -28,6 +28,7 @@ import {
   Delete as DeleteIcon,
   DeleteOutline,
   Edit as EditIcon,
+  Visibility,
   AttachFile,
 } from '@mui/icons-material';
 import { api, MonthDetail as MonthDetailType, Account } from '../api/client';
@@ -56,6 +57,9 @@ export default function MonthDetail() {
   const [editAmount, setEditAmount] = useState('');
   const [editDueDate, setEditDueDate] = useState('');
   const [editNotes, setEditNotes] = useState('');
+
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [detailAccount, setDetailAccount] = useState<Account | null>(null);
 
   const [snackbar, setSnackbar] = useState<{ message: string; severity: 'success' | 'error' } | null>(null);
 
@@ -272,6 +276,9 @@ export default function MonthDetail() {
                       Pagar
                     </Button>
                   )}
+                  <IconButton size="small" onClick={() => { setDetailAccount(account); setDetailOpen(true); }}>
+                    <Visibility fontSize="small" />
+                  </IconButton>
                   <IconButton size="small" onClick={() => openEditDialog(account)}>
                     <EditIcon fontSize="small" />
                   </IconButton>
@@ -377,6 +384,60 @@ export default function MonthDetail() {
           <Button variant="contained" onClick={handleEditAccount} disabled={!editName.trim()}>
             Salvar
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={detailOpen} onClose={() => setDetailOpen(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>{detailAccount?.name}</DialogTitle>
+        <DialogContent dividers>
+          {detailAccount && (
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, py: 1 }}>
+              <Box>
+                <Typography variant="caption" color="text.secondary">Valor</Typography>
+                <Typography>{detailAccount.amount ? `R$ ${detailAccount.amount.toFixed(2)}` : 'Valor não definido'}</Typography>
+              </Box>
+              {detailAccount.due_date && (
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Vencimento</Typography>
+                  <Typography>{new Date(detailAccount.due_date).toLocaleDateString('pt-BR')}</Typography>
+                </Box>
+              )}
+              <Box>
+                <Typography variant="caption" color="text.secondary">Status</Typography>
+                <Chip
+                  label={detailAccount.is_paid ? 'Paga' : 'Pendente'}
+                  color={detailAccount.is_paid ? 'success' : 'default'}
+                  size="small"
+                  sx={{ mt: 0.5 }}
+                />
+              </Box>
+              {detailAccount.paid_at && (
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Pago em</Typography>
+                  <Typography>{new Date(detailAccount.paid_at).toLocaleDateString('pt-BR')}</Typography>
+                </Box>
+              )}
+              {detailAccount.receipt && (
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Comprovante</Typography>
+                  <Box>
+                    <Button size="small" startIcon={<AttachFile />} href={`/uploads/${detailAccount.receipt}`} target="_blank">
+                      Abrir comprovante
+                    </Button>
+                  </Box>
+                </Box>
+              )}
+              {detailAccount.notes && (
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Observação</Typography>
+                  <Typography sx={{ fontStyle: 'italic' }}>"{detailAccount.notes}"</Typography>
+                </Box>
+              )}
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDetailOpen(false)}>Fechar</Button>
         </DialogActions>
       </Dialog>
 
