@@ -37,6 +37,13 @@ export default function Layout({ children }: LayoutProps) {
           </Button>
           <Button
             color="inherit"
+            onClick={() => navigate('/grafico')}
+            sx={{ fontWeight: location.pathname === '/grafico' ? 'bold' : 'normal' }}
+          >
+            Gráfico
+          </Button>
+          <Button
+            color="inherit"
             onClick={() => navigate('/configuracao')}
             sx={{ fontWeight: location.pathname === '/configuracao' ? 'bold' : 'normal' }}
           >

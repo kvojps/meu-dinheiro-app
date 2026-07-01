@@ -8,6 +8,8 @@ export interface Month {
   created_at: string;
   total_accounts?: number;
   paid_accounts?: number;
+  paid_amount?: number;
+  unpaid_amount?: number;
   total_amount?: number;
 }
 

@@ -3,6 +3,7 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Configuracao from './pages/Configuracao';
 import MonthDetail from './pages/MonthDetail';
+import Grafico from './pages/Grafico';
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/configuracao" element={<Configuracao />} />
         <Route path="/meses/:id" element={<MonthDetail />} />
+        <Route path="/grafico" element={<Grafico />} />
       </Routes>
     </Layout>
   );
