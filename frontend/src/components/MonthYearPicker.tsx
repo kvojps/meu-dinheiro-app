@@ -56,6 +56,7 @@ export default function MonthYearPicker({
           type="number"
           value={year}
           onChange={(e) => onYearChange(Number(e.target.value))}
+          inputProps={{ min: 2000, max: 2100 }}
           sx={{ width: 100 }}
           size="small"
         />

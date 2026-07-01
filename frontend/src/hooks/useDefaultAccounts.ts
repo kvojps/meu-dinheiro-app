@@ -8,13 +8,16 @@ export function useDefaultAccounts(
 ) {
   const [defaultAccounts, setDefaultAccounts] = useState<DefaultAccount[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   async function reload() {
     try {
       const d = await api.getDefaultAccounts();
       d.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
       setDefaultAccounts(d);
+      setError(false);
     } catch (err) {
+      setError(true);
       showError(err);
     } finally {
       setLoading(false);
@@ -23,7 +26,14 @@ export function useDefaultAccounts(
 
   useEffect(() => {
     reload();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function retry() {
+    setLoading(true);
+    setError(false);
+    reload();
+  }
 
   async function save(
     data: { name: string; due_day?: number; amount: number },
@@ -55,5 +65,5 @@ export function useDefaultAccounts(
     }
   }
 
-  return { defaultAccounts, loading, save, remove, reload };
+  return { defaultAccounts, loading, error, retry, save, remove, reload };
 }
