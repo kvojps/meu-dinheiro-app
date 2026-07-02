@@ -33,7 +33,7 @@ interface LayoutProps {
 
 const NAV_ITEMS = [
   { label: 'Despesas', path: '/', icon: <ReceiptLong fontSize="small" /> },
-  { label: 'Histórico de Despesas', path: '/history', icon: <BarChart fontSize="small" /> },
+  { label: 'Histórico', path: '/history', icon: <BarChart fontSize="small" /> },
   { label: 'Configurações', path: '/settings', icon: <SettingsIcon fontSize="small" /> },
 ];
 

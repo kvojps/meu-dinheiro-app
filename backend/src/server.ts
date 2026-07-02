@@ -5,8 +5,10 @@ import { getDatabase } from './database';
 import setupRouter from './routes/setup';
 import monthsRouter from './routes/months';
 import defaultExpensesRouter from './routes/defaultExpenses';
+import defaultIncomesRouter from './routes/defaultIncomes';
 import bankAccountsRouter from './routes/bankAccounts';
 import expensesRouter from './routes/expenses';
+import incomesRouter from './routes/incomes';
 import exportImportRouter from './routes/exportImport';
 import { errorHandler } from './middleware/errorHandler';
 
@@ -22,8 +24,10 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/api', setupRouter);
 app.use('/api/months', monthsRouter);
 app.use('/api/default-expenses', defaultExpensesRouter);
+app.use('/api/default-incomes', defaultIncomesRouter);
 app.use('/api/bank-accounts', bankAccountsRouter);
 app.use('/api', expensesRouter);
+app.use('/api', incomesRouter);
 app.use('/api', exportImportRouter);
 
 const frontendDist = path.join(__dirname, '../../frontend/dist');

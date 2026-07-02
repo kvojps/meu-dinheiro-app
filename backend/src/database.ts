@@ -45,6 +45,15 @@ function ensureExpenseBankAccountColumn() {
   }
 }
 
+function ensureDefaultIncomeBankAccountColumn() {
+  const columns = db.prepare('PRAGMA table_info(default_incomes)').all() as { name: string }[];
+  if (!columns.some((c) => c.name === 'bank_account_id')) {
+    db.exec(
+      'ALTER TABLE default_incomes ADD COLUMN bank_account_id INTEGER REFERENCES bank_accounts(id)'
+    );
+  }
+}
+
 function initializeSchema() {
   migrateLegacyTableNames();
 
@@ -85,7 +94,30 @@ function initializeSchema() {
       bank_account_id INTEGER REFERENCES bank_accounts(id),
       created_at TEXT DEFAULT (datetime('now'))
     );
+
+    CREATE TABLE IF NOT EXISTS default_incomes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      expected_day INTEGER,
+      amount REAL NOT NULL DEFAULT 0,
+      bank_account_id INTEGER REFERENCES bank_accounts(id),
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS incomes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      month_id INTEGER NOT NULL REFERENCES months(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      expected_date TEXT,
+      amount REAL NOT NULL DEFAULT 0,
+      is_received INTEGER NOT NULL DEFAULT 0,
+      received_at TEXT,
+      notes TEXT,
+      bank_account_id INTEGER REFERENCES bank_accounts(id),
+      created_at TEXT DEFAULT (datetime('now'))
+    );
   `);
 
   ensureExpenseBankAccountColumn();
+  ensureDefaultIncomeBankAccountColumn();
 }

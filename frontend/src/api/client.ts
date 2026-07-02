@@ -1,4 +1,12 @@
-import type { Month, MonthDetail, DefaultExpense, Expense, BankAccount } from '../types/models';
+import type {
+  Month,
+  MonthDetail,
+  DefaultExpense,
+  DefaultIncome,
+  Expense,
+  Income,
+  BankAccount,
+} from '../types/models';
 
 const API_BASE = '/api';
 
@@ -147,6 +155,85 @@ export const api = {
 
   unpayExpense(id: number) {
     return request<Expense>(`/expenses/${id}/unpay`, { method: 'PUT' });
+  },
+
+  getDefaultIncomes() {
+    return request<DefaultIncome[]>('/default-incomes');
+  },
+
+  createDefaultIncome(data: {
+    name: string;
+    expected_day?: number;
+    amount: number;
+    bank_account_id?: number | null;
+  }) {
+    return request<DefaultIncome>('/default-incomes', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  updateDefaultIncome(
+    id: number,
+    data: { name?: string; expected_day?: number; amount?: number; bank_account_id?: number | null }
+  ) {
+    return request<DefaultIncome>(`/default-incomes/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteDefaultIncome(id: number) {
+    return request<{ message: string }>(`/default-incomes/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  createIncome(
+    monthId: number,
+    data: { name: string; expected_date?: string; amount: number; bank_account_id?: number | null }
+  ) {
+    return request<Income>(`/months/${monthId}/incomes`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  updateIncome(
+    id: number,
+    data: {
+      name?: string;
+      expected_date?: string;
+      amount?: number;
+      notes?: string;
+      bank_account_id?: number | null;
+    }
+  ) {
+    return request<Income>(`/incomes/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteIncome(id: number) {
+    return request<{ message: string }>(`/incomes/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  receiveIncome(id: number, notes?: string, receivedAt?: string, bankAccountId?: number) {
+    return request<Income>(`/incomes/${id}/receive`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        notes,
+        received_at: receivedAt,
+        bank_account_id: bankAccountId,
+      }),
+    });
+  },
+
+  unreceiveIncome(id: number) {
+    return request<Income>(`/incomes/${id}/unreceive`, { method: 'PUT' });
   },
 
   async exportData() {

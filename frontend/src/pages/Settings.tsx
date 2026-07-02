@@ -27,11 +27,13 @@ import {
   FileDownload as FileDownloadIcon,
   ExpandMore,
   ReceiptLong,
+  Payments,
   AccountBalance,
   ErrorOutline,
 } from '@mui/icons-material';
-import { DefaultExpense, BankAccount } from '../types/models';
+import { DefaultExpense, DefaultIncome, BankAccount } from '../types/models';
 import DefaultExpenseForm from '../components/DefaultExpenseForm';
+import DefaultIncomeForm from '../components/DefaultIncomeForm';
 import BankAccountForm from '../components/BankAccountForm';
 import MonthYearPicker from '../components/MonthYearPicker';
 import FileUploadButton from '../components/FileUploadButton';
@@ -39,6 +41,7 @@ import AppSnackbar from '../components/AppSnackbar';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { useSnackbar } from '../hooks/useSnackbar';
 import { useDefaultExpenses } from '../hooks/useDefaultExpenses';
+import { useDefaultIncomes } from '../hooks/useDefaultIncomes';
 import { useBankAccounts } from '../hooks/useBankAccounts';
 import { useMonthRangeCreator, MAX_BATCH_MONTHS } from '../hooks/useMonthRangeCreator';
 import { useDataTransfer } from '../hooks/useDataTransfer';
@@ -50,6 +53,13 @@ export default function Settings() {
     showError,
     showSnackbar
   );
+  const {
+    defaultIncomes,
+    loading: defaultIncomesLoading,
+    save: saveDefaultIncome,
+    remove: removeDefaultIncome,
+    reload: reloadDefaultIncomes,
+  } = useDefaultIncomes(showError, showSnackbar);
   const {
     bankAccounts,
     loading: bankAccountsLoading,
@@ -63,6 +73,7 @@ export default function Settings() {
   );
   const { importing, exportData, importData } = useDataTransfer(showSnackbar, showError, () => {
     reload();
+    reloadDefaultIncomes();
     reloadBankAccounts();
   });
 
@@ -72,6 +83,13 @@ export default function Settings() {
 
   const [deleteTarget, setDeleteTarget] = useState<DefaultExpense | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  const [incomeFormOpen, setIncomeFormOpen] = useState(false);
+  const [editingIncome, setEditingIncome] = useState<DefaultIncome | null>(null);
+  const [incomeFormKey, setIncomeFormKey] = useState(0);
+
+  const [deleteIncomeTarget, setDeleteIncomeTarget] = useState<DefaultIncome | null>(null);
+  const [deletingIncome, setDeletingIncome] = useState(false);
 
   const [bankAccountFormOpen, setBankAccountFormOpen] = useState(false);
   const [editingBankAccount, setEditingBankAccount] = useState<BankAccount | null>(null);
@@ -132,6 +150,40 @@ export default function Settings() {
         setEditingExpense(null);
       }
     });
+  }
+
+  function openEditIncome(income: DefaultIncome) {
+    setEditingIncome(income);
+    setIncomeFormKey((k) => k + 1);
+    setIncomeFormOpen(true);
+  }
+
+  function openAddIncome() {
+    setEditingIncome(null);
+    setIncomeFormKey((k) => k + 1);
+    setIncomeFormOpen(true);
+  }
+
+  function handleSaveDefaultIncome(data: {
+    name: string;
+    expected_day?: number;
+    amount: number;
+    bank_account_id?: number | null;
+  }) {
+    saveDefaultIncome(data, editingIncome?.id).then((success) => {
+      if (success) {
+        setIncomeFormOpen(false);
+        setEditingIncome(null);
+      }
+    });
+  }
+
+  async function handleConfirmDeleteIncome() {
+    if (!deleteIncomeTarget) return;
+    setDeletingIncome(true);
+    await removeDefaultIncome(deleteIncomeTarget.id);
+    setDeletingIncome(false);
+    setDeleteIncomeTarget(null);
   }
 
   async function handleConfirmDelete() {
@@ -242,6 +294,68 @@ export default function Settings() {
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMore />}>
             <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="h6">Entradas Padrão</Typography>
+              <Chip label={defaultIncomes.length} size="small" />
+            </Stack>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                Entradas que serão criadas automaticamente em cada novo mês.
+              </Typography>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={openAddIncome}
+                size="small"
+              >
+                Adicionar
+              </Button>
+            </Box>
+            <Divider sx={{ mb: 2 }} />
+            {defaultIncomesLoading ? (
+              <Stack spacing={1}>
+                <Skeleton variant="rounded" height={56} />
+                <Skeleton variant="rounded" height={56} />
+              </Stack>
+            ) : defaultIncomes.length === 0 ? (
+              <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
+                Nenhuma entrada padrão cadastrada.
+              </Typography>
+            ) : (
+              <List disablePadding>
+                {defaultIncomes.map((inc) => (
+                  <ListItem key={inc.id} divider sx={{ px: 0 }}>
+                    <ListItemAvatar>
+                      <Avatar sx={{ bgcolor: 'success.main' }}>
+                        <Payments fontSize="small" />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={inc.name}
+                      primaryTypographyProps={{ fontWeight: 600 }}
+                      secondary={`${formatCurrencyBRLOrFallback(inc.amount, 'Valor variável')}${inc.expected_day ? ` - Previsto dia ${inc.expected_day}` : ''}${inc.bank_account_name ? ` - Conta: ${inc.bank_account_name}` : ''}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" onClick={() => openEditIncome(inc)} sx={{ mr: 1 }}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton edge="end" onClick={() => setDeleteIncomeTarget(inc)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Stack direction="row" spacing={1} alignItems="center">
               <Typography variant="h6">Contas Bancárias</Typography>
               <Chip label={bankAccounts.length} size="small" />
               {bankAccounts.length > 0 && (
@@ -259,7 +373,8 @@ export default function Settings() {
               sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
             >
               <Typography variant="body2" color="text.secondary">
-                Contas usadas opcionalmente para debitar o valor ao pagar uma despesa.
+                Contas usadas opcionalmente para debitar o valor ao pagar uma despesa ou creditar
+                ao receber uma entrada.
               </Typography>
               <Button
                 variant="contained"
@@ -319,7 +434,8 @@ export default function Settings() {
           </AccordionSummary>
           <AccordionDetails>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Adicione meses passados ou futuros. As despesas padrão serão copiadas automaticamente.
+              Adicione meses passados ou futuros. As despesas e entradas padrão serão copiadas
+              automaticamente.
             </Typography>
             <Stack direction="row" spacing={2} alignItems="flex-end" flexWrap="wrap" useFlexGap>
               <MonthYearPicker
@@ -365,8 +481,8 @@ export default function Settings() {
           </AccordionSummary>
           <AccordionDetails>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Exporta todos os meses, despesas e comprovantes em um arquivo ZIP. A importação
-              substitui todos os dados atuais.
+              Exporta todos os meses, despesas, entradas e comprovantes em um arquivo ZIP. A
+              importação substitui todos os dados atuais.
             </Typography>
             <Stack direction="row" spacing={2}>
               <Button variant="outlined" startIcon={<FileDownloadIcon />} onClick={exportData}>
@@ -407,6 +523,32 @@ export default function Settings() {
         loading={deleting}
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleConfirmDelete}
+      />
+
+      <DefaultIncomeForm
+        key={incomeFormKey}
+        open={incomeFormOpen}
+        bankAccounts={bankAccounts}
+        onClose={() => {
+          setIncomeFormOpen(false);
+          setEditingIncome(null);
+        }}
+        onSave={handleSaveDefaultIncome}
+        initial={editingIncome}
+      />
+
+      <ConfirmDialog
+        open={!!deleteIncomeTarget}
+        title="Excluir entrada padrão?"
+        message={
+          <>
+            Tem certeza que deseja excluir <strong>{deleteIncomeTarget?.name}</strong>? Ela deixará
+            de ser criada automaticamente nos próximos meses.
+          </>
+        }
+        loading={deletingIncome}
+        onClose={() => setDeleteIncomeTarget(null)}
+        onConfirm={handleConfirmDeleteIncome}
       />
 
       <BankAccountForm

@@ -11,9 +11,11 @@ export function getExportData(db: Database.Database) {
     version: 1,
     exported_at: new Date().toISOString(),
     default_expenses: db.prepare('SELECT * FROM default_expenses').all(),
+    default_incomes: db.prepare('SELECT * FROM default_incomes').all(),
     bank_accounts: db.prepare('SELECT * FROM bank_accounts').all(),
     months: db.prepare('SELECT * FROM months ORDER BY year, month').all(),
     expenses: db.prepare('SELECT * FROM expenses ORDER BY month_id').all(),
+    incomes: db.prepare('SELECT * FROM incomes ORDER BY month_id').all(),
   };
 }
 
@@ -37,6 +39,9 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
     const defaultExpenses = data.default_expenses ?? data.default_accounts ?? [];
     // Backups anteriores à criação das contas bancárias não têm essa chave.
     const bankAccounts = data.bank_accounts ?? [];
+    // Backups anteriores à criação de entradas não têm essas chaves.
+    const incomes = data.incomes ?? [];
+    const defaultIncomes = data.default_incomes ?? [];
 
     if (!data.version || !data.months || !expenses) {
       throw new AppError(400, 'Formato de dados inválido');
@@ -46,7 +51,9 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
     try {
       const run = db.transaction(() => {
         db.exec('DELETE FROM expenses');
+        db.exec('DELETE FROM incomes');
         db.exec('DELETE FROM default_expenses');
+        db.exec('DELETE FROM default_incomes');
         db.exec('DELETE FROM bank_accounts');
         db.exec('DELETE FROM months');
 
@@ -55,6 +62,13 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
         );
         for (const exp of defaultExpenses) {
           insertDefault.run(exp.name, exp.due_day, exp.amount);
+        }
+
+        const insertDefaultIncome = db.prepare(
+          'INSERT INTO default_incomes (name, expected_day, amount, bank_account_id) VALUES (?, ?, ?, ?)'
+        );
+        for (const inc of defaultIncomes) {
+          insertDefaultIncome.run(inc.name, inc.expected_day, inc.amount, inc.bank_account_id ?? null);
         }
 
         const insertBankAccount = db.prepare(
@@ -87,6 +101,24 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
             e.receipt,
             e.notes,
             e.bank_account_id ?? null
+          );
+        }
+
+        const insertIncome = db.prepare(
+          `INSERT INTO incomes (id, month_id, name, expected_date, amount, is_received, received_at, notes, bank_account_id)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        );
+        for (const i of incomes) {
+          insertIncome.run(
+            i.id,
+            i.month_id,
+            i.name,
+            i.expected_date,
+            i.amount,
+            i.is_received,
+            i.received_at,
+            i.notes,
+            i.bank_account_id ?? null
           );
         }
       });

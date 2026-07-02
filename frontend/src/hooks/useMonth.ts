@@ -119,6 +119,81 @@ export function useMonth(id: string | undefined) {
     }
   }
 
+  async function receive(incomeId: number, notes?: string, receivedAt?: string, bankAccountId?: number) {
+    try {
+      await api.receiveIncome(incomeId, notes, receivedAt, bankAccountId);
+      showSnackbar('Entrada marcada como recebida!');
+      await reload();
+      return true;
+    } catch (err) {
+      showError(err);
+      return false;
+    }
+  }
+
+  async function unreceive(incomeId: number) {
+    try {
+      await api.unreceiveIncome(incomeId);
+      showSnackbar('Recebimento desmarcado');
+      await reload();
+      return true;
+    } catch (err) {
+      showError(err);
+      return false;
+    }
+  }
+
+  async function addIncome(data: {
+    name: string;
+    amount: number;
+    expected_date?: string;
+    bank_account_id?: number | null;
+  }) {
+    if (!id) return false;
+    try {
+      await api.createIncome(Number(id), data);
+      showSnackbar('Entrada adicionada');
+      await reload();
+      return true;
+    } catch (err) {
+      showError(err);
+      return false;
+    }
+  }
+
+  async function editIncome(
+    incomeId: number,
+    data: {
+      name: string;
+      amount: number;
+      expected_date?: string;
+      notes?: string;
+      bank_account_id?: number | null;
+    }
+  ) {
+    try {
+      await api.updateIncome(incomeId, data);
+      showSnackbar('Entrada atualizada');
+      await reload();
+      return true;
+    } catch (err) {
+      showError(err);
+      return false;
+    }
+  }
+
+  async function deleteIncome(incomeId: number) {
+    try {
+      await api.deleteIncome(incomeId);
+      showSnackbar('Entrada removida');
+      await reload();
+      return true;
+    } catch (err) {
+      showError(err);
+      return false;
+    }
+  }
+
   async function deleteMonth() {
     if (!id) return false;
     setDeleting(true);
@@ -151,6 +226,11 @@ export function useMonth(id: string | undefined) {
     addExpense,
     editExpense,
     deleteExpense,
+    receive,
+    unreceive,
+    addIncome,
+    editIncome,
+    deleteIncome,
     deleteMonth,
   };
 }

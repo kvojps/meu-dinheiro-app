@@ -51,6 +51,7 @@ export function deleteBankAccount(db: Database.Database, id: number) {
   getBankAccountById(db, id);
   const run = db.transaction(() => {
     db.prepare('UPDATE expenses SET bank_account_id = NULL WHERE bank_account_id = ?').run(id);
+    db.prepare('UPDATE incomes SET bank_account_id = NULL WHERE bank_account_id = ?').run(id);
     db.prepare('DELETE FROM bank_accounts WHERE id = ?').run(id);
   });
   run();

@@ -17,6 +17,14 @@ interface DefaultExpenseRow {
   amount: number;
 }
 
+interface DefaultIncomeRow {
+  id: number;
+  name: string;
+  expected_day: number | null;
+  amount: number;
+  bank_account_id: number | null;
+}
+
 function insertExpensesFromDefaults(
   db: Database.Database,
   monthId: number,
@@ -29,6 +37,27 @@ function insertExpensesFromDefaults(
   );
   for (const def of defaults) {
     insertExpense.run(monthId, def.name, formatDueDate(year, month, def.due_day), def.amount);
+  }
+}
+
+function insertIncomesFromDefaults(
+  db: Database.Database,
+  monthId: number,
+  year: number,
+  month: number
+) {
+  const defaults = db.prepare('SELECT * FROM default_incomes').all() as DefaultIncomeRow[];
+  const insertIncome = db.prepare(
+    'INSERT INTO incomes (month_id, name, expected_date, amount, bank_account_id) VALUES (?, ?, ?, ?, ?)'
+  );
+  for (const def of defaults) {
+    insertIncome.run(
+      monthId,
+      def.name,
+      formatDueDate(year, month, def.expected_day),
+      def.amount,
+      def.bank_account_id
+    );
   }
 }
 
@@ -50,6 +79,7 @@ export function createMonthWithDefaults(
       .run(label, year, month);
     const monthId = result.lastInsertRowid as number;
     insertExpensesFromDefaults(db, monthId, year, month);
+    insertIncomesFromDefaults(db, monthId, year, month);
     return monthId;
   });
 
@@ -73,16 +103,19 @@ export function listMonths(db: Database.Database) {
     .prepare(
       `
     SELECT m.*,
-      COUNT(e.id) as total_expenses,
-      COALESCE(SUM(CASE WHEN e.is_paid = 1 THEN 1 ELSE 0 END), 0) as paid_expenses,
-      COALESCE(SUM(CASE WHEN e.is_paid = 1 THEN e.amount ELSE 0 END), 0) as paid_amount,
-      COALESCE(SUM(CASE WHEN e.is_paid = 0 THEN e.amount ELSE 0 END), 0) as unpaid_amount,
-      COALESCE(SUM(e.amount), 0) as total_amount,
-      COALESCE(SUM(CASE WHEN e.is_paid = 0 AND e.due_date IS NOT NULL AND e.due_date < date('now') THEN 1 ELSE 0 END), 0) as overdue_expenses,
-      COALESCE(SUM(CASE WHEN e.is_paid = 0 AND e.due_date IS NOT NULL AND e.due_date < date('now') THEN e.amount ELSE 0 END), 0) as overdue_amount
+      (SELECT COUNT(*) FROM expenses e WHERE e.month_id = m.id) as total_expenses,
+      (SELECT COALESCE(SUM(CASE WHEN e.is_paid = 1 THEN 1 ELSE 0 END), 0) FROM expenses e WHERE e.month_id = m.id) as paid_expenses,
+      (SELECT COALESCE(SUM(CASE WHEN e.is_paid = 1 THEN e.amount ELSE 0 END), 0) FROM expenses e WHERE e.month_id = m.id) as paid_amount,
+      (SELECT COALESCE(SUM(CASE WHEN e.is_paid = 0 THEN e.amount ELSE 0 END), 0) FROM expenses e WHERE e.month_id = m.id) as unpaid_amount,
+      (SELECT COALESCE(SUM(e.amount), 0) FROM expenses e WHERE e.month_id = m.id) as total_amount,
+      (SELECT COALESCE(SUM(CASE WHEN e.is_paid = 0 AND e.due_date IS NOT NULL AND e.due_date < date('now') THEN 1 ELSE 0 END), 0) FROM expenses e WHERE e.month_id = m.id) as overdue_expenses,
+      (SELECT COALESCE(SUM(CASE WHEN e.is_paid = 0 AND e.due_date IS NOT NULL AND e.due_date < date('now') THEN e.amount ELSE 0 END), 0) FROM expenses e WHERE e.month_id = m.id) as overdue_amount,
+      (SELECT COUNT(*) FROM incomes i WHERE i.month_id = m.id) as total_incomes,
+      (SELECT COALESCE(SUM(CASE WHEN i.is_received = 1 THEN 1 ELSE 0 END), 0) FROM incomes i WHERE i.month_id = m.id) as received_incomes,
+      (SELECT COALESCE(SUM(CASE WHEN i.is_received = 1 THEN i.amount ELSE 0 END), 0) FROM incomes i WHERE i.month_id = m.id) as received_income,
+      (SELECT COALESCE(SUM(CASE WHEN i.is_received = 0 THEN i.amount ELSE 0 END), 0) FROM incomes i WHERE i.month_id = m.id) as pending_income,
+      (SELECT COALESCE(SUM(i.amount), 0) FROM incomes i WHERE i.month_id = m.id) as total_income
     FROM months m
-    LEFT JOIN expenses e ON e.month_id = m.id
-    GROUP BY m.id
     ORDER BY m.year DESC, m.month DESC
   `
     )
@@ -105,7 +138,17 @@ export function getMonthWithExpenses(db: Database.Database, id: number) {
     )
     .all(id);
 
-  return { ...month, expenses };
+  const incomes = db
+    .prepare(
+      `SELECT i.*, ba.name as bank_account_name
+       FROM incomes i
+       LEFT JOIN bank_accounts ba ON ba.id = i.bank_account_id
+       WHERE i.month_id = ?
+       ORDER BY i.expected_date, i.name`
+    )
+    .all(id);
+
+  return { ...month, expenses, incomes };
 }
 
 export function createNextMonth(db: Database.Database, year?: number, month?: number): MonthRow {

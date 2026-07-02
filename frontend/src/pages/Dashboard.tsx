@@ -9,6 +9,7 @@ import {
   Box,
   Chip,
   Paper,
+  Divider,
   FormControl,
   InputLabel,
   Select,
@@ -136,15 +137,15 @@ export default function Dashboard() {
         (acc, m) => ({
           paid: acc.paid + (m.paid_amount ?? 0),
           pending: acc.pending + (m.unpaid_amount ?? 0),
+          received: acc.received + (m.received_income ?? 0),
+          pendingIncome: acc.pendingIncome + (m.pending_income ?? 0),
         }),
-        { paid: 0, pending: 0 }
+        { paid: 0, pending: 0, received: 0, pendingIncome: 0 }
       ),
     [filteredMonths]
   );
 
-  const summaryTotal = summary.paid + summary.pending;
-  const paidPct = summaryTotal > 0 ? (summary.paid / summaryTotal) * 100 : 0;
-  const pendingPct = summaryTotal > 0 ? 100 - paidPct : 0;
+  const balance = summary.received - summary.paid;
 
   const now = new Date();
   const currentKey = monthKey(now.getFullYear(), now.getMonth() + 1);
@@ -200,56 +201,58 @@ export default function Dashboard() {
   return (
     <Box>
       <Paper sx={{ p: 3, mb: 3 }}>
+        {bankAccounts.length > 0 && (
+          <>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Saldo em contas
+            </Typography>
+            <Typography
+              variant="h3"
+              sx={{ fontWeight: 800 }}
+              color={totalBankBalance < 0 ? 'error.main' : 'text.primary'}
+            >
+              {formatCurrencyBRL(totalBankBalance)}
+            </Typography>
+            <Divider sx={{ my: 2.5 }} />
+          </>
+        )}
+
         <Typography variant="body2" color="text.secondary" gutterBottom>
-          Total no período
+          Balanço do período (entradas - despesas)
         </Typography>
-        <Typography variant="h3" sx={{ fontWeight: 800 }}>
-          {formatCurrencyBRL(summaryTotal)}
-        </Typography>
-
-        <Box
-          sx={{
-            display: 'flex',
-            height: 8,
-            borderRadius: 1,
-            overflow: 'hidden',
-            mt: 2.5,
-            mb: 1.5,
-            bgcolor: 'action.hover',
-          }}
+        <Typography
+          variant={bankAccounts.length > 0 ? 'h5' : 'h3'}
+          sx={{ fontWeight: 800 }}
+          color={balance >= 0 ? 'success.main' : 'error.main'}
         >
-          {summaryTotal > 0 && (
-            <>
-              <Box sx={{ width: `${paidPct}%`, bgcolor: 'success.main' }} />
-              <Box sx={{ width: `${pendingPct}%`, bgcolor: 'warning.main' }} />
-            </>
-          )}
-        </Box>
+          {formatCurrencyBRL(balance)}
+        </Typography>
 
-        <Stack direction="row" spacing={3} flexWrap="wrap">
+        <Stack direction="row" spacing={3} flexWrap="wrap" sx={{ mt: 2 }}>
           <Stack direction="row" spacing={1} alignItems="center">
             <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }} />
             <Typography variant="body2" color="text.secondary">
-              Pago: <strong>{formatCurrencyBRL(summary.paid)}</strong>
+              Recebido: <strong>{formatCurrencyBRL(summary.received)}</strong>
             </Typography>
           </Stack>
           <Stack direction="row" spacing={1} alignItems="center">
             <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'warning.main' }} />
             <Typography variant="body2" color="text.secondary">
-              Pendente: <strong>{formatCurrencyBRL(summary.pending)}</strong>
+              A receber: <strong>{formatCurrencyBRL(summary.pendingIncome)}</strong>
             </Typography>
           </Stack>
-          {bankAccounts.length > 0 && (
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'info.main' }} />
-              <Typography
-                variant="body2"
-                color={totalBankBalance < 0 ? 'error.main' : 'text.secondary'}
-              >
-                Em contas: <strong>{formatCurrencyBRL(totalBankBalance)}</strong>
-              </Typography>
-            </Stack>
-          )}
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'error.main' }} />
+            <Typography variant="body2" color="text.secondary">
+              Pago: <strong>{formatCurrencyBRL(summary.paid)}</strong>
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'text.disabled' }} />
+            <Typography variant="body2" color="text.secondary">
+              A pagar: <strong>{formatCurrencyBRL(summary.pending)}</strong>
+            </Typography>
+          </Stack>
         </Stack>
       </Paper>
 
@@ -359,6 +362,27 @@ export default function Dashboard() {
                     >
                       {formatCurrencyBRL(month.total_amount ?? 0)}
                     </Typography>
+
+                    {(month.total_income ?? 0) > 0 && (
+                      <Stack direction="row" spacing={2} sx={{ mt: 0.5 }}>
+                        <Typography variant="body2" color="success.main">
+                          Entradas: {formatCurrencyBRL(month.total_income ?? 0)}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color={
+                            (month.received_income ?? 0) - (month.paid_amount ?? 0) >= 0
+                              ? 'success.main'
+                              : 'error.main'
+                          }
+                        >
+                          Saldo:{' '}
+                          {formatCurrencyBRL(
+                            (month.received_income ?? 0) - (month.paid_amount ?? 0)
+                          )}
+                        </Typography>
+                      </Stack>
+                    )}
 
                     {total > 0 && (
                       <Box sx={{ mt: 1.5 }}>
