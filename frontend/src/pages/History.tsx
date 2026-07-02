@@ -148,7 +148,7 @@ export default function History() {
       <Box sx={{ textAlign: 'center', mt: 8 }}>
         <ErrorOutline sx={{ fontSize: 48, color: 'error.main', mb: 1 }} />
         <Typography variant="h5" gutterBottom>
-          Não foi possível carregar o histórico
+          Não foi possível carregar o histórico de despesas
         </Typography>
         <Typography color="text.secondary" sx={{ mb: 2 }}>
           Verifique sua conexão e tente novamente.
@@ -164,7 +164,7 @@ export default function History() {
   return (
     <Box>
       <Typography variant="h4" gutterBottom>
-        Histórico Mensal
+        Histórico de Despesas
       </Typography>
 
       <Paper

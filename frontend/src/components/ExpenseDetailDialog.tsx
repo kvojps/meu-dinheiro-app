@@ -9,35 +9,35 @@ import {
   Typography,
 } from '@mui/material';
 import { AttachFile } from '@mui/icons-material';
-import { Account } from '../types/models';
+import { Expense } from '../types/models';
 import { formatDateOnlyBR, formatPaidDateBR } from '../utils/date';
 import { formatCurrencyBRLOrFallback } from '../utils/format';
 
-interface AccountDetailDialogProps {
+interface ExpenseDetailDialogProps {
   open: boolean;
-  account: Account | null;
+  expense: Expense | null;
   onClose: () => void;
 }
 
-export default function AccountDetailDialog({ open, account, onClose }: AccountDetailDialogProps) {
+export default function ExpenseDetailDialog({ open, expense, onClose }: ExpenseDetailDialogProps) {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{account?.name}</DialogTitle>
+      <DialogTitle>{expense?.name}</DialogTitle>
       <DialogContent dividers>
-        {account && (
+        {expense && (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, py: 1 }}>
             <Box>
               <Typography variant="caption" color="text.secondary">
                 Valor
               </Typography>
-              <Typography>{formatCurrencyBRLOrFallback(account.amount)}</Typography>
+              <Typography>{formatCurrencyBRLOrFallback(expense.amount)}</Typography>
             </Box>
-            {account.due_date && (
+            {expense.due_date && (
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   Vencimento
                 </Typography>
-                <Typography>{formatDateOnlyBR(account.due_date)}</Typography>
+                <Typography>{formatDateOnlyBR(expense.due_date)}</Typography>
               </Box>
             )}
             <Box>
@@ -45,21 +45,21 @@ export default function AccountDetailDialog({ open, account, onClose }: AccountD
                 Status
               </Typography>
               <Chip
-                label={account.is_paid ? 'Paga' : 'Pendente'}
-                color={account.is_paid ? 'success' : 'default'}
+                label={expense.is_paid ? 'Paga' : 'Pendente'}
+                color={expense.is_paid ? 'success' : 'default'}
                 size="small"
                 sx={{ mt: 0.5 }}
               />
             </Box>
-            {account.paid_at && (
+            {expense.paid_at && (
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   Pago em
                 </Typography>
-                <Typography>{formatPaidDateBR(account.paid_at)}</Typography>
+                <Typography>{formatPaidDateBR(expense.paid_at)}</Typography>
               </Box>
             )}
-            {account.receipt && (
+            {expense.receipt && (
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   Comprovante
@@ -68,7 +68,7 @@ export default function AccountDetailDialog({ open, account, onClose }: AccountD
                   <Button
                     size="small"
                     startIcon={<AttachFile />}
-                    href={`/uploads/${account.receipt}`}
+                    href={`/uploads/${expense.receipt}`}
                     target="_blank"
                   >
                     Abrir comprovante
@@ -76,12 +76,12 @@ export default function AccountDetailDialog({ open, account, onClose }: AccountD
                 </Box>
               </Box>
             )}
-            {account.notes && (
+            {expense.notes && (
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   Observação
                 </Typography>
-                <Typography sx={{ fontStyle: 'italic' }}>"{account.notes}"</Typography>
+                <Typography sx={{ fontStyle: 'italic' }}>"{expense.notes}"</Typography>
               </Box>
             )}
           </Box>

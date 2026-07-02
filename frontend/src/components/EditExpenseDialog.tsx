@@ -7,11 +7,11 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import { Account } from '../types/models';
+import { Expense } from '../types/models';
 
-interface EditAccountDialogProps {
+interface EditExpenseDialogProps {
   open: boolean;
-  account: Account;
+  expense: Expense;
   onClose: () => void;
   onSubmit: (data: {
     name: string;
@@ -21,16 +21,16 @@ interface EditAccountDialogProps {
   }) => Promise<boolean>;
 }
 
-export default function EditAccountDialog({
+export default function EditExpenseDialog({
   open,
-  account,
+  expense,
   onClose,
   onSubmit,
-}: EditAccountDialogProps) {
-  const [name, setName] = useState(account.name);
-  const [amount, setAmount] = useState(account.amount ? String(account.amount) : '');
-  const [dueDate, setDueDate] = useState(account.due_date || '');
-  const [notes, setNotes] = useState(account.notes || '');
+}: EditExpenseDialogProps) {
+  const [name, setName] = useState(expense.name);
+  const [amount, setAmount] = useState(expense.amount ? String(expense.amount) : '');
+  const [dueDate, setDueDate] = useState(expense.due_date || '');
+  const [notes, setNotes] = useState(expense.notes || '');
 
   async function handleSubmit() {
     if (!name.trim()) return;
@@ -45,7 +45,7 @@ export default function EditAccountDialog({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Editar Conta</DialogTitle>
+      <DialogTitle>Editar Despesa</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus

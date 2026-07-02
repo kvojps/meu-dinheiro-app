@@ -282,9 +282,9 @@ export default function Dashboard() {
 
       <Grid container spacing={3}>
         {visibleMonths.map((month) => {
-          const total = month.total_accounts ?? 0;
-          const paid = month.paid_accounts ?? 0;
-          const overdue = month.overdue_accounts ?? 0;
+          const total = month.total_expenses ?? 0;
+          const paid = month.paid_expenses ?? 0;
+          const overdue = month.overdue_expenses ?? 0;
           const allPaid = total > 0 && paid === total;
           const isCurrent = monthKey(month.year, month.month) === currentKey;
 
@@ -322,7 +322,7 @@ export default function Dashboard() {
                         {total > 0 ? (
                           <Chip label={`${paid}/${total} pagas`} color={statusColor} size="small" />
                         ) : (
-                          <Chip label="Sem contas" size="small" />
+                          <Chip label="Sem despesas" size="small" />
                         )}
                         {overdue > 0 && (
                           <Chip

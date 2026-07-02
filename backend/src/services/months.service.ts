@@ -10,25 +10,25 @@ export interface MonthRow {
   created_at: string;
 }
 
-interface DefaultAccountRow {
+interface DefaultExpenseRow {
   id: number;
   name: string;
   due_day: number | null;
   amount: number;
 }
 
-function insertAccountsFromDefaults(
+function insertExpensesFromDefaults(
   db: Database.Database,
   monthId: number,
   year: number,
   month: number
 ) {
-  const defaults = db.prepare('SELECT * FROM default_accounts').all() as DefaultAccountRow[];
-  const insertAccount = db.prepare(
-    'INSERT INTO accounts (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)'
+  const defaults = db.prepare('SELECT * FROM default_expenses').all() as DefaultExpenseRow[];
+  const insertExpense = db.prepare(
+    'INSERT INTO expenses (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)'
   );
   for (const def of defaults) {
-    insertAccount.run(monthId, def.name, formatDueDate(year, month, def.due_day), def.amount);
+    insertExpense.run(monthId, def.name, formatDueDate(year, month, def.due_day), def.amount);
   }
 }
 
@@ -49,7 +49,7 @@ export function createMonthWithDefaults(
       .prepare('INSERT INTO months (label, year, month) VALUES (?, ?, ?)')
       .run(label, year, month);
     const monthId = result.lastInsertRowid as number;
-    insertAccountsFromDefaults(db, monthId, year, month);
+    insertExpensesFromDefaults(db, monthId, year, month);
     return monthId;
   });
 
@@ -73,15 +73,15 @@ export function listMonths(db: Database.Database) {
     .prepare(
       `
     SELECT m.*,
-      COUNT(a.id) as total_accounts,
-      COALESCE(SUM(CASE WHEN a.is_paid = 1 THEN 1 ELSE 0 END), 0) as paid_accounts,
-      COALESCE(SUM(CASE WHEN a.is_paid = 1 THEN a.amount ELSE 0 END), 0) as paid_amount,
-      COALESCE(SUM(CASE WHEN a.is_paid = 0 THEN a.amount ELSE 0 END), 0) as unpaid_amount,
-      COALESCE(SUM(a.amount), 0) as total_amount,
-      COALESCE(SUM(CASE WHEN a.is_paid = 0 AND a.due_date IS NOT NULL AND a.due_date < date('now') THEN 1 ELSE 0 END), 0) as overdue_accounts,
-      COALESCE(SUM(CASE WHEN a.is_paid = 0 AND a.due_date IS NOT NULL AND a.due_date < date('now') THEN a.amount ELSE 0 END), 0) as overdue_amount
+      COUNT(e.id) as total_expenses,
+      COALESCE(SUM(CASE WHEN e.is_paid = 1 THEN 1 ELSE 0 END), 0) as paid_expenses,
+      COALESCE(SUM(CASE WHEN e.is_paid = 1 THEN e.amount ELSE 0 END), 0) as paid_amount,
+      COALESCE(SUM(CASE WHEN e.is_paid = 0 THEN e.amount ELSE 0 END), 0) as unpaid_amount,
+      COALESCE(SUM(e.amount), 0) as total_amount,
+      COALESCE(SUM(CASE WHEN e.is_paid = 0 AND e.due_date IS NOT NULL AND e.due_date < date('now') THEN 1 ELSE 0 END), 0) as overdue_expenses,
+      COALESCE(SUM(CASE WHEN e.is_paid = 0 AND e.due_date IS NOT NULL AND e.due_date < date('now') THEN e.amount ELSE 0 END), 0) as overdue_amount
     FROM months m
-    LEFT JOIN accounts a ON a.month_id = m.id
+    LEFT JOIN expenses e ON e.month_id = m.id
     GROUP BY m.id
     ORDER BY m.year DESC, m.month DESC
   `
@@ -89,17 +89,17 @@ export function listMonths(db: Database.Database) {
     .all();
 }
 
-export function getMonthWithAccounts(db: Database.Database, id: number) {
+export function getMonthWithExpenses(db: Database.Database, id: number) {
   const month = db.prepare('SELECT * FROM months WHERE id = ?').get(id) as MonthRow | undefined;
   if (!month) {
     throw new AppError(404, 'Month not found');
   }
 
-  const accounts = db
-    .prepare('SELECT * FROM accounts WHERE month_id = ? ORDER BY due_date, name')
+  const expenses = db
+    .prepare('SELECT * FROM expenses WHERE month_id = ? ORDER BY due_date, name')
     .all(id);
 
-  return { ...month, accounts };
+  return { ...month, expenses };
 }
 
 export function createNextMonth(db: Database.Database, year?: number, month?: number): MonthRow {

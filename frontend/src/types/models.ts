@@ -4,20 +4,20 @@ export interface Month {
   year: number;
   month: number;
   created_at: string;
-  total_accounts?: number;
-  paid_accounts?: number;
+  total_expenses?: number;
+  paid_expenses?: number;
   paid_amount?: number;
   unpaid_amount?: number;
   total_amount?: number;
-  overdue_accounts?: number;
+  overdue_expenses?: number;
   overdue_amount?: number;
 }
 
 export interface MonthDetail extends Month {
-  accounts: Account[];
+  expenses: Expense[];
 }
 
-export interface DefaultAccount {
+export interface DefaultExpense {
   id: number;
   name: string;
   due_day: number | null;
@@ -25,7 +25,7 @@ export interface DefaultAccount {
   created_at: string;
 }
 
-export interface Account {
+export interface Expense {
   id: number;
   month_id: number;
   name: string;

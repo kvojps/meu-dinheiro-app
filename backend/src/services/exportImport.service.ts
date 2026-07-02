@@ -10,9 +10,9 @@ export function getExportData(db: Database.Database) {
   return {
     version: 1,
     exported_at: new Date().toISOString(),
-    default_accounts: db.prepare('SELECT * FROM default_accounts').all(),
+    default_expenses: db.prepare('SELECT * FROM default_expenses').all(),
     months: db.prepare('SELECT * FROM months ORDER BY year, month').all(),
-    accounts: db.prepare('SELECT * FROM accounts ORDER BY month_id').all(),
+    expenses: db.prepare('SELECT * FROM expenses ORDER BY month_id').all(),
   };
 }
 
@@ -31,22 +31,26 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
 
     const data = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
 
-    if (!data.version || !data.months || !data.accounts) {
+    // Backups exportados antes da renomeação "contas" -> "despesas" usam as chaves antigas.
+    const expenses = data.expenses ?? data.accounts;
+    const defaultExpenses = data.default_expenses ?? data.default_accounts ?? [];
+
+    if (!data.version || !data.months || !expenses) {
       throw new AppError(400, 'Formato de dados inválido');
     }
 
     db.pragma('foreign_keys = OFF');
     try {
       const run = db.transaction(() => {
-        db.exec('DELETE FROM accounts');
-        db.exec('DELETE FROM default_accounts');
+        db.exec('DELETE FROM expenses');
+        db.exec('DELETE FROM default_expenses');
         db.exec('DELETE FROM months');
 
         const insertDefault = db.prepare(
-          'INSERT INTO default_accounts (name, due_day, amount) VALUES (?, ?, ?)'
+          'INSERT INTO default_expenses (name, due_day, amount) VALUES (?, ?, ?)'
         );
-        for (const acc of data.default_accounts ?? []) {
-          insertDefault.run(acc.name, acc.due_day, acc.amount);
+        for (const exp of defaultExpenses) {
+          insertDefault.run(exp.name, exp.due_day, exp.amount);
         }
 
         const insertMonth = db.prepare(
@@ -56,21 +60,21 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
           insertMonth.run(m.id, m.label, m.year, m.month);
         }
 
-        const insertAccount = db.prepare(
-          `INSERT INTO accounts (id, month_id, name, due_date, amount, is_paid, paid_at, receipt, notes)
+        const insertExpense = db.prepare(
+          `INSERT INTO expenses (id, month_id, name, due_date, amount, is_paid, paid_at, receipt, notes)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
         );
-        for (const a of data.accounts) {
-          insertAccount.run(
-            a.id,
-            a.month_id,
-            a.name,
-            a.due_date,
-            a.amount,
-            a.is_paid,
-            a.paid_at,
-            a.receipt,
-            a.notes
+        for (const e of expenses) {
+          insertExpense.run(
+            e.id,
+            e.month_id,
+            e.name,
+            e.due_date,
+            e.amount,
+            e.is_paid,
+            e.paid_at,
+            e.receipt,
+            e.notes
           );
         }
       });

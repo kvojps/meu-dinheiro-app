@@ -24,7 +24,21 @@ export function getDatabase(): Database.Database {
   return db;
 }
 
+function migrateLegacyTableNames() {
+  const tableExists = (name: string) =>
+    !!db.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?").get(name);
+
+  if (tableExists('default_accounts') && !tableExists('default_expenses')) {
+    db.exec('ALTER TABLE default_accounts RENAME TO default_expenses');
+  }
+  if (tableExists('accounts') && !tableExists('expenses')) {
+    db.exec('ALTER TABLE accounts RENAME TO expenses');
+  }
+}
+
 function initializeSchema() {
+  migrateLegacyTableNames();
+
   db.exec(`
     CREATE TABLE IF NOT EXISTS months (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,7 +48,7 @@ function initializeSchema() {
       created_at TEXT DEFAULT (datetime('now'))
     );
 
-    CREATE TABLE IF NOT EXISTS default_accounts (
+    CREATE TABLE IF NOT EXISTS default_expenses (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       due_day INTEGER,
@@ -42,7 +56,7 @@ function initializeSchema() {
       created_at TEXT DEFAULT (datetime('now'))
     );
 
-    CREATE TABLE IF NOT EXISTS accounts (
+    CREATE TABLE IF NOT EXISTS expenses (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       month_id INTEGER NOT NULL REFERENCES months(id) ON DELETE CASCADE,
       name TEXT NOT NULL,

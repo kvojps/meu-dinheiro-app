@@ -7,21 +7,21 @@ import {
   TextField,
   Button,
 } from '@mui/material';
-import { DefaultAccount } from '../types/models';
+import { DefaultExpense } from '../types/models';
 
-interface DefaultAccountFormProps {
+interface DefaultExpenseFormProps {
   open: boolean;
   onClose: () => void;
   onSave: (data: { name: string; due_day?: number; amount: number }) => void;
-  initial?: DefaultAccount | null;
+  initial?: DefaultExpense | null;
 }
 
-export default function DefaultAccountForm({
+export default function DefaultExpenseForm({
   open,
   onClose,
   onSave,
   initial,
-}: DefaultAccountFormProps) {
+}: DefaultExpenseFormProps) {
   const [name, setName] = useState(initial?.name ?? '');
   const [dueDay, setDueDay] = useState(initial?.due_day ? String(initial.due_day) : '');
   const [amount, setAmount] = useState(initial ? String(initial.amount) : '');
@@ -37,11 +37,11 @@ export default function DefaultAccountForm({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{initial ? 'Editar Conta Padrão' : 'Nova Conta Padrão'}</DialogTitle>
+      <DialogTitle>{initial ? 'Editar Despesa Padrão' : 'Nova Despesa Padrão'}</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
-          label="Nome da conta"
+          label="Nome da despesa"
           fullWidth
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -53,7 +53,7 @@ export default function DefaultAccountForm({
           fullWidth
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          helperText="Deixe em branco para contas de valor variável."
+          helperText="Deixe em branco para despesas de valor variável."
           sx={{ mb: 2 }}
         />
         <TextField
@@ -63,7 +63,7 @@ export default function DefaultAccountForm({
           value={dueDay}
           onChange={(e) => setDueDay(e.target.value)}
           inputProps={{ min: 1, max: 31 }}
-          helperText="Opcional. Dia do mês em que a conta vence."
+          helperText="Opcional. Dia do mês em que a despesa vence."
         />
       </DialogContent>
       <DialogActions>

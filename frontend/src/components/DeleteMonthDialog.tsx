@@ -27,8 +27,8 @@ export default function DeleteMonthDialog({
       <DialogTitle>Excluir mês?</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Tem certeza que deseja excluir <strong>{monthLabel}</strong>? Todas as contas e pagamentos
-          serão removidos.
+          Tem certeza que deseja excluir <strong>{monthLabel}</strong>? Todas as despesas e
+          pagamentos serão removidos.
         </DialogContentText>
       </DialogContent>
       <DialogActions>

@@ -8,13 +8,13 @@ import {
   TextField,
 } from '@mui/material';
 
-interface AddAccountDialogProps {
+interface AddExpenseDialogProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (data: { name: string; amount: number; due_date?: string }) => Promise<boolean>;
 }
 
-export default function AddAccountDialog({ open, onClose, onSubmit }: AddAccountDialogProps) {
+export default function AddExpenseDialog({ open, onClose, onSubmit }: AddExpenseDialogProps) {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -38,7 +38,7 @@ export default function AddAccountDialog({ open, onClose, onSubmit }: AddAccount
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Nova Conta</DialogTitle>
+      <DialogTitle>Nova Despesa</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus

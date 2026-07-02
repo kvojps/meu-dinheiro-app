@@ -1,4 +1,4 @@
-import type { Month, MonthDetail, DefaultAccount, Account } from '../types/models';
+import type { Month, MonthDetail, DefaultExpense, Expense } from '../types/models';
 
 const API_BASE = '/api';
 
@@ -50,60 +50,60 @@ export const api = {
     return request<MonthDetail>(`/months/${id}`);
   },
 
-  getDefaultAccounts() {
-    return request<DefaultAccount[]>('/default-accounts');
+  getDefaultExpenses() {
+    return request<DefaultExpense[]>('/default-expenses');
   },
 
-  createDefaultAccount(data: { name: string; due_day?: number; amount: number }) {
-    return request<DefaultAccount>('/default-accounts', {
+  createDefaultExpense(data: { name: string; due_day?: number; amount: number }) {
+    return request<DefaultExpense>('/default-expenses', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   },
 
-  updateDefaultAccount(id: number, data: { name?: string; due_day?: number; amount?: number }) {
-    return request<DefaultAccount>(`/default-accounts/${id}`, {
+  updateDefaultExpense(id: number, data: { name?: string; due_day?: number; amount?: number }) {
+    return request<DefaultExpense>(`/default-expenses/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   },
 
-  deleteDefaultAccount(id: number) {
-    return request<{ message: string }>(`/default-accounts/${id}`, {
+  deleteDefaultExpense(id: number) {
+    return request<{ message: string }>(`/default-expenses/${id}`, {
       method: 'DELETE',
     });
   },
 
-  createAccount(monthId: number, data: { name: string; due_date?: string; amount: number }) {
-    return request<Account>(`/months/${monthId}/accounts`, {
+  createExpense(monthId: number, data: { name: string; due_date?: string; amount: number }) {
+    return request<Expense>(`/months/${monthId}/expenses`, {
       method: 'POST',
       body: JSON.stringify(data),
     });
   },
 
-  updateAccount(
+  updateExpense(
     id: number,
     data: { name?: string; due_date?: string; amount?: number; notes?: string }
   ) {
-    return request<Account>(`/accounts/${id}`, {
+    return request<Expense>(`/expenses/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   },
 
-  deleteAccount(id: number) {
-    return request<{ message: string }>(`/accounts/${id}`, {
+  deleteExpense(id: number) {
+    return request<{ message: string }>(`/expenses/${id}`, {
       method: 'DELETE',
     });
   },
 
-  async payAccount(id: number, file?: File, notes?: string, paidAt?: string) {
+  async payExpense(id: number, file?: File, notes?: string, paidAt?: string) {
     const formData = new FormData();
     if (file) formData.append('receipt', file);
     if (notes) formData.append('notes', notes);
     if (paidAt) formData.append('paid_at', paidAt);
 
-    const res = await fetch(`${API_BASE}/accounts/${id}/pay`, {
+    const res = await fetch(`${API_BASE}/expenses/${id}/pay`, {
       method: 'PUT',
       body: formData,
     });
@@ -111,11 +111,11 @@ export const api = {
       const err = await res.json().catch(() => ({ error: res.statusText }));
       throw new Error(err.error || 'Request failed');
     }
-    return res.json() as Promise<Account>;
+    return res.json() as Promise<Expense>;
   },
 
-  unpayAccount(id: number) {
-    return request<Account>(`/accounts/${id}/unpay`, { method: 'PUT' });
+  unpayExpense(id: number) {
+    return request<Expense>(`/expenses/${id}/unpay`, { method: 'PUT' });
   },
 
   async exportData() {

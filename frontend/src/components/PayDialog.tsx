@@ -9,19 +9,19 @@ import {
   Box,
   TextField,
 } from '@mui/material';
-import { Account } from '../types/models';
+import { Expense } from '../types/models';
 import FileUploadButton from './FileUploadButton';
 import { formatDateOnlyBR, todayDateString } from '../utils/date';
 import { formatCurrencyBRL } from '../utils/format';
 
 interface PayDialogProps {
   open: boolean;
-  account: Account | null;
+  expense: Expense | null;
   onClose: () => void;
   onConfirm: (file?: File, notes?: string, paidAt?: string) => void;
 }
 
-export default function PayDialog({ open, account, onClose, onConfirm }: PayDialogProps) {
+export default function PayDialog({ open, expense, onClose, onConfirm }: PayDialogProps) {
   const [file, setFile] = useState<File | null>(null);
   const [notes, setNotes] = useState('');
   const [paidAt, setPaidAt] = useState(todayDateString());
@@ -40,21 +40,21 @@ export default function PayDialog({ open, account, onClose, onConfirm }: PayDial
     setPaidAt(todayDateString());
   }
 
-  if (!account) return null;
+  if (!expense) return null;
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Pagar Conta</DialogTitle>
+      <DialogTitle>Pagar Despesa</DialogTitle>
       <DialogContent>
         <Typography variant="h6" gutterBottom>
-          {account.name}
+          {expense.name}
         </Typography>
         <Typography variant="body1" color="text.secondary" gutterBottom>
-          Valor: {formatCurrencyBRL(account.amount)}
+          Valor: {formatCurrencyBRL(expense.amount)}
         </Typography>
-        {account.due_date && (
+        {expense.due_date && (
           <Typography variant="body2" color="text.secondary" gutterBottom>
-            Vencimento: {formatDateOnlyBR(account.due_date)}
+            Vencimento: {formatDateOnlyBR(expense.due_date)}
           </Typography>
         )}
 

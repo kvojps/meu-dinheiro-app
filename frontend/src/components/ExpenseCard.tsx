@@ -24,12 +24,12 @@ import {
   StickyNote2Outlined,
   Visibility,
 } from '@mui/icons-material';
-import { Account } from '../types/models';
+import { Expense } from '../types/models';
 import { formatDateOnlyBR, formatPaidDateBR, todayDateString } from '../utils/date';
 import { formatCurrencyBRLOrFallback } from '../utils/format';
 
-interface AccountCardProps {
-  account: Account;
+interface ExpenseCardProps {
+  expense: Expense;
   onPay: () => void;
   onUnpay: () => void;
   onViewDetail: () => void;
@@ -37,20 +37,20 @@ interface AccountCardProps {
   onDelete: () => void;
 }
 
-export default function AccountCard({
-  account,
+export default function ExpenseCard({
+  expense,
   onPay,
   onUnpay,
   onViewDetail,
   onEdit,
   onDelete,
-}: AccountCardProps) {
+}: ExpenseCardProps) {
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
 
-  const isOverdue = !account.is_paid && !!account.due_date && account.due_date < todayDateString();
+  const isOverdue = !expense.is_paid && !!expense.due_date && expense.due_date < todayDateString();
 
   let borderColor: string = 'warning.main';
-  if (account.is_paid) borderColor = 'success.main';
+  if (expense.is_paid) borderColor = 'success.main';
   else if (isOverdue) borderColor = 'error.main';
 
   function closeMenu() {
@@ -71,16 +71,16 @@ export default function AccountCard({
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <Typography variant="h6" gutterBottom>
-              {account.name}
+              {expense.name}
             </Typography>
-            {account.notes && (
+            {expense.notes && (
               <Tooltip title="Possui observação">
                 <StickyNote2Outlined fontSize="small" sx={{ color: 'text.secondary', mb: 0.5 }} />
               </Tooltip>
             )}
           </Stack>
           <Stack direction="row" spacing={0.5}>
-            {account.is_paid ? (
+            {expense.is_paid ? (
               <Chip label="Paga" color="success" size="small" icon={<CheckCircle />} />
             ) : isOverdue ? (
               <Chip label="Vencida" color="error" size="small" />
@@ -90,24 +90,24 @@ export default function AccountCard({
           </Stack>
         </Box>
         <Typography variant="h5" sx={{ fontWeight: 700 }} gutterBottom>
-          {formatCurrencyBRLOrFallback(account.amount)}
+          {formatCurrencyBRLOrFallback(expense.amount)}
         </Typography>
-        {account.due_date && (
+        {expense.due_date && (
           <Typography variant="body2" color="text.secondary">
-            Vencimento: {formatDateOnlyBR(account.due_date)}
+            Vencimento: {formatDateOnlyBR(expense.due_date)}
           </Typography>
         )}
-        {account.paid_at && (
+        {expense.paid_at && (
           <Typography variant="body2" color="text.secondary">
-            Pago em: {formatPaidDateBR(account.paid_at)}
+            Pago em: {formatPaidDateBR(expense.paid_at)}
           </Typography>
         )}
-        {account.receipt && (
+        {expense.receipt && (
           <Box sx={{ mt: 1 }}>
             <Button
               size="small"
               startIcon={<AttachFile />}
-              href={`/uploads/${account.receipt}`}
+              href={`/uploads/${expense.receipt}`}
               target="_blank"
             >
               Comprovante
@@ -116,7 +116,7 @@ export default function AccountCard({
         )}
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        {account.is_paid ? (
+        {expense.is_paid ? (
           <Button size="small" color="warning" onClick={onUnpay}>
             Desmarcar
           </Button>

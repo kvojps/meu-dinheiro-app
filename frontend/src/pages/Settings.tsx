@@ -29,21 +29,21 @@ import {
   ReceiptLong,
   ErrorOutline,
 } from '@mui/icons-material';
-import { DefaultAccount } from '../types/models';
-import DefaultAccountForm from '../components/DefaultAccountForm';
+import { DefaultExpense } from '../types/models';
+import DefaultExpenseForm from '../components/DefaultExpenseForm';
 import MonthYearPicker from '../components/MonthYearPicker';
 import FileUploadButton from '../components/FileUploadButton';
 import AppSnackbar from '../components/AppSnackbar';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { useSnackbar } from '../hooks/useSnackbar';
-import { useDefaultAccounts } from '../hooks/useDefaultAccounts';
+import { useDefaultExpenses } from '../hooks/useDefaultExpenses';
 import { useMonthRangeCreator, MAX_BATCH_MONTHS } from '../hooks/useMonthRangeCreator';
 import { useDataTransfer } from '../hooks/useDataTransfer';
 import { formatCurrencyBRLOrFallback } from '../utils/format';
 
 export default function Settings() {
   const { snackbar, showSnackbar, showError, closeSnackbar } = useSnackbar();
-  const { defaultAccounts, loading, error, retry, save, remove, reload } = useDefaultAccounts(
+  const { defaultExpenses, loading, error, retry, save, remove, reload } = useDefaultExpenses(
     showError,
     showSnackbar
   );
@@ -54,31 +54,31 @@ export default function Settings() {
   const { importing, exportData, importData } = useDataTransfer(showSnackbar, showError, reload);
 
   const [formOpen, setFormOpen] = useState(false);
-  const [editingAccount, setEditingAccount] = useState<DefaultAccount | null>(null);
+  const [editingExpense, setEditingExpense] = useState<DefaultExpense | null>(null);
   const [formKey, setFormKey] = useState(0);
 
-  const [deleteTarget, setDeleteTarget] = useState<DefaultAccount | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<DefaultExpense | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   const [pendingImportFile, setPendingImportFile] = useState<File | null>(null);
 
-  function openEdit(account: DefaultAccount) {
-    setEditingAccount(account);
+  function openEdit(expense: DefaultExpense) {
+    setEditingExpense(expense);
     setFormKey((k) => k + 1);
     setFormOpen(true);
   }
 
   function openAdd() {
-    setEditingAccount(null);
+    setEditingExpense(null);
     setFormKey((k) => k + 1);
     setFormOpen(true);
   }
 
   function handleSaveDefault(data: { name: string; due_day?: number; amount: number }) {
-    save(data, editingAccount?.id).then((success) => {
+    save(data, editingExpense?.id).then((success) => {
       if (success) {
         setFormOpen(false);
-        setEditingAccount(null);
+        setEditingExpense(null);
       }
     });
   }
@@ -139,8 +139,8 @@ export default function Settings() {
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMore />}>
             <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="h6">Contas Padrão</Typography>
-              <Chip label={defaultAccounts.length} size="small" />
+              <Typography variant="h6">Despesas Padrão</Typography>
+              <Chip label={defaultExpenses.length} size="small" />
             </Stack>
           </AccordionSummary>
           <AccordionDetails>
@@ -148,20 +148,20 @@ export default function Settings() {
               sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
             >
               <Typography variant="body2" color="text.secondary">
-                Contas que serão criadas automaticamente em cada novo mês.
+                Despesas que serão criadas automaticamente em cada novo mês.
               </Typography>
               <Button variant="contained" startIcon={<AddIcon />} onClick={openAdd} size="small">
                 Adicionar
               </Button>
             </Box>
             <Divider sx={{ mb: 2 }} />
-            {defaultAccounts.length === 0 ? (
+            {defaultExpenses.length === 0 ? (
               <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
-                Nenhuma conta padrão cadastrada.
+                Nenhuma despesa padrão cadastrada.
               </Typography>
             ) : (
               <List disablePadding>
-                {defaultAccounts.map((acc) => (
+                {defaultExpenses.map((acc) => (
                   <ListItem key={acc.id} divider sx={{ px: 0 }}>
                     <ListItemAvatar>
                       <Avatar sx={{ bgcolor: 'primary.main' }}>
@@ -194,7 +194,7 @@ export default function Settings() {
           </AccordionSummary>
           <AccordionDetails>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Adicione meses passados ou futuros. As contas padrão serão copiadas automaticamente.
+              Adicione meses passados ou futuros. As despesas padrão serão copiadas automaticamente.
             </Typography>
             <Stack direction="row" spacing={2} alignItems="flex-end" flexWrap="wrap" useFlexGap>
               <MonthYearPicker
@@ -240,7 +240,7 @@ export default function Settings() {
           </AccordionSummary>
           <AccordionDetails>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Exporta todos os meses, contas e comprovantes em um arquivo ZIP. A importação
+              Exporta todos os meses, despesas e comprovantes em um arquivo ZIP. A importação
               substitui todos os dados atuais.
             </Typography>
             <Stack direction="row" spacing={2}>
@@ -259,20 +259,20 @@ export default function Settings() {
         </Accordion>
       </Stack>
 
-      <DefaultAccountForm
+      <DefaultExpenseForm
         key={formKey}
         open={formOpen}
         onClose={() => {
           setFormOpen(false);
-          setEditingAccount(null);
+          setEditingExpense(null);
         }}
         onSave={handleSaveDefault}
-        initial={editingAccount}
+        initial={editingExpense}
       />
 
       <ConfirmDialog
         open={!!deleteTarget}
-        title="Excluir conta padrão?"
+        title="Excluir despesa padrão?"
         message={
           <>
             Tem certeza que deseja excluir <strong>{deleteTarget?.name}</strong>? Ela deixará de ser
@@ -290,7 +290,7 @@ export default function Settings() {
         message={
           <>
             Importar <strong>{pendingImportFile?.name}</strong> vai <strong>substituir todos os
-            dados atuais</strong> (meses, contas e comprovantes). Essa ação não pode ser desfeita.
+            dados atuais</strong> (meses, despesas e comprovantes). Essa ação não pode ser desfeita.
           </>
         }
         confirmLabel="Importar"

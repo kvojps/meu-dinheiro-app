@@ -6,11 +6,11 @@ import { asyncHandler } from '../middleware/asyncHandler';
 import { validateBody } from '../middleware/validate';
 import { parseId } from '../utils/parseId';
 import {
-  createAccountSchema,
-  updateAccountSchema,
-  payAccountSchema,
-} from '../schemas/accounts.schema';
-import * as accountsService from '../services/accounts.service';
+  createExpenseSchema,
+  updateExpenseSchema,
+  payExpenseSchema,
+} from '../schemas/expenses.schema';
+import * as expensesService from '../services/expenses.service';
 
 const UPLOADS_DIR = path.join(__dirname, '../../uploads');
 
@@ -20,12 +20,12 @@ const storage = multer.diskStorage({
   },
   filename: (req: any, file, cb) => {
     const db = getDatabase();
-    const account = accountsService.getAccountForFilename(db, req.params.id);
+    const expense = expensesService.getExpenseForFilename(db, req.params.id);
     const monthPart = (
-      account?.month_label?.replace(/[^a-zA-Z0-9-]/g, '_') || 'unknown'
+      expense?.month_label?.replace(/[^a-zA-Z0-9-]/g, '_') || 'unknown'
     ).toLowerCase();
-    const namePart = (account?.name?.replace(/[^a-zA-Z0-9-]/g, '_') || 'unknown').toLowerCase();
-    // O id garante unicidade: duas contas com mesmo nome no mesmo mês não devem
+    const namePart = (expense?.name?.replace(/[^a-zA-Z0-9-]/g, '_') || 'unknown').toLowerCase();
+    // O id garante unicidade: duas despesas com mesmo nome no mesmo mês não devem
     // sobrescrever o comprovante uma da outra.
     cb(null, `${monthPart}-${namePart}-${req.params.id}${path.extname(file.originalname)}`);
   },
@@ -49,63 +49,63 @@ const upload = multer({
 const router = Router();
 
 router.get(
-  '/months/:monthId/accounts',
+  '/months/:monthId/expenses',
   asyncHandler(async (req: Request, res: Response) => {
     const db = getDatabase();
     const monthId = parseId(req.params.monthId);
-    res.json(accountsService.listAccountsForMonth(db, monthId));
+    res.json(expensesService.listExpensesForMonth(db, monthId));
   })
 );
 
 router.post(
-  '/months/:monthId/accounts',
-  validateBody(createAccountSchema),
+  '/months/:monthId/expenses',
+  validateBody(createExpenseSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const db = getDatabase();
     const monthId = parseId(req.params.monthId);
-    const created = accountsService.createAccount(db, monthId, req.body);
+    const created = expensesService.createExpense(db, monthId, req.body);
     res.status(201).json(created);
   })
 );
 
 router.put(
-  '/accounts/:id',
-  validateBody(updateAccountSchema),
+  '/expenses/:id',
+  validateBody(updateExpenseSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const db = getDatabase();
     const id = parseId(req.params.id);
-    res.json(accountsService.updateAccount(db, id, req.body));
+    res.json(expensesService.updateExpense(db, id, req.body));
   })
 );
 
 router.delete(
-  '/accounts/:id',
+  '/expenses/:id',
   asyncHandler(async (req: Request, res: Response) => {
     const db = getDatabase();
     const id = parseId(req.params.id);
-    accountsService.deleteAccount(db, id);
-    res.json({ message: 'Account deleted' });
+    expensesService.deleteExpense(db, id);
+    res.json({ message: 'Expense deleted' });
   })
 );
 
 router.put(
-  '/accounts/:id/pay',
+  '/expenses/:id/pay',
   upload.single('receipt'),
-  validateBody(payAccountSchema),
+  validateBody(payExpenseSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const db = getDatabase();
     const id = parseId(req.params.id);
     const receipt = req.file ? req.file.filename : undefined;
-    res.json(accountsService.payAccount(db, id, receipt, req.body.notes, req.body.paid_at));
+    res.json(expensesService.payExpense(db, id, receipt, req.body.notes, req.body.paid_at));
   })
 );
 
 router.put(
-  '/accounts/:id/unpay',
+  '/expenses/:id/unpay',
   asyncHandler(async (req: Request, res: Response) => {
     const db = getDatabase();
     const id = parseId(req.params.id);
-    res.json(accountsService.unpayAccount(db, id));
+    res.json(expensesService.unpayExpense(db, id));
   })
 );
 

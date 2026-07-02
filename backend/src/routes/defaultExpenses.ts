@@ -4,10 +4,10 @@ import { asyncHandler } from '../middleware/asyncHandler';
 import { validateBody } from '../middleware/validate';
 import { parseId } from '../utils/parseId';
 import {
-  createDefaultAccountSchema,
-  updateDefaultAccountSchema,
-} from '../schemas/defaultAccounts.schema';
-import * as defaultAccountsService from '../services/defaultAccounts.service';
+  createDefaultExpenseSchema,
+  updateDefaultExpenseSchema,
+} from '../schemas/defaultExpenses.schema';
+import * as defaultExpensesService from '../services/defaultExpenses.service';
 
 const router = Router();
 
@@ -15,27 +15,27 @@ router.get(
   '/',
   asyncHandler(async (_req: Request, res: Response) => {
     const db = getDatabase();
-    res.json(defaultAccountsService.listDefaultAccounts(db));
+    res.json(defaultExpensesService.listDefaultExpenses(db));
   })
 );
 
 router.post(
   '/',
-  validateBody(createDefaultAccountSchema),
+  validateBody(createDefaultExpenseSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const db = getDatabase();
-    const created = defaultAccountsService.createDefaultAccount(db, req.body);
+    const created = defaultExpensesService.createDefaultExpense(db, req.body);
     res.status(201).json(created);
   })
 );
 
 router.put(
   '/:id',
-  validateBody(updateDefaultAccountSchema),
+  validateBody(updateDefaultExpenseSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const db = getDatabase();
     const id = parseId(req.params.id);
-    res.json(defaultAccountsService.updateDefaultAccount(db, id, req.body));
+    res.json(defaultExpensesService.updateDefaultExpense(db, id, req.body));
   })
 );
 
@@ -44,8 +44,8 @@ router.delete(
   asyncHandler(async (req: Request, res: Response) => {
     const db = getDatabase();
     const id = parseId(req.params.id);
-    defaultAccountsService.deleteDefaultAccount(db, id);
-    res.json({ message: 'Default account deleted' });
+    defaultExpensesService.deleteDefaultExpense(db, id);
+    res.json({ message: 'Default expense deleted' });
   })
 );
 

@@ -21,7 +21,7 @@ router.get(
   asyncHandler(async (req: Request, res: Response) => {
     const db = getDatabase();
     const id = parseId(req.params.id);
-    res.json(monthsService.getMonthWithAccounts(db, id));
+    res.json(monthsService.getMonthWithExpenses(db, id));
   })
 );
 

@@ -31,12 +31,12 @@ import {
   MoreVert,
   Search,
 } from '@mui/icons-material';
-import { Account } from '../types/models';
-import AccountCard from '../components/AccountCard';
+import { Expense } from '../types/models';
+import ExpenseCard from '../components/ExpenseCard';
 import PayDialog from '../components/PayDialog';
-import AddAccountDialog from '../components/AddAccountDialog';
-import EditAccountDialog from '../components/EditAccountDialog';
-import AccountDetailDialog from '../components/AccountDetailDialog';
+import AddExpenseDialog from '../components/AddExpenseDialog';
+import EditExpenseDialog from '../components/EditExpenseDialog';
+import ExpenseDetailDialog from '../components/ExpenseDetailDialog';
 import DeleteMonthDialog from '../components/DeleteMonthDialog';
 import ConfirmDialog from '../components/ConfirmDialog';
 import AppSnackbar from '../components/AppSnackbar';
@@ -65,14 +65,14 @@ export default function MonthDetail() {
     retry,
     pay,
     unpay,
-    addAccount,
-    editAccount,
-    deleteAccount,
+    addExpense,
+    editExpense,
+    deleteExpense,
     deleteMonth,
   } = useMonth(id);
 
   const [payDialogOpen, setPayDialogOpen] = useState(false);
-  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
 
   const [addDialogOpen, setAddDialogOpen] = useState(false);
 
@@ -80,31 +80,31 @@ export default function MonthDetail() {
   const [headerMenuAnchor, setHeaderMenuAnchor] = useState<HTMLElement | null>(null);
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [editingAccount, setEditingAccount] = useState<Account | null>(null);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [editKey, setEditKey] = useState(0);
 
   const [detailOpen, setDetailOpen] = useState(false);
-  const [detailAccount, setDetailAccount] = useState<Account | null>(null);
+  const [detailExpense, setDetailExpense] = useState<Expense | null>(null);
 
-  const [deleteAccountTarget, setDeleteAccountTarget] = useState<Account | null>(null);
-  const [deletingAccount, setDeletingAccount] = useState(false);
+  const [deleteExpenseTarget, setDeleteExpenseTarget] = useState<Expense | null>(null);
+  const [deletingExpense, setDeletingExpense] = useState(false);
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [sortBy, setSortBy] = useState<SortBy>('due_date');
   const [page, setPage] = useState(1);
 
-  async function handleDeleteAccount() {
-    if (!deleteAccountTarget) return;
-    setDeletingAccount(true);
-    if (await deleteAccount(deleteAccountTarget.id)) {
-      setDeleteAccountTarget(null);
+  async function handleDeleteExpense() {
+    if (!deleteExpenseTarget) return;
+    setDeletingExpense(true);
+    if (await deleteExpense(deleteExpenseTarget.id)) {
+      setDeleteExpenseTarget(null);
     }
-    setDeletingAccount(false);
+    setDeletingExpense(false);
   }
 
-  function openEditDialog(account: Account) {
-    setEditingAccount(account);
+  function openEditDialog(expense: Expense) {
+    setEditingExpense(expense);
     setEditKey((k) => k + 1);
     setEditDialogOpen(true);
   }
@@ -178,13 +178,13 @@ export default function MonthDetail() {
     );
   }
 
-  const paidCount = month.accounts.filter((a) => a.is_paid).length;
+  const paidCount = month.expenses.filter((e) => e.is_paid).length;
   const today = todayDateString();
 
-  const summary = month.accounts.reduce(
-    (acc, a) => {
-      if (a.is_paid) acc.paid += a.amount ?? 0;
-      else acc.pending += a.amount ?? 0;
+  const summary = month.expenses.reduce(
+    (acc, e) => {
+      if (e.is_paid) acc.paid += e.amount ?? 0;
+      else acc.pending += e.amount ?? 0;
       return acc;
     },
     { paid: 0, pending: 0 }
@@ -193,13 +193,13 @@ export default function MonthDetail() {
   const paidPct = summaryTotal > 0 ? (summary.paid / summaryTotal) * 100 : 0;
   const pendingPct = summaryTotal > 0 ? 100 - paidPct : 0;
 
-  const filteredAccounts = month.accounts
-    .filter((a) => a.name.toLowerCase().includes(search.trim().toLowerCase()))
-    .filter((a) => {
+  const filteredExpenses = month.expenses
+    .filter((e) => e.name.toLowerCase().includes(search.trim().toLowerCase()))
+    .filter((e) => {
       if (statusFilter === 'all') return true;
-      if (statusFilter === 'paid') return !!a.is_paid;
-      if (statusFilter === 'overdue') return !a.is_paid && !!a.due_date && a.due_date < today;
-      return !a.is_paid;
+      if (statusFilter === 'paid') return !!e.is_paid;
+      if (statusFilter === 'overdue') return !e.is_paid && !!e.due_date && e.due_date < today;
+      return !e.is_paid;
     })
     .sort((a, b) => {
       if (sortBy === 'name') return a.name.localeCompare(b.name, 'pt-BR');
@@ -207,8 +207,8 @@ export default function MonthDetail() {
       return (a.due_date || '9999-99-99').localeCompare(b.due_date || '9999-99-99');
     });
 
-  const totalPages = Math.max(1, Math.ceil(filteredAccounts.length / PAGE_SIZE));
-  const paginatedAccounts = filteredAccounts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(filteredExpenses.length / PAGE_SIZE));
+  const paginatedExpenses = filteredExpenses.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <Box>
@@ -240,9 +240,9 @@ export default function MonthDetail() {
           </span>
         </Tooltip>
         <Chip
-          label={`${paidCount}/${month.accounts.length} pagas`}
+          label={`${paidCount}/${month.expenses.length} pagas`}
           color={
-            paidCount === month.accounts.length && month.accounts.length > 0 ? 'success' : 'warning'
+            paidCount === month.expenses.length && month.expenses.length > 0 ? 'success' : 'warning'
           }
           sx={{ ml: 1 }}
         />
@@ -268,7 +268,7 @@ export default function MonthDetail() {
         </Menu>
       </Box>
 
-      {month.accounts.length > 0 && (
+      {month.expenses.length > 0 && (
         <Paper sx={{ p: 3, mb: 3 }}>
           <Typography variant="body2" color="text.secondary" gutterBottom>
             Total do mês
@@ -311,13 +311,13 @@ export default function MonthDetail() {
         </Paper>
       )}
 
-      {month.accounts.length === 0 ? (
+      {month.expenses.length === 0 ? (
         <Paper sx={{ p: 6, textAlign: 'center' }}>
           <Typography color="text.secondary" gutterBottom>
-            Nenhuma conta cadastrada neste mês.
+            Nenhuma despesa cadastrada neste mês.
           </Typography>
           <Button variant="outlined" onClick={() => setAddDialogOpen(true)}>
-            Adicionar Conta
+            Adicionar Despesa
           </Button>
         </Paper>
       ) : (
@@ -326,7 +326,7 @@ export default function MonthDetail() {
             <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" useFlexGap>
               <TextField
                 size="small"
-                placeholder="Buscar conta..."
+                placeholder="Buscar despesa..."
                 value={search}
                 onChange={(e) => handleSearch(e.target.value)}
                 sx={{ minWidth: 200 }}
@@ -385,27 +385,27 @@ export default function MonthDetail() {
             </Stack>
           </Paper>
 
-          {filteredAccounts.length === 0 ? (
+          {filteredExpenses.length === 0 ? (
             <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
-              Nenhuma conta encontrada com esses filtros.
+              Nenhuma despesa encontrada com esses filtros.
             </Typography>
           ) : (
             <Grid container spacing={2}>
-              {paginatedAccounts.map((account) => (
-                <Grid item xs={12} sm={6} md={4} key={account.id}>
-                  <AccountCard
-                    account={account}
+              {paginatedExpenses.map((expense) => (
+                <Grid item xs={12} sm={6} md={4} key={expense.id}>
+                  <ExpenseCard
+                    expense={expense}
                     onPay={() => {
-                      setSelectedAccount(account);
+                      setSelectedExpense(expense);
                       setPayDialogOpen(true);
                     }}
-                    onUnpay={() => unpay(account.id)}
+                    onUnpay={() => unpay(expense.id)}
                     onViewDetail={() => {
-                      setDetailAccount(account);
+                      setDetailExpense(expense);
                       setDetailOpen(true);
                     }}
-                    onEdit={() => openEditDialog(account)}
-                    onDelete={() => setDeleteAccountTarget(account)}
+                    onEdit={() => openEditDialog(expense)}
+                    onDelete={() => setDeleteExpenseTarget(expense)}
                   />
                 </Grid>
               ))}
@@ -427,48 +427,48 @@ export default function MonthDetail() {
 
       <Box sx={{ mt: 3, textAlign: 'center' }}>
         <Button variant="outlined" onClick={() => setAddDialogOpen(true)}>
-          Adicionar Conta
+          Adicionar Despesa
         </Button>
       </Box>
 
       <PayDialog
         open={payDialogOpen}
-        account={selectedAccount}
+        expense={selectedExpense}
         onClose={() => {
           setPayDialogOpen(false);
-          setSelectedAccount(null);
+          setSelectedExpense(null);
         }}
         onConfirm={async (file, notes, paidAt) => {
-          if (!selectedAccount) return;
-          if (await pay(selectedAccount.id, file, notes, paidAt)) {
+          if (!selectedExpense) return;
+          if (await pay(selectedExpense.id, file, notes, paidAt)) {
             setPayDialogOpen(false);
-            setSelectedAccount(null);
+            setSelectedExpense(null);
           }
         }}
       />
 
-      <AddAccountDialog
+      <AddExpenseDialog
         open={addDialogOpen}
         onClose={() => setAddDialogOpen(false)}
-        onSubmit={addAccount}
+        onSubmit={addExpense}
       />
 
-      {editingAccount && (
-        <EditAccountDialog
+      {editingExpense && (
+        <EditExpenseDialog
           key={editKey}
           open={editDialogOpen}
-          account={editingAccount}
+          expense={editingExpense}
           onClose={() => {
             setEditDialogOpen(false);
-            setEditingAccount(null);
+            setEditingExpense(null);
           }}
-          onSubmit={(data) => editAccount(editingAccount.id, data)}
+          onSubmit={(data) => editExpense(editingExpense.id, data)}
         />
       )}
 
-      <AccountDetailDialog
+      <ExpenseDetailDialog
         open={detailOpen}
-        account={detailAccount}
+        expense={detailExpense}
         onClose={() => setDetailOpen(false)}
       />
 
@@ -481,17 +481,17 @@ export default function MonthDetail() {
       />
 
       <ConfirmDialog
-        open={!!deleteAccountTarget}
-        title="Excluir conta?"
+        open={!!deleteExpenseTarget}
+        title="Excluir despesa?"
         message={
           <>
-            Tem certeza que deseja excluir <strong>{deleteAccountTarget?.name}</strong>? Essa ação
+            Tem certeza que deseja excluir <strong>{deleteExpenseTarget?.name}</strong>? Essa ação
             não pode ser desfeita.
           </>
         }
-        loading={deletingAccount}
-        onClose={() => setDeleteAccountTarget(null)}
-        onConfirm={handleDeleteAccount}
+        loading={deletingExpense}
+        onClose={() => setDeleteExpenseTarget(null)}
+        onConfirm={handleDeleteExpense}
       />
 
       <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />

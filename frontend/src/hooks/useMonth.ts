@@ -49,10 +49,10 @@ export function useMonth(id: string | undefined) {
     reload();
   }
 
-  async function pay(accountId: number, file?: File, notes?: string, paidAt?: string) {
+  async function pay(expenseId: number, file?: File, notes?: string, paidAt?: string) {
     try {
-      await api.payAccount(accountId, file, notes, paidAt);
-      showSnackbar('Conta marcada como paga!');
+      await api.payExpense(expenseId, file, notes, paidAt);
+      showSnackbar('Despesa marcada como paga!');
       await reload();
       return true;
     } catch (err) {
@@ -61,9 +61,9 @@ export function useMonth(id: string | undefined) {
     }
   }
 
-  async function unpay(accountId: number) {
+  async function unpay(expenseId: number) {
     try {
-      await api.unpayAccount(accountId);
+      await api.unpayExpense(expenseId);
       showSnackbar('Pagamento desmarcado');
       await reload();
       return true;
@@ -73,11 +73,11 @@ export function useMonth(id: string | undefined) {
     }
   }
 
-  async function addAccount(data: { name: string; amount: number; due_date?: string }) {
+  async function addExpense(data: { name: string; amount: number; due_date?: string }) {
     if (!id) return false;
     try {
-      await api.createAccount(Number(id), data);
-      showSnackbar('Conta adicionada');
+      await api.createExpense(Number(id), data);
+      showSnackbar('Despesa adicionada');
       await reload();
       return true;
     } catch (err) {
@@ -86,13 +86,13 @@ export function useMonth(id: string | undefined) {
     }
   }
 
-  async function editAccount(
-    accountId: number,
+  async function editExpense(
+    expenseId: number,
     data: { name: string; amount: number; due_date?: string; notes?: string }
   ) {
     try {
-      await api.updateAccount(accountId, data);
-      showSnackbar('Conta atualizada');
+      await api.updateExpense(expenseId, data);
+      showSnackbar('Despesa atualizada');
       await reload();
       return true;
     } catch (err) {
@@ -101,10 +101,10 @@ export function useMonth(id: string | undefined) {
     }
   }
 
-  async function deleteAccount(accountId: number) {
+  async function deleteExpense(expenseId: number) {
     try {
-      await api.deleteAccount(accountId);
-      showSnackbar('Conta removida');
+      await api.deleteExpense(expenseId);
+      showSnackbar('Despesa removida');
       await reload();
       return true;
     } catch (err) {
@@ -140,9 +140,9 @@ export function useMonth(id: string | undefined) {
     retry,
     pay,
     unpay,
-    addAccount,
-    editAccount,
-    deleteAccount,
+    addExpense,
+    editExpense,
+    deleteExpense,
     deleteMonth,
   };
 }
