@@ -307,6 +307,8 @@ export default function Dashboard() {
           const overdue = month.overdue_expenses ?? 0;
           const allPaid = total > 0 && paid === total;
           const isCurrent = monthKey(month.year, month.month) === currentKey;
+          const totalAmount = month.total_amount ?? 0;
+          const balance = (month.total_income ?? 0) - totalAmount;
 
           let statusColor: 'success' | 'warning' | 'default' = 'default';
           if (total > 0) {
@@ -358,28 +360,18 @@ export default function Dashboard() {
                     <Typography
                       variant="h4"
                       sx={{ fontWeight: 700 }}
-                      color={allPaid ? 'success.main' : 'text.primary'}
+                      color={balance >= 0 ? 'success.main' : 'error.main'}
                     >
-                      {formatCurrencyBRL(month.total_amount ?? 0)}
+                      {formatCurrencyBRL(balance)}
                     </Typography>
 
-                    {(month.total_income ?? 0) > 0 && (
+                    {(totalAmount > 0 || (month.total_income ?? 0) > 0) && (
                       <Stack direction="row" spacing={2} sx={{ mt: 0.5 }}>
                         <Typography variant="body2" color="success.main">
                           Entradas: {formatCurrencyBRL(month.total_income ?? 0)}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          color={
-                            (month.received_income ?? 0) - (month.paid_amount ?? 0) >= 0
-                              ? 'success.main'
-                              : 'error.main'
-                          }
-                        >
-                          Saldo:{' '}
-                          {formatCurrencyBRL(
-                            (month.received_income ?? 0) - (month.paid_amount ?? 0)
-                          )}
+                        <Typography variant="body2" color="error.main">
+                          Despesas: {formatCurrencyBRL(totalAmount)}
                         </Typography>
                       </Stack>
                     )}
