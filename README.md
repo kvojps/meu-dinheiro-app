@@ -58,7 +58,3 @@ backend/src/
   errors/        # AppError
   constants/     # Nomes de mês, formatação de data de vencimento
 ```
-
-## Plano de melhoria
-
-O diagnóstico de qualidade de código e o plano priorizado (com andamento) estão em [`PLANO_MELHORIA.md`](./PLANO_MELHORIA.md).
