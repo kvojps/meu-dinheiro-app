@@ -41,6 +41,7 @@ import {
   Legend,
   CartesianGrid,
   ReferenceArea,
+  ReferenceLine,
   ResponsiveContainer,
 } from 'recharts';
 import { api } from '../api/client';
@@ -205,6 +206,29 @@ export default function History() {
         </Button>
         <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
       </Box>
+    );
+  }
+
+  function renderSaldoDot(props: {
+    cx?: number;
+    cy?: number;
+    payload?: { id: number; Saldo: number };
+  }) {
+    const { cx, cy, payload } = props;
+    if (cx == null || cy == null || !payload) return <></>;
+    const color = payload.Saldo >= 0 ? theme.palette.success.main : theme.palette.error.main;
+    return (
+      <circle
+        key={`saldo-dot-${payload.id}`}
+        cx={cx}
+        cy={cy}
+        r={5}
+        fill={color}
+        stroke={theme.palette.background.paper}
+        strokeWidth={2}
+        cursor="pointer"
+        onClick={() => navigate(`/months/${payload.id}`)}
+      />
     );
   }
 
@@ -609,7 +633,7 @@ export default function History() {
               </Paper>
 
               {view === 'chart' ? (
-                <ResponsiveContainer width="100%" height={isMobile ? 320 : 500}>
+                <ResponsiveContainer width="100%" height={isMobile ? 320 : 420}>
                   <ComposedChart data={comparativoData} margin={isMobile ? { bottom: 40 } : undefined}>
                     {comparativoData.map(
                       (entry) =>
@@ -636,7 +660,7 @@ export default function History() {
                     />
                     <YAxis stroke={theme.palette.text.secondary} />
                     <Tooltip
-                      cursor={{ fill: theme.palette.action.hover }}
+                      cursor={{ stroke: theme.palette.divider }}
                       formatter={(value) => formatCurrencyBRL(Number(value) || 0)}
                       contentStyle={{
                         backgroundColor: theme.palette.background.paper,
@@ -644,31 +668,14 @@ export default function History() {
                         borderRadius: 8,
                       }}
                     />
-                    <Legend />
-                    <Bar dataKey="Entradas" fill={theme.palette.success.main} radius={[4, 4, 0, 0]}>
-                      {comparativoData.map((entry) => (
-                        <Cell
-                          key={entry.id}
-                          cursor="pointer"
-                          onClick={() => navigate(`/months/${entry.id}`)}
-                        />
-                      ))}
-                    </Bar>
-                    <Bar dataKey="Despesas" fill={theme.palette.error.main} radius={[4, 4, 0, 0]}>
-                      {comparativoData.map((entry) => (
-                        <Cell
-                          key={entry.id}
-                          cursor="pointer"
-                          onClick={() => navigate(`/months/${entry.id}`)}
-                        />
-                      ))}
-                    </Bar>
+                    <ReferenceLine y={0} stroke={theme.palette.divider} />
                     <Line
                       type="monotone"
                       dataKey="Saldo"
-                      stroke={theme.palette.info.main}
+                      stroke={theme.palette.primary.main}
                       strokeWidth={2}
-                      dot={{ r: 3 }}
+                      dot={renderSaldoDot}
+                      activeDot={{ r: 6 }}
                     />
                   </ComposedChart>
                 </ResponsiveContainer>
