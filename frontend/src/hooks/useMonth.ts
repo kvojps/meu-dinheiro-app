@@ -49,9 +49,15 @@ export function useMonth(id: string | undefined) {
     reload();
   }
 
-  async function pay(expenseId: number, file?: File, notes?: string, paidAt?: string) {
+  async function pay(
+    expenseId: number,
+    file?: File,
+    notes?: string,
+    paidAt?: string,
+    bankAccountId?: number
+  ) {
     try {
-      await api.payExpense(expenseId, file, notes, paidAt);
+      await api.payExpense(expenseId, file, notes, paidAt, bankAccountId);
       showSnackbar('Despesa marcada como paga!');
       await reload();
       return true;
@@ -136,6 +142,8 @@ export function useMonth(id: string | undefined) {
     nextMonthId,
     deleting,
     snackbar,
+    showSnackbar,
+    showError,
     closeSnackbar,
     retry,
     pay,

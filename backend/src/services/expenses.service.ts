@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
 import { AppError } from '../errors/AppError';
+import * as bankAccountsService from './bankAccounts.service';
 
 const UPLOADS_DIR = path.join(__dirname, '../../uploads');
 
@@ -15,13 +16,20 @@ export interface ExpenseRow {
   paid_at: string | null;
   receipt: string | null;
   notes: string | null;
+  bank_account_id: number | null;
   created_at: string;
 }
 
 export function listExpensesForMonth(db: Database.Database, monthId: number) {
   return db
-    .prepare('SELECT * FROM expenses WHERE month_id = ? ORDER BY due_date, name')
-    .all(monthId) as ExpenseRow[];
+    .prepare(
+      `SELECT e.*, ba.name as bank_account_name
+       FROM expenses e
+       LEFT JOIN bank_accounts ba ON ba.id = e.bank_account_id
+       WHERE e.month_id = ?
+       ORDER BY e.due_date, e.name`
+    )
+    .all(monthId) as (ExpenseRow & { bank_account_name: string | null })[];
 }
 
 export function getExpenseById(db: Database.Database, id: number): ExpenseRow {
@@ -106,18 +114,26 @@ export function payExpense(
   id: number,
   receipt: string | undefined,
   notes: string | undefined,
-  paidAt: string | undefined
+  paidAt: string | undefined,
+  bankAccountId: number | undefined
 ): ExpenseRow {
   const existing = getExpenseById(db, id);
 
-  db.prepare(
-    'UPDATE expenses SET is_paid = 1, paid_at = ?, receipt = ?, notes = ? WHERE id = ?'
-  ).run(
-    paidAt || todayLocalDate(),
-    receipt ?? existing.receipt,
-    notes !== undefined ? notes : existing.notes,
-    id
-  );
+  const run = db.transaction(() => {
+    if (bankAccountId) {
+      bankAccountsService.debitBankAccount(db, bankAccountId, existing.amount);
+    }
+    db.prepare(
+      'UPDATE expenses SET is_paid = 1, paid_at = ?, receipt = ?, notes = ?, bank_account_id = ? WHERE id = ?'
+    ).run(
+      paidAt || todayLocalDate(),
+      receipt ?? existing.receipt,
+      notes !== undefined ? notes : existing.notes,
+      bankAccountId ?? null,
+      id
+    );
+  });
+  run();
 
   return getExpenseById(db, id);
 }
@@ -126,9 +142,15 @@ export function unpayExpense(db: Database.Database, id: number): ExpenseRow {
   const existing = getExpenseById(db, id);
   deleteReceiptFile(existing.receipt);
 
-  db.prepare('UPDATE expenses SET is_paid = 0, paid_at = NULL, receipt = NULL WHERE id = ?').run(
-    id
-  );
+  const run = db.transaction(() => {
+    if (existing.bank_account_id) {
+      bankAccountsService.creditBankAccount(db, existing.bank_account_id, existing.amount);
+    }
+    db.prepare(
+      'UPDATE expenses SET is_paid = 0, paid_at = NULL, receipt = NULL, bank_account_id = NULL WHERE id = ?'
+    ).run(id);
+  });
+  run();
 
   return getExpenseById(db, id);
 }

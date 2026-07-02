@@ -8,8 +8,12 @@ import {
   Typography,
   Box,
   TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
-import { Expense } from '../types/models';
+import { BankAccount, Expense } from '../types/models';
 import FileUploadButton from './FileUploadButton';
 import { formatDateOnlyBR, todayDateString } from '../utils/date';
 import { formatCurrencyBRL } from '../utils/format';
@@ -17,27 +21,37 @@ import { formatCurrencyBRL } from '../utils/format';
 interface PayDialogProps {
   open: boolean;
   expense: Expense | null;
+  bankAccounts: BankAccount[];
   onClose: () => void;
-  onConfirm: (file?: File, notes?: string, paidAt?: string) => void;
+  onConfirm: (file?: File, notes?: string, paidAt?: string, bankAccountId?: number) => void;
 }
 
-export default function PayDialog({ open, expense, onClose, onConfirm }: PayDialogProps) {
+export default function PayDialog({
+  open,
+  expense,
+  bankAccounts,
+  onClose,
+  onConfirm,
+}: PayDialogProps) {
   const [file, setFile] = useState<File | null>(null);
   const [notes, setNotes] = useState('');
   const [paidAt, setPaidAt] = useState(todayDateString());
+  const [bankAccountId, setBankAccountId] = useState<number | ''>('');
 
   function handleClose() {
     setFile(null);
     setNotes('');
     setPaidAt(todayDateString());
+    setBankAccountId('');
     onClose();
   }
 
   function handleConfirm() {
-    onConfirm(file || undefined, notes || undefined, paidAt || undefined);
+    onConfirm(file || undefined, notes || undefined, paidAt || undefined, bankAccountId || undefined);
     setFile(null);
     setNotes('');
     setPaidAt(todayDateString());
+    setBankAccountId('');
   }
 
   if (!expense) return null;
@@ -68,6 +82,24 @@ export default function PayDialog({ open, expense, onClose, onConfirm }: PayDial
           inputProps={{ max: todayDateString() }}
           sx={{ mt: 2 }}
         />
+
+        <FormControl fullWidth sx={{ mt: 2 }}>
+          <InputLabel>Conta (opcional)</InputLabel>
+          <Select
+            value={bankAccountId}
+            label="Conta (opcional)"
+            onChange={(e) => setBankAccountId(e.target.value as number | '')}
+          >
+            <MenuItem value="">
+              <em>Nenhuma</em>
+            </MenuItem>
+            {bankAccounts.map((account) => (
+              <MenuItem key={account.id} value={account.id}>
+                {account.name} ({formatCurrencyBRL(account.balance)})
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <Box sx={{ mt: 3, mb: 2 }}>
           <FileUploadButton

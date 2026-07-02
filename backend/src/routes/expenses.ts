@@ -96,7 +96,16 @@ router.put(
     const db = getDatabase();
     const id = parseId(req.params.id);
     const receipt = req.file ? req.file.filename : undefined;
-    res.json(expensesService.payExpense(db, id, receipt, req.body.notes, req.body.paid_at));
+    res.json(
+      expensesService.payExpense(
+        db,
+        id,
+        receipt,
+        req.body.notes,
+        req.body.paid_at,
+        req.body.bank_account_id
+      )
+    );
   })
 );
 

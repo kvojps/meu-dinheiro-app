@@ -96,7 +96,13 @@ export function getMonthWithExpenses(db: Database.Database, id: number) {
   }
 
   const expenses = db
-    .prepare('SELECT * FROM expenses WHERE month_id = ? ORDER BY due_date, name')
+    .prepare(
+      `SELECT e.*, ba.name as bank_account_name
+       FROM expenses e
+       LEFT JOIN bank_accounts ba ON ba.id = e.bank_account_id
+       WHERE e.month_id = ?
+       ORDER BY e.due_date, e.name`
+    )
     .all(id);
 
   return { ...month, expenses };

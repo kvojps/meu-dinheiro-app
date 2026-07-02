@@ -102,6 +102,11 @@ export default function ExpenseCard({
             Pago em: {formatPaidDateBR(expense.paid_at)}
           </Typography>
         )}
+        {expense.bank_account_name && (
+          <Typography variant="body2" color="text.secondary">
+            Conta: {expense.bank_account_name}
+          </Typography>
+        )}
         {expense.receipt && (
           <Box sx={{ mt: 1 }}>
             <Button

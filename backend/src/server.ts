@@ -5,6 +5,7 @@ import { getDatabase } from './database';
 import setupRouter from './routes/setup';
 import monthsRouter from './routes/months';
 import defaultExpensesRouter from './routes/defaultExpenses';
+import bankAccountsRouter from './routes/bankAccounts';
 import expensesRouter from './routes/expenses';
 import exportImportRouter from './routes/exportImport';
 import { errorHandler } from './middleware/errorHandler';
@@ -21,6 +22,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/api', setupRouter);
 app.use('/api/months', monthsRouter);
 app.use('/api/default-expenses', defaultExpensesRouter);
+app.use('/api/bank-accounts', bankAccountsRouter);
 app.use('/api', expensesRouter);
 app.use('/api', exportImportRouter);
 

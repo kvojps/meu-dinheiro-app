@@ -27,19 +27,22 @@ import {
   FileDownload as FileDownloadIcon,
   ExpandMore,
   ReceiptLong,
+  AccountBalance,
   ErrorOutline,
 } from '@mui/icons-material';
-import { DefaultExpense } from '../types/models';
+import { DefaultExpense, BankAccount } from '../types/models';
 import DefaultExpenseForm from '../components/DefaultExpenseForm';
+import BankAccountForm from '../components/BankAccountForm';
 import MonthYearPicker from '../components/MonthYearPicker';
 import FileUploadButton from '../components/FileUploadButton';
 import AppSnackbar from '../components/AppSnackbar';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { useSnackbar } from '../hooks/useSnackbar';
 import { useDefaultExpenses } from '../hooks/useDefaultExpenses';
+import { useBankAccounts } from '../hooks/useBankAccounts';
 import { useMonthRangeCreator, MAX_BATCH_MONTHS } from '../hooks/useMonthRangeCreator';
 import { useDataTransfer } from '../hooks/useDataTransfer';
-import { formatCurrencyBRLOrFallback } from '../utils/format';
+import { formatCurrencyBRL, formatCurrencyBRLOrFallback } from '../utils/format';
 
 export default function Settings() {
   const { snackbar, showSnackbar, showError, closeSnackbar } = useSnackbar();
@@ -47,11 +50,21 @@ export default function Settings() {
     showError,
     showSnackbar
   );
+  const {
+    bankAccounts,
+    loading: bankAccountsLoading,
+    save: saveBankAccount,
+    remove: removeBankAccount,
+    reload: reloadBankAccounts,
+  } = useBankAccounts(showError, showSnackbar);
   const { range, setRange, creating, createRange, monthsCount, rangeValid } = useMonthRangeCreator(
     showSnackbar,
     showError
   );
-  const { importing, exportData, importData } = useDataTransfer(showSnackbar, showError, reload);
+  const { importing, exportData, importData } = useDataTransfer(showSnackbar, showError, () => {
+    reload();
+    reloadBankAccounts();
+  });
 
   const [formOpen, setFormOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<DefaultExpense | null>(null);
@@ -60,7 +73,45 @@ export default function Settings() {
   const [deleteTarget, setDeleteTarget] = useState<DefaultExpense | null>(null);
   const [deleting, setDeleting] = useState(false);
 
+  const [bankAccountFormOpen, setBankAccountFormOpen] = useState(false);
+  const [editingBankAccount, setEditingBankAccount] = useState<BankAccount | null>(null);
+  const [bankAccountFormKey, setBankAccountFormKey] = useState(0);
+
+  const [deleteBankAccountTarget, setDeleteBankAccountTarget] = useState<BankAccount | null>(null);
+  const [deletingBankAccount, setDeletingBankAccount] = useState(false);
+
   const [pendingImportFile, setPendingImportFile] = useState<File | null>(null);
+
+  const totalBankBalance = bankAccounts.reduce((sum, a) => sum + a.balance, 0);
+
+  function openEditBankAccount(account: BankAccount) {
+    setEditingBankAccount(account);
+    setBankAccountFormKey((k) => k + 1);
+    setBankAccountFormOpen(true);
+  }
+
+  function openAddBankAccount() {
+    setEditingBankAccount(null);
+    setBankAccountFormKey((k) => k + 1);
+    setBankAccountFormOpen(true);
+  }
+
+  function handleSaveBankAccount(data: { name: string; balance?: number }) {
+    saveBankAccount(data, editingBankAccount?.id).then((success) => {
+      if (success) {
+        setBankAccountFormOpen(false);
+        setEditingBankAccount(null);
+      }
+    });
+  }
+
+  async function handleConfirmDeleteBankAccount() {
+    if (!deleteBankAccountTarget) return;
+    setDeletingBankAccount(true);
+    await removeBankAccount(deleteBankAccountTarget.id);
+    setDeletingBankAccount(false);
+    setDeleteBankAccountTarget(null);
+  }
 
   function openEdit(expense: DefaultExpense) {
     setEditingExpense(expense);
@@ -190,6 +241,80 @@ export default function Settings() {
 
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMore />}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="h6">Contas Bancárias</Typography>
+              <Chip label={bankAccounts.length} size="small" />
+              {bankAccounts.length > 0 && (
+                <Chip
+                  label={`Total: ${formatCurrencyBRL(totalBankBalance)}`}
+                  size="small"
+                  variant="outlined"
+                  color={totalBankBalance < 0 ? 'error' : 'default'}
+                />
+              )}
+            </Stack>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                Contas usadas opcionalmente para debitar o valor ao pagar uma despesa.
+              </Typography>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={openAddBankAccount}
+                size="small"
+              >
+                Adicionar
+              </Button>
+            </Box>
+            <Divider sx={{ mb: 2 }} />
+            {bankAccountsLoading ? (
+              <Stack spacing={1}>
+                <Skeleton variant="rounded" height={56} />
+                <Skeleton variant="rounded" height={56} />
+              </Stack>
+            ) : bankAccounts.length === 0 ? (
+              <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
+                Nenhuma conta cadastrada.
+              </Typography>
+            ) : (
+              <List disablePadding>
+                {bankAccounts.map((account) => (
+                  <ListItem key={account.id} divider sx={{ px: 0 }}>
+                    <ListItemAvatar>
+                      <Avatar sx={{ bgcolor: 'primary.main' }}>
+                        <AccountBalance fontSize="small" />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={account.name}
+                      primaryTypographyProps={{ fontWeight: 600 }}
+                      secondary={`Saldo: ${formatCurrencyBRL(account.balance)}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        onClick={() => openEditBankAccount(account)}
+                        sx={{ mr: 1 }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton edge="end" onClick={() => setDeleteBankAccountTarget(account)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMore />}>
             <Typography variant="h6">Adicionar Meses</Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -282,6 +407,32 @@ export default function Settings() {
         loading={deleting}
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleConfirmDelete}
+      />
+
+      <BankAccountForm
+        key={bankAccountFormKey}
+        open={bankAccountFormOpen}
+        onClose={() => {
+          setBankAccountFormOpen(false);
+          setEditingBankAccount(null);
+        }}
+        onSave={handleSaveBankAccount}
+        initial={editingBankAccount}
+      />
+
+      <ConfirmDialog
+        open={!!deleteBankAccountTarget}
+        title="Excluir conta?"
+        message={
+          <>
+            Tem certeza que deseja excluir <strong>{deleteBankAccountTarget?.name}</strong>?
+            Despesas já pagas com essa conta deixarão de referenciá-la, mas o pagamento em si não
+            será desfeito.
+          </>
+        }
+        loading={deletingBankAccount}
+        onClose={() => setDeleteBankAccountTarget(null)}
+        onConfirm={handleConfirmDeleteBankAccount}
       />
 
       <ConfirmDialog

@@ -41,6 +41,7 @@ import DeleteMonthDialog from '../components/DeleteMonthDialog';
 import ConfirmDialog from '../components/ConfirmDialog';
 import AppSnackbar from '../components/AppSnackbar';
 import { useMonth } from '../hooks/useMonth';
+import { useBankAccounts } from '../hooks/useBankAccounts';
 import { todayDateString } from '../utils/date';
 import { formatCurrencyBRL } from '../utils/format';
 
@@ -61,6 +62,8 @@ export default function MonthDetail() {
     nextMonthId,
     deleting,
     snackbar,
+    showSnackbar,
+    showError,
     closeSnackbar,
     retry,
     pay,
@@ -70,6 +73,7 @@ export default function MonthDetail() {
     deleteExpense,
     deleteMonth,
   } = useMonth(id);
+  const { bankAccounts } = useBankAccounts(showError, showSnackbar);
 
   const [payDialogOpen, setPayDialogOpen] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
@@ -434,13 +438,14 @@ export default function MonthDetail() {
       <PayDialog
         open={payDialogOpen}
         expense={selectedExpense}
+        bankAccounts={bankAccounts}
         onClose={() => {
           setPayDialogOpen(false);
           setSelectedExpense(null);
         }}
-        onConfirm={async (file, notes, paidAt) => {
+        onConfirm={async (file, notes, paidAt, bankAccountId) => {
           if (!selectedExpense) return;
-          if (await pay(selectedExpense.id, file, notes, paidAt)) {
+          if (await pay(selectedExpense.id, file, notes, paidAt, bankAccountId)) {
             setPayDialogOpen(false);
             setSelectedExpense(null);
           }

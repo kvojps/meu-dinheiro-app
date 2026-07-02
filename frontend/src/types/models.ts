@@ -35,5 +35,14 @@ export interface Expense {
   paid_at: string | null;
   receipt: string | null;
   notes: string | null;
+  bank_account_id: number | null;
+  bank_account_name?: string | null;
+  created_at: string;
+}
+
+export interface BankAccount {
+  id: number;
+  name: string;
+  balance: number;
   created_at: string;
 }

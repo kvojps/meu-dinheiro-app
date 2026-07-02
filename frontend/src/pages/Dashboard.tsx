@@ -23,6 +23,7 @@ import { api } from '../api/client';
 import { Month } from '../types/models';
 import AppSnackbar from '../components/AppSnackbar';
 import { useSnackbar } from '../hooks/useSnackbar';
+import { useBankAccounts } from '../hooks/useBankAccounts';
 import { formatCurrencyBRL } from '../utils/format';
 
 const INITIAL_VISIBLE = 12;
@@ -40,7 +41,12 @@ export default function Dashboard() {
   const [toOverride, setToOverride] = useState('');
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
   const navigate = useNavigate();
-  const { snackbar, showError, closeSnackbar } = useSnackbar();
+  const { snackbar, showSnackbar, showError, closeSnackbar } = useSnackbar();
+  const { bankAccounts } = useBankAccounts(showError, showSnackbar);
+  const totalBankBalance = useMemo(
+    () => bankAccounts.reduce((sum, a) => sum + a.balance, 0),
+    [bankAccounts]
+  );
 
   const loadMonths = useCallback(() => {
     api
@@ -233,6 +239,17 @@ export default function Dashboard() {
               Pendente: <strong>{formatCurrencyBRL(summary.pending)}</strong>
             </Typography>
           </Stack>
+          {bankAccounts.length > 0 && (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'info.main' }} />
+              <Typography
+                variant="body2"
+                color={totalBankBalance < 0 ? 'error.main' : 'text.secondary'}
+              >
+                Em contas: <strong>{formatCurrencyBRL(totalBankBalance)}</strong>
+              </Typography>
+            </Stack>
+          )}
         </Stack>
       </Paper>
 

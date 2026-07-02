@@ -59,6 +59,14 @@ export default function ExpenseDetailDialog({ open, expense, onClose }: ExpenseD
                 <Typography>{formatPaidDateBR(expense.paid_at)}</Typography>
               </Box>
             )}
+            {expense.bank_account_name && (
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  Conta
+                </Typography>
+                <Typography>{expense.bank_account_name}</Typography>
+              </Box>
+            )}
             {expense.receipt && (
               <Box>
                 <Typography variant="caption" color="text.secondary">

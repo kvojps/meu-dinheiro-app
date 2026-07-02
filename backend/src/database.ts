@@ -36,6 +36,15 @@ function migrateLegacyTableNames() {
   }
 }
 
+function ensureExpenseBankAccountColumn() {
+  const columns = db.prepare('PRAGMA table_info(expenses)').all() as { name: string }[];
+  if (!columns.some((c) => c.name === 'bank_account_id')) {
+    db.exec(
+      'ALTER TABLE expenses ADD COLUMN bank_account_id INTEGER REFERENCES bank_accounts(id)'
+    );
+  }
+}
+
 function initializeSchema() {
   migrateLegacyTableNames();
 
@@ -56,6 +65,13 @@ function initializeSchema() {
       created_at TEXT DEFAULT (datetime('now'))
     );
 
+    CREATE TABLE IF NOT EXISTS bank_accounts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      balance REAL NOT NULL DEFAULT 0,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
     CREATE TABLE IF NOT EXISTS expenses (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       month_id INTEGER NOT NULL REFERENCES months(id) ON DELETE CASCADE,
@@ -66,7 +82,10 @@ function initializeSchema() {
       paid_at TEXT,
       receipt TEXT,
       notes TEXT,
+      bank_account_id INTEGER REFERENCES bank_accounts(id),
       created_at TEXT DEFAULT (datetime('now'))
     );
   `);
+
+  ensureExpenseBankAccountColumn();
 }

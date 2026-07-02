@@ -1,4 +1,4 @@
-import type { Month, MonthDetail, DefaultExpense, Expense } from '../types/models';
+import type { Month, MonthDetail, DefaultExpense, Expense, BankAccount } from '../types/models';
 
 const API_BASE = '/api';
 
@@ -74,6 +74,30 @@ export const api = {
     });
   },
 
+  getBankAccounts() {
+    return request<BankAccount[]>('/bank-accounts');
+  },
+
+  createBankAccount(data: { name: string; balance?: number }) {
+    return request<BankAccount>('/bank-accounts', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  updateBankAccount(id: number, data: { name?: string; balance?: number }) {
+    return request<BankAccount>(`/bank-accounts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteBankAccount(id: number) {
+    return request<{ message: string }>(`/bank-accounts/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
   createExpense(monthId: number, data: { name: string; due_date?: string; amount: number }) {
     return request<Expense>(`/months/${monthId}/expenses`, {
       method: 'POST',
@@ -97,11 +121,18 @@ export const api = {
     });
   },
 
-  async payExpense(id: number, file?: File, notes?: string, paidAt?: string) {
+  async payExpense(
+    id: number,
+    file?: File,
+    notes?: string,
+    paidAt?: string,
+    bankAccountId?: number
+  ) {
     const formData = new FormData();
     if (file) formData.append('receipt', file);
     if (notes) formData.append('notes', notes);
     if (paidAt) formData.append('paid_at', paidAt);
+    if (bankAccountId) formData.append('bank_account_id', String(bankAccountId));
 
     const res = await fetch(`${API_BASE}/expenses/${id}/pay`, {
       method: 'PUT',

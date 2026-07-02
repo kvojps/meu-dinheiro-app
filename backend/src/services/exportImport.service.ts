@@ -11,6 +11,7 @@ export function getExportData(db: Database.Database) {
     version: 1,
     exported_at: new Date().toISOString(),
     default_expenses: db.prepare('SELECT * FROM default_expenses').all(),
+    bank_accounts: db.prepare('SELECT * FROM bank_accounts').all(),
     months: db.prepare('SELECT * FROM months ORDER BY year, month').all(),
     expenses: db.prepare('SELECT * FROM expenses ORDER BY month_id').all(),
   };
@@ -34,6 +35,8 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
     // Backups exportados antes da renomeação "contas" -> "despesas" usam as chaves antigas.
     const expenses = data.expenses ?? data.accounts;
     const defaultExpenses = data.default_expenses ?? data.default_accounts ?? [];
+    // Backups anteriores à criação das contas bancárias não têm essa chave.
+    const bankAccounts = data.bank_accounts ?? [];
 
     if (!data.version || !data.months || !expenses) {
       throw new AppError(400, 'Formato de dados inválido');
@@ -44,6 +47,7 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
       const run = db.transaction(() => {
         db.exec('DELETE FROM expenses');
         db.exec('DELETE FROM default_expenses');
+        db.exec('DELETE FROM bank_accounts');
         db.exec('DELETE FROM months');
 
         const insertDefault = db.prepare(
@@ -51,6 +55,13 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
         );
         for (const exp of defaultExpenses) {
           insertDefault.run(exp.name, exp.due_day, exp.amount);
+        }
+
+        const insertBankAccount = db.prepare(
+          'INSERT INTO bank_accounts (id, name, balance) VALUES (?, ?, ?)'
+        );
+        for (const acc of bankAccounts) {
+          insertBankAccount.run(acc.id, acc.name, acc.balance);
         }
 
         const insertMonth = db.prepare(
@@ -61,8 +72,8 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
         }
 
         const insertExpense = db.prepare(
-          `INSERT INTO expenses (id, month_id, name, due_date, amount, is_paid, paid_at, receipt, notes)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          `INSERT INTO expenses (id, month_id, name, due_date, amount, is_paid, paid_at, receipt, notes, bank_account_id)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         );
         for (const e of expenses) {
           insertExpense.run(
@@ -74,7 +85,8 @@ export async function importFromZipBuffer(db: Database.Database, buffer: Buffer)
             e.is_paid,
             e.paid_at,
             e.receipt,
-            e.notes
+            e.notes,
+            e.bank_account_id ?? null
           );
         }
       });
