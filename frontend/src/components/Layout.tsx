@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import {
   Savings,
-  ReceiptLong,
+  Dashboard as DashboardIcon,
   BarChart,
   Settings as SettingsIcon,
   Menu as MenuIcon,
@@ -32,7 +32,7 @@ interface LayoutProps {
 }
 
 const NAV_ITEMS = [
-  { label: 'Despesas', path: '/', icon: <ReceiptLong fontSize="small" /> },
+  { label: 'Visão Geral', path: '/', icon: <DashboardIcon fontSize="small" /> },
   { label: 'Histórico', path: '/history', icon: <BarChart fontSize="small" /> },
   { label: 'Configurações', path: '/settings', icon: <SettingsIcon fontSize="small" /> },
 ];
