@@ -367,10 +367,10 @@ export default function Dashboard() {
 
                     {(totalAmount > 0 || (month.total_income ?? 0) > 0) && (
                       <Stack direction="row" spacing={2} sx={{ mt: 0.5 }}>
-                        <Typography variant="body2" color="success.main">
+                        <Typography variant="body2" color="text.secondary">
                           Entradas: {formatCurrencyBRL(month.total_income ?? 0)}
                         </Typography>
-                        <Typography variant="body2" color="error.main">
+                        <Typography variant="body2" color="text.secondary">
                           Despesas: {formatCurrencyBRL(totalAmount)}
                         </Typography>
                       </Stack>
