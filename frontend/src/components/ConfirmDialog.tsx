@@ -13,6 +13,8 @@ interface ConfirmDialogProps {
   title: string;
   message: ReactNode;
   confirmLabel?: string;
+  loadingLabel?: string;
+  confirmColor?: 'error' | 'warning' | 'primary';
   loading?: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -23,6 +25,8 @@ export default function ConfirmDialog({
   title,
   message,
   confirmLabel = 'Excluir',
+  loadingLabel,
+  confirmColor = 'error',
   loading = false,
   onClose,
   onConfirm,
@@ -37,8 +41,8 @@ export default function ConfirmDialog({
         <Button onClick={onClose} disabled={loading}>
           Cancelar
         </Button>
-        <Button onClick={onConfirm} color="error" variant="contained" disabled={loading}>
-          {loading ? 'Excluindo...' : confirmLabel}
+        <Button onClick={onConfirm} color={confirmColor} variant="contained" disabled={loading}>
+          {loading ? loadingLabel ?? `${confirmLabel}...` : confirmLabel}
         </Button>
       </DialogActions>
     </Dialog>

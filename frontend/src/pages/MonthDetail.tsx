@@ -93,6 +93,9 @@ export default function MonthDetail() {
   const [deleteExpenseTarget, setDeleteExpenseTarget] = useState<Expense | null>(null);
   const [deletingExpense, setDeletingExpense] = useState(false);
 
+  const [unpayTarget, setUnpayTarget] = useState<Expense | null>(null);
+  const [unpaying, setUnpaying] = useState(false);
+
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [sortBy, setSortBy] = useState<SortBy>('due_date');
@@ -105,6 +108,15 @@ export default function MonthDetail() {
       setDeleteExpenseTarget(null);
     }
     setDeletingExpense(false);
+  }
+
+  async function handleUnpay() {
+    if (!unpayTarget) return;
+    setUnpaying(true);
+    if (await unpay(unpayTarget.id)) {
+      setUnpayTarget(null);
+    }
+    setUnpaying(false);
   }
 
   function openEditDialog(expense: Expense) {
@@ -403,7 +415,7 @@ export default function MonthDetail() {
                       setSelectedExpense(expense);
                       setPayDialogOpen(true);
                     }}
-                    onUnpay={() => unpay(expense.id)}
+                    onUnpay={() => setUnpayTarget(expense)}
                     onViewDetail={() => {
                       setDetailExpense(expense);
                       setDetailOpen(true);
@@ -497,6 +509,21 @@ export default function MonthDetail() {
         loading={deletingExpense}
         onClose={() => setDeleteExpenseTarget(null)}
         onConfirm={handleDeleteExpense}
+      />
+
+      <ConfirmDialog
+        open={!!unpayTarget}
+        title="Desmarcar pagamento?"
+        message={
+          <>
+            Tem certeza que deseja desmarcar o pagamento de <strong>{unpayTarget?.name}</strong>?
+          </>
+        }
+        confirmLabel="Desmarcar"
+        confirmColor="warning"
+        loading={unpaying}
+        onClose={() => setUnpayTarget(null)}
+        onConfirm={handleUnpay}
       />
 
       <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
