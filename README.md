@@ -2,8 +2,7 @@
 
 App local de controle financeiro pessoal: meses, contas com vencimento, contas padrão (recorrentes), comprovantes de pagamento e export/import de dados.
 
-- **Backend**: Express + TypeScript + better-sqlite3 (`backend/`)
-- **Frontend**: React 19 + MUI + Vite (`frontend/`)
+App desktop Electron (via `electron-vite`), com SQLite (`better-sqlite3`) acessado diretamente no processo main e comunicação main ↔ renderer por IPC (`contextBridge` + `ipcMain.handle`). Sem servidor HTTP.
 
 Uso individual, local — sem autenticação.
 
@@ -13,48 +12,50 @@ Uso individual, local — sem autenticação.
 
 ## Rodando em desenvolvimento
 
-Backend e frontend são pacotes independentes (sem workspace na raiz); rode cada um em um terminal.
-
 ```bash
-# terminal 1 — backend (http://localhost:3001)
-cd backend
-npm install
-npm run dev
-
-# terminal 2 — frontend (http://localhost:5173, com proxy para /api)
-cd frontend
 npm install
 npm run dev
 ```
 
-O backend cria `data.db` (SQLite) e a pasta `uploads/` na raiz do projeto na primeira execução.
+O banco (`money-manager.db`) e a pasta `uploads/` (comprovantes) ficam em `%APPDATA%/money-manager` (Windows), fora do repositório.
 
-## Build de produção
+## Build de produção / instalador
 
 ```bash
-cd frontend && npm run build   # gera frontend/dist
-cd ../backend && npm run build # gera backend/dist
-npm start                      # dentro de backend/, serve a API e o frontend/dist juntos
+npm run build   # gera out/main, out/preload, out/renderer
+npm run dist    # gera o instalador NSIS em dist/
 ```
 
-## Scripts disponíveis (em cada pacote)
+## Scripts disponíveis
 
 | Script | Descrição |
 | --- | --- |
-| `npm run dev` | Sobe em modo desenvolvimento (hot reload) |
-| `npm run build` | Typecheck + build de produção |
+| `npm run dev` | Sobe o app Electron em modo desenvolvimento (hot reload no renderer) |
+| `npm run build` | Build de produção via `electron-vite` |
+| `npm run preview` | Roda o build de produção localmente |
+| `npm run dist` | Build + empacota o instalador `.exe` (NSIS) via `electron-builder` |
 | `npm run lint` | ESLint |
 | `npm run format` | Formata com Prettier |
 | `npm run format:check` | Verifica formatação sem alterar arquivos |
 
-## Estrutura do backend
+## Estrutura
 
 ```
-backend/src/
-  routes/       # Express routers — parsing/validação, delega ao service
-  services/     # Regra de negócio (SQL via better-sqlite3)
-  schemas/      # Validação de entrada (zod)
-  middleware/    # asyncHandler, errorHandler, validate
-  errors/        # AppError
-  constants/     # Nomes de mês, formatação de data de vencimento
+src/
+  main/
+    index.ts          # bootstrap do Electron (BrowserWindow, lifecycle)
+    db/                # connection.ts + repositórios SQL por domínio
+    ipc/               # registerIpc.ts, backupHandlers.ts
+    files/             # I/O de comprovantes (receiptsStorage.ts)
+    schemas/           # Validação de entrada (zod)
+    errors/            # AppError
+    constants/         # Nomes de mês, formatação de data de vencimento
+    utils/             # parseId, parseOrThrow
+  preload/
+    index.ts           # contextBridge: expõe window.api
+  shared/
+    ipc/               # channels.ts, api.ts (contrato ElectronApi)
+    types/             # Tipos de domínio compartilhados
+  renderer/
+    src/                # React 19 + MUI + Vite (components, hooks, pages)
 ```

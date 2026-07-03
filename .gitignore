@@ -1,10 +1,9 @@
 node_modules/
 dist/
+out/
 *.db
 *.db-shm
 *.db-wal
-backend/uploads/*
-!backend/uploads/.gitkeep
 *.tsbuildinfo
 uploads/
 .DS_Store
