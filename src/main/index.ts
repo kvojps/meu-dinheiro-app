@@ -12,6 +12,9 @@ function createWindow() {
     minWidth: 960,
     minHeight: 640,
     show: false,
+    ...(process.env.VITE_DEV_SERVER_URL
+      ? { icon: path.join(__dirname, '../../build/icon.ico') }
+      : {}),
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
       contextIsolation: true,
