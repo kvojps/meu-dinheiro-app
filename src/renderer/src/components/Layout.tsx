@@ -17,7 +17,6 @@ import {
   useTheme,
 } from '@mui/material';
 import {
-  Savings,
   Dashboard as DashboardIcon,
   BarChart,
   Settings as SettingsIcon,
@@ -26,6 +25,7 @@ import {
   Brightness7,
 } from '@mui/icons-material';
 import { useThemeMode } from '../hooks/useThemeMode';
+import logo from '../assets/logo-32x32.svg';
 
 interface LayoutProps {
   children: ReactNode;
@@ -64,7 +64,14 @@ export default function Layout({ children }: LayoutProps) {
             }}
             onClick={() => go('/')}
           >
-            <Savings color="primary" />
+            <Box
+              component="img"
+              src={logo}
+              alt=""
+              width={24}
+              height={24}
+              sx={{ borderRadius: '3px' }}
+            />
             <Typography variant="h6" sx={{ fontWeight: 700 }}>
               Money Manager
             </Typography>
