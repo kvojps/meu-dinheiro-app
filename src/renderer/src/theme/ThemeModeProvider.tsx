@@ -3,7 +3,7 @@ import { PaletteMode, ThemeProvider, CssBaseline } from '@mui/material';
 import { getAppTheme } from './index';
 import { ThemeModeContext } from './themeModeContext';
 
-const STORAGE_KEY = 'money-manager-theme-mode';
+const STORAGE_KEY = 'meu-dinheiro-theme-mode';
 
 function getInitialMode(): PaletteMode {
   const stored = localStorage.getItem(STORAGE_KEY);

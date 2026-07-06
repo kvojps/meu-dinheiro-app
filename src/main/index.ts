@@ -3,7 +3,7 @@ import path from 'node:path';
 import { initDb } from './db/connection';
 import { registerIpcHandlers } from './ipc/registerIpc';
 
-app.setName('money-manager');
+app.setName('meu-dinheiro');
 
 function createWindow() {
   const mainWindow = new BrowserWindow({

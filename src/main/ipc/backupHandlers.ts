@@ -15,7 +15,7 @@ function windowFor(event: IpcMainInvokeEvent): BrowserWindow {
 
 export function registerBackupHandlers(db: Database.Database, uploadsDir: string): void {
   ipcMain.handle(IPC_CHANNELS.dataExport, async (event): Promise<ExportResult> => {
-    const defaultPath = `export-money-manager-${new Date().toISOString().slice(0, 10)}.zip`;
+    const defaultPath = `export-meu-dinheiro-${new Date().toISOString().slice(0, 10)}.zip`;
     const result = await dialog.showSaveDialog(windowFor(event), {
       title: 'Exportar dados',
       defaultPath,

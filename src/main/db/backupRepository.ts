@@ -48,7 +48,7 @@ export async function importFromZipFile(
   uploadsDir: string,
   filePath: string
 ): Promise<void> {
-  const tempDir = path.join(app.getPath('temp'), 'money-manager-import-' + Date.now());
+  const tempDir = path.join(app.getPath('temp'), 'meu-dinheiro-import-' + Date.now());
   fs.mkdirSync(tempDir, { recursive: true });
 
   try {

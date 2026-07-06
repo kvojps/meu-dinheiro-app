@@ -73,7 +73,7 @@ export default function Layout({ children }: LayoutProps) {
               sx={{ borderRadius: '3px' }}
             />
             <Typography variant="h6" sx={{ fontWeight: 700 }}>
-              Money Manager
+              Meu Dinheiro
             </Typography>
           </Box>
 

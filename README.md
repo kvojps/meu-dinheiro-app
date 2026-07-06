@@ -1,4 +1,4 @@
-# Money Manager
+# Meu Dinheiro
 
 Aplicativo desktop (Electron) para **controle financeiro pessoal organizado por mês**: contas a pagar/receber com vencimento, contas padrão (recorrentes), comprovantes de pagamento, contas bancárias e histórico com gráficos. Uso individual, local — sem autenticação e sem servidor.
 
@@ -12,7 +12,7 @@ Aplicativo desktop (Electron) para **controle financeiro pessoal organizado por 
 - **Configurações**: gerenciamento de contas padrão, contas bancárias, criação de intervalo de meses e exportação/importação dos dados.
 - **Backup**: exportação e importação completa dos dados (banco + comprovantes) em um arquivo `.zip`, via diálogos nativos de salvar/abrir.
 
-Os dados ficam armazenados localmente em um banco **SQLite** (`money-manager.db`) e os comprovantes em uma pasta `uploads/`, ambos em `%APPDATA%/money-manager` (Windows) — fora do repositório e do controle de versão.
+Os dados ficam armazenados localmente em um banco **SQLite** (`meu-dinheiro.db`) e os comprovantes em uma pasta `uploads/`, ambos em `%APPDATA%/meu-dinheiro` (Windows) — fora do repositório e do controle de versão.
 
 ## Como executar
 

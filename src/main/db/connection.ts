@@ -128,7 +128,7 @@ export function getUploadsDir(): string {
 }
 
 export function initDb(): Database.Database {
-  const dbPath = path.join(app.getPath('userData'), 'money-manager.db');
+  const dbPath = path.join(app.getPath('userData'), 'meu-dinheiro.db');
   const uploadsDir = getUploadsDir();
 
   migrateLegacyDataIfNeeded(dbPath, uploadsDir);
