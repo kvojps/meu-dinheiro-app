@@ -63,8 +63,7 @@ function insertIncomesFromDefaults(
 
 export function findMonthByYearMonth(db: Database.Database, year: number, month: number) {
   return db.prepare('SELECT id FROM months WHERE year = ? AND month = ?').get(year, month) as
-    | { id: number }
-    | undefined;
+    { id: number } | undefined;
 }
 
 export function createMonthWithDefaults(

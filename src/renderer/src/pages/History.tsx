@@ -134,9 +134,12 @@ export default function History() {
     },
     { paid: 0, pending: 0, overdue: 0 }
   );
-  const expenseYearTotal = expenseYearTotals.paid + expenseYearTotals.pending + expenseYearTotals.overdue;
-  const expensePaidPct = expenseYearTotal > 0 ? (expenseYearTotals.paid / expenseYearTotal) * 100 : 0;
-  const expensePendingPct = expenseYearTotal > 0 ? (expenseYearTotals.pending / expenseYearTotal) * 100 : 0;
+  const expenseYearTotal =
+    expenseYearTotals.paid + expenseYearTotals.pending + expenseYearTotals.overdue;
+  const expensePaidPct =
+    expenseYearTotal > 0 ? (expenseYearTotals.paid / expenseYearTotal) * 100 : 0;
+  const expensePendingPct =
+    expenseYearTotal > 0 ? (expenseYearTotals.pending / expenseYearTotal) * 100 : 0;
   const expenseOverduePct = expenseYearTotal > 0 ? 100 - expensePaidPct - expensePendingPct : 0;
 
   const incomeChartData = yearMonths.map((m) => ({
@@ -155,7 +158,8 @@ export default function History() {
     { received: 0, pending: 0 }
   );
   const incomeYearTotal = incomeYearTotals.received + incomeYearTotals.pending;
-  const incomeReceivedPct = incomeYearTotal > 0 ? (incomeYearTotals.received / incomeYearTotal) * 100 : 0;
+  const incomeReceivedPct =
+    incomeYearTotal > 0 ? (incomeYearTotals.received / incomeYearTotal) * 100 : 0;
   const incomePendingPct = incomeYearTotal > 0 ? 100 - incomeReceivedPct : 0;
 
   const comparativoData = yearMonths.map((m) => {
@@ -255,7 +259,10 @@ export default function History() {
           <ChevronLeft />
         </IconButton>
         <FormControl size="small" sx={{ minWidth: 100 }}>
-          <Select value={selectedYear || ''} onChange={(e) => setYearOverride(Number(e.target.value))}>
+          <Select
+            value={selectedYear || ''}
+            onChange={(e) => setYearOverride(Number(e.target.value))}
+          >
             {years.map((y) => (
               <MenuItem key={y} value={y}>
                 {y}
@@ -331,19 +338,25 @@ export default function History() {
                 </Box>
                 <Stack direction="row" spacing={3} flexWrap="wrap">
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }} />
+                    <Box
+                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }}
+                    />
                     <Typography variant="body2" color="text.secondary">
                       Pago: <strong>{formatCurrencyBRL(expenseYearTotals.paid)}</strong>
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'warning.main' }} />
+                    <Box
+                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'warning.main' }}
+                    />
                     <Typography variant="body2" color="text.secondary">
                       Pendente: <strong>{formatCurrencyBRL(expenseYearTotals.pending)}</strong>
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'error.main' }} />
+                    <Box
+                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'error.main' }}
+                    />
                     <Typography variant="body2" color="text.secondary">
                       Vencida: <strong>{formatCurrencyBRL(expenseYearTotals.overdue)}</strong>
                     </Typography>
@@ -353,7 +366,10 @@ export default function History() {
 
               {view === 'chart' ? (
                 <ResponsiveContainer width="100%" height={isMobile ? 320 : 500}>
-                  <ComposedChart data={expenseChartData} margin={isMobile ? { bottom: 40 } : undefined}>
+                  <ComposedChart
+                    data={expenseChartData}
+                    margin={isMobile ? { bottom: 40 } : undefined}
+                  >
                     {expenseChartData.map(
                       (entry) =>
                         entry.isCurrent && (
@@ -490,13 +506,17 @@ export default function History() {
                 </Box>
                 <Stack direction="row" spacing={3} flexWrap="wrap">
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }} />
+                    <Box
+                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }}
+                    />
                     <Typography variant="body2" color="text.secondary">
                       Recebido: <strong>{formatCurrencyBRL(incomeYearTotals.received)}</strong>
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'warning.main' }} />
+                    <Box
+                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'warning.main' }}
+                    />
                     <Typography variant="body2" color="text.secondary">
                       A receber: <strong>{formatCurrencyBRL(incomeYearTotals.pending)}</strong>
                     </Typography>
@@ -506,7 +526,10 @@ export default function History() {
 
               {view === 'chart' ? (
                 <ResponsiveContainer width="100%" height={isMobile ? 320 : 500}>
-                  <ComposedChart data={incomeChartData} margin={isMobile ? { bottom: 40 } : undefined}>
+                  <ComposedChart
+                    data={incomeChartData}
+                    margin={isMobile ? { bottom: 40 } : undefined}
+                  >
                     {incomeChartData.map(
                       (entry) =>
                         entry.isCurrent && (
@@ -618,13 +641,17 @@ export default function History() {
                 </Typography>
                 <Stack direction="row" spacing={3} flexWrap="wrap" sx={{ mt: 2 }}>
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }} />
+                    <Box
+                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }}
+                    />
                     <Typography variant="body2" color="text.secondary">
                       Entradas: <strong>{formatCurrencyBRL(comparativoTotals.income)}</strong>
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'error.main' }} />
+                    <Box
+                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'error.main' }}
+                    />
                     <Typography variant="body2" color="text.secondary">
                       Despesas: <strong>{formatCurrencyBRL(comparativoTotals.expense)}</strong>
                     </Typography>
@@ -634,7 +661,10 @@ export default function History() {
 
               {view === 'chart' ? (
                 <ResponsiveContainer width="100%" height={isMobile ? 320 : 420}>
-                  <ComposedChart data={comparativoData} margin={isMobile ? { bottom: 40 } : undefined}>
+                  <ComposedChart
+                    data={comparativoData}
+                    margin={isMobile ? { bottom: 40 } : undefined}
+                  >
                     {comparativoData.map(
                       (entry) =>
                         entry.isCurrent && (

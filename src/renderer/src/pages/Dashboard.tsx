@@ -263,11 +263,7 @@ export default function Dashboard() {
           </Typography>
           <FormControl size="small" sx={{ minWidth: 180 }}>
             <InputLabel>De</InputLabel>
-            <Select
-              value={fromValue}
-              label="De"
-              onChange={(e) => handleFromChange(e.target.value)}
-            >
+            <Select value={fromValue} label="De" onChange={(e) => handleFromChange(e.target.value)}>
               {monthOptions.map((opt) => (
                 <MenuItem key={opt.value} value={opt.value}>
                   {opt.label}
@@ -287,7 +283,12 @@ export default function Dashboard() {
           </FormControl>
 
           <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-            <Chip label="Últimos 3 meses" size="small" variant="outlined" onClick={handleQuickLast3} />
+            <Chip
+              label="Últimos 3 meses"
+              size="small"
+              variant="outlined"
+              onClick={handleQuickLast3}
+            />
             <Chip label="Este ano" size="small" variant="outlined" onClick={handleQuickThisYear} />
             <Chip label="Tudo" size="small" variant="outlined" onClick={handleClearRange} />
           </Stack>
@@ -340,7 +341,12 @@ export default function Dashboard() {
                         </Typography>
                         {isCurrent && <Chip label="Atual" color="primary" size="small" />}
                       </Stack>
-                      <Stack direction="row" spacing={0.5} flexWrap="wrap" justifyContent="flex-end">
+                      <Stack
+                        direction="row"
+                        spacing={0.5}
+                        flexWrap="wrap"
+                        justifyContent="flex-end"
+                      >
                         {total > 0 ? (
                           <Chip label={`${paid}/${total} pagas`} color={statusColor} size="small" />
                         ) : (

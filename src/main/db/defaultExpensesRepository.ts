@@ -53,8 +53,7 @@ export function createDefaultExpense(
 
 export function getDefaultExpenseById(db: Database.Database, id: number): DefaultExpenseRow {
   const existing = db.prepare('SELECT * FROM default_expenses WHERE id = ?').get(id) as
-    | DefaultExpenseRow
-    | undefined;
+    DefaultExpenseRow | undefined;
   if (!existing) {
     throw new AppError(404, 'Default expense not found');
   }

@@ -31,8 +31,7 @@ export function listExpensesForMonth(db: Database.Database, monthId: number) {
 
 export function getExpenseById(db: Database.Database, id: number): ExpenseRow {
   const expense = db.prepare('SELECT * FROM expenses WHERE id = ?').get(id) as
-    | ExpenseRow
-    | undefined;
+    ExpenseRow | undefined;
   if (!expense) {
     throw new AppError(404, 'Expense not found');
   }

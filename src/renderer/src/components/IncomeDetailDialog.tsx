@@ -1,4 +1,13 @@
-import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from '@mui/material';
 import { Income } from '../types/models';
 import { formatDateOnlyBR, formatPaidDateBR } from '../utils/date';
 import { formatCurrencyBRLOrFallback } from '../utils/format';

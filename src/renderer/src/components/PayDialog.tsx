@@ -47,7 +47,12 @@ export default function PayDialog({
   }
 
   function handleConfirm() {
-    onConfirm(file || undefined, notes || undefined, paidAt || undefined, bankAccountId || undefined);
+    onConfirm(
+      file || undefined,
+      notes || undefined,
+      paidAt || undefined,
+      bankAccountId || undefined
+    );
     setFile(null);
     setNotes('');
     setPaidAt(todayDateString());

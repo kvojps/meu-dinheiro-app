@@ -69,8 +69,7 @@ export function createDefaultIncome(
 
 export function getDefaultIncomeById(db: Database.Database, id: number): DefaultIncomeRow {
   const existing = db.prepare('SELECT * FROM default_incomes WHERE id = ?').get(id) as
-    | DefaultIncomeRow
-    | undefined;
+    DefaultIncomeRow | undefined;
   if (!existing) {
     throw new AppError(404, 'Default income not found');
   }

@@ -119,7 +119,12 @@ export function useMonth(id: string | undefined) {
     }
   }
 
-  async function receive(incomeId: number, notes?: string, receivedAt?: string, bankAccountId?: number) {
+  async function receive(
+    incomeId: number,
+    notes?: string,
+    receivedAt?: string,
+    bankAccountId?: number
+  ) {
     try {
       await api.receiveIncome(incomeId, notes, receivedAt, bankAccountId);
       showSnackbar('Entrada marcada como recebida!');

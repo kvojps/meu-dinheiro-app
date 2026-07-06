@@ -42,9 +42,7 @@ function migrateLegacyTableNames() {
 function ensureExpenseBankAccountColumn() {
   const columns = db.prepare('PRAGMA table_info(expenses)').all() as { name: string }[];
   if (!columns.some((c) => c.name === 'bank_account_id')) {
-    db.exec(
-      'ALTER TABLE expenses ADD COLUMN bank_account_id INTEGER REFERENCES bank_accounts(id)'
-    );
+    db.exec('ALTER TABLE expenses ADD COLUMN bank_account_id INTEGER REFERENCES bank_accounts(id)');
   }
 }
 

@@ -28,9 +28,7 @@ export function listIncomesForMonth(db: Database.Database, monthId: number) {
 }
 
 export function getIncomeById(db: Database.Database, id: number): IncomeRow {
-  const income = db.prepare('SELECT * FROM incomes WHERE id = ?').get(id) as
-    | IncomeRow
-    | undefined;
+  const income = db.prepare('SELECT * FROM incomes WHERE id = ?').get(id) as IncomeRow | undefined;
   if (!income) {
     throw new AppError(404, 'Income not found');
   }

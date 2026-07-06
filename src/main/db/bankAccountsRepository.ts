@@ -14,8 +14,7 @@ export function listBankAccounts(db: Database.Database) {
 
 export function getBankAccountById(db: Database.Database, id: number): BankAccountRow {
   const existing = db.prepare('SELECT * FROM bank_accounts WHERE id = ?').get(id) as
-    | BankAccountRow
-    | undefined;
+    BankAccountRow | undefined;
   if (!existing) {
     throw new AppError(404, 'Bank account not found');
   }

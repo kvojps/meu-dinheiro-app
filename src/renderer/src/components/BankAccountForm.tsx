@@ -46,11 +46,7 @@ export default function BankAccountForm({ open, onClose, onSave, initial }: Bank
           fullWidth
           value={balance}
           onChange={(e) => setBalance(e.target.value)}
-          helperText={
-            initial
-              ? 'Ajuste manual do saldo atual.'
-              : 'Saldo inicial da conta.'
-          }
+          helperText={initial ? 'Ajuste manual do saldo atual.' : 'Saldo inicial da conta.'}
         />
       </DialogContent>
       <DialogActions>

@@ -42,7 +42,7 @@ export default function ConfirmDialog({
           Cancelar
         </Button>
         <Button onClick={onConfirm} color={confirmColor} variant="contained" disabled={loading}>
-          {loading ? loadingLabel ?? `${confirmLabel}...` : confirmLabel}
+          {loading ? (loadingLabel ?? `${confirmLabel}...`) : confirmLabel}
         </Button>
       </DialogActions>
     </Dialog>

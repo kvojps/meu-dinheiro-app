@@ -9,12 +9,10 @@ import type {
 } from '../types/models';
 
 export type ExportResult =
-  | { success: true; filePath: string }
-  | { success: false; error: 'canceled' };
+  { success: true; filePath: string } | { success: false; error: 'canceled' };
 
 export type ImportResult =
-  | { success: true }
-  | { success: false; error: 'canceled' | 'invalid-format'; message?: string };
+  { success: true } | { success: false; error: 'canceled' | 'invalid-format'; message?: string };
 
 export interface ReceiptPayload {
   buffer: ArrayBuffer;

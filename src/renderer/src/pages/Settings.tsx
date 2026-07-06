@@ -370,8 +370,8 @@ export default function Settings() {
               sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
             >
               <Typography variant="body2" color="text.secondary">
-                Contas usadas opcionalmente para debitar o valor ao pagar uma despesa ou creditar
-                ao receber uma entrada.
+                Contas usadas opcionalmente para debitar o valor ao pagar uma despesa ou creditar ao
+                receber uma entrada.
               </Typography>
               <Button
                 variant="contained"
@@ -581,8 +581,8 @@ export default function Settings() {
         message={
           <>
             Escolha um arquivo ZIP exportado anteriormente. A importação vai{' '}
-            <strong>substituir todos os dados atuais</strong> (meses, despesas e comprovantes).
-            Essa ação não pode ser desfeita.
+            <strong>substituir todos os dados atuais</strong> (meses, despesas e comprovantes). Essa
+            ação não pode ser desfeita.
           </>
         }
         confirmLabel="Escolher arquivo"

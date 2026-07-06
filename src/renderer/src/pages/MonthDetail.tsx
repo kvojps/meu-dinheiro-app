@@ -422,10 +422,7 @@ export default function MonthDetail() {
       </Paper>
 
       <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 3 }}>
-        <Tab
-          value="expenses"
-          label={`Despesas (${paidCount}/${month.expenses.length})`}
-        />
+        <Tab value="expenses" label={`Despesas (${paidCount}/${month.expenses.length})`} />
         <Tab value="incomes" label={`Entradas (${receivedCount}/${month.incomes.length})`} />
       </Tabs>
 
@@ -810,7 +807,8 @@ export default function MonthDetail() {
         title="Desmarcar recebimento?"
         message={
           <>
-            Tem certeza que deseja desmarcar o recebimento de <strong>{unreceiveTarget?.name}</strong>?
+            Tem certeza que deseja desmarcar o recebimento de{' '}
+            <strong>{unreceiveTarget?.name}</strong>?
           </>
         }
         confirmLabel="Desmarcar"
