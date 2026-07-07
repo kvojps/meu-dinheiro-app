@@ -8,7 +8,7 @@
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "postinstall": "electron-rebuild -f -w better-sqlite3",
-    "dist:win": "npm run build && electron-builder --win nsis",
+    "dist:win": "electron-vite build && electron-builder --win",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -16,8 +16,15 @@
   "build": {
     "appId": "com.meudinheiro.app",
     "productName": "Meu Dinheiro",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
     "files": [
       "out/**/*"
+    ],
+    "asarUnpack": [
+      "**/*.node"
     ],
     "win": {
       "target": "nsis",
