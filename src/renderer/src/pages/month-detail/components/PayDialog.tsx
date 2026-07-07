@@ -12,7 +12,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import { BankAccount, Expense } from '@/types/models';
+import { BankAccount, Expense } from '@shared/types/models';
 import { FileUploadButton } from '@/components/FileUploadButton';
 import { formatDateOnlyBR, todayDateString } from '@/utils/date';
 import { formatCurrencyBRL } from '@/utils/format';

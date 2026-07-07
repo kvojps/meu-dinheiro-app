@@ -45,7 +45,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { api } from '@/api/client';
-import { Month } from '@/types/models';
+import { Month } from '@shared/types/models';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 import { formatCurrencyBRL } from '@/utils/format';
 import { monthDetailPath } from '@/routes';

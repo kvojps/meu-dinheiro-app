@@ -8,7 +8,7 @@ import {
   DialogTitle,
   Typography,
 } from '@mui/material';
-import { Income } from '@/types/models';
+import { Income } from '@shared/types/models';
 import { formatDateOnlyBR, formatPaidDateBR } from '@/utils/date';
 import { formatCurrencyBRLOrFallback } from '@/utils/format';
 

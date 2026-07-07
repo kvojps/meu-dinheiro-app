@@ -8,7 +8,7 @@ import {
   Button,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { DefaultExpense } from '@/types/models';
+import { DefaultExpense } from '@shared/types/models';
 import { defaultExpenseFormSchema, DefaultExpenseFormValues } from './formSchemas';
 
 interface DefaultExpenseFormProps {

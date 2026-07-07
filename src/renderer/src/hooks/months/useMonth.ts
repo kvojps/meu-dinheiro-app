@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/api/client';
-import { MonthDetail } from '@/types/models';
+import { MonthDetail } from '@shared/types/models';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 
 export function useMonth(id: string | undefined) {

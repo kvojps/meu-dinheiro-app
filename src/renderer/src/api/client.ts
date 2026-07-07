@@ -6,7 +6,7 @@ import type {
   Expense,
   Income,
   BankAccount,
-} from '../types/models';
+} from '@shared/types/models';
 import type { ExportResult, ImportResult } from '@shared/ipc/api';
 
 function unwrapIpcError(err: unknown): never {

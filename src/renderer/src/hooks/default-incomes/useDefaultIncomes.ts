@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/api/client';
-import { DefaultIncome } from '@/types/models';
+import { DefaultIncome } from '@shared/types/models';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 
 export function useDefaultIncomes() {

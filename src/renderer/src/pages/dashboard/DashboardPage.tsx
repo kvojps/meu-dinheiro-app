@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import { ErrorOutline, ReportProblemOutlined } from '@mui/icons-material';
 import { api } from '@/api/client';
-import { Month } from '@/types/models';
+import { Month } from '@shared/types/models';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 import { useBankAccounts } from '@/hooks/bank-accounts/useBankAccounts';
 import { formatCurrencyBRL } from '@/utils/format';

@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import { AttachFile } from '@mui/icons-material';
-import { Expense } from '@/types/models';
+import { Expense } from '@shared/types/models';
 import { formatDateOnlyBR, formatPaidDateBR } from '@/utils/date';
 import { formatCurrencyBRLOrFallback } from '@/utils/format';
 

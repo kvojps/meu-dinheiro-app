@@ -9,7 +9,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import { BankAccount, DefaultIncome } from '@/types/models';
+import { BankAccount, DefaultIncome } from '@shared/types/models';
 import { formatCurrencyBRL } from '@/utils/format';
 import { defaultIncomeFormSchema, DefaultIncomeFormValues } from './formSchemas';
 
