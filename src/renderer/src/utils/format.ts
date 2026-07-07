@@ -9,7 +9,7 @@ export function formatCurrencyBRL(amount: number): string {
 
 export function formatCurrencyBRLOrFallback(
   amount: number | null | undefined,
-  fallback = 'Valor não definido'
+  fallback = 'Valor não definido',
 ): string {
   return amount ? formatCurrencyBRL(amount) : fallback;
 }

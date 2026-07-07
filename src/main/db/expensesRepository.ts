@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import { AppError } from '../errors/AppError';
-import * as bankAccountsRepository from './bankAccountsRepository';
 import { deleteReceiptFile } from '../files/receiptsStorage';
+import * as bankAccountsRepository from './bankAccountsRepository';
 
 export interface ExpenseRow {
   id: number;
@@ -24,7 +24,7 @@ export function listExpensesForMonth(db: Database.Database, monthId: number) {
        FROM expenses e
        LEFT JOIN bank_accounts ba ON ba.id = e.bank_account_id
        WHERE e.month_id = ?
-       ORDER BY e.due_date, e.name`
+       ORDER BY e.due_date, e.name`,
     )
     .all(monthId) as (ExpenseRow & { bank_account_name: string | null })[];
 }
@@ -41,7 +41,7 @@ export function getExpenseById(db: Database.Database, id: number): ExpenseRow {
 export function getExpenseForFilename(db: Database.Database, id: number) {
   return db
     .prepare(
-      'SELECT e.*, m.label as month_label FROM expenses e JOIN months m ON e.month_id = m.id WHERE e.id = ?'
+      'SELECT e.*, m.label as month_label FROM expenses e JOIN months m ON e.month_id = m.id WHERE e.id = ?',
     )
     .get(id) as (ExpenseRow & { month_label: string }) | undefined;
 }
@@ -49,7 +49,7 @@ export function getExpenseForFilename(db: Database.Database, id: number) {
 export function createExpense(
   db: Database.Database,
   monthId: number,
-  data: { name: string; due_date?: string | null; amount?: number }
+  data: { name: string; due_date?: string | null; amount?: number },
 ): ExpenseRow {
   const month = db.prepare('SELECT id FROM months WHERE id = ?').get(monthId);
   if (!month) {
@@ -68,7 +68,7 @@ export function createExpense(
 export function updateExpense(
   db: Database.Database,
   id: number,
-  data: { name?: string; due_date?: string | null; amount?: number; notes?: string | null }
+  data: { name?: string; due_date?: string | null; amount?: number; notes?: string | null },
 ): ExpenseRow {
   const existing = getExpenseById(db, id);
 
@@ -77,7 +77,7 @@ export function updateExpense(
     data.due_date !== undefined ? data.due_date : existing.due_date,
     data.amount !== undefined ? data.amount : existing.amount,
     data.notes !== undefined ? data.notes : existing.notes,
-    id
+    id,
   );
 
   return getExpenseById(db, id);
@@ -92,7 +92,7 @@ export function deleteExpense(db: Database.Database, uploadsDir: string, id: num
 function todayLocalDate(): string {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
-    now.getDate()
+    now.getDate(),
   ).padStart(2, '0')}`;
 }
 
@@ -102,7 +102,7 @@ export function payExpense(
   receipt: string | undefined,
   notes: string | undefined,
   paidAt: string | undefined,
-  bankAccountId: number | undefined
+  bankAccountId: number | undefined,
 ): ExpenseRow {
   const existing = getExpenseById(db, id);
 
@@ -111,13 +111,13 @@ export function payExpense(
       bankAccountsRepository.debitBankAccount(db, bankAccountId, existing.amount);
     }
     db.prepare(
-      'UPDATE expenses SET is_paid = 1, paid_at = ?, receipt = ?, notes = ?, bank_account_id = ? WHERE id = ?'
+      'UPDATE expenses SET is_paid = 1, paid_at = ?, receipt = ?, notes = ?, bank_account_id = ? WHERE id = ?',
     ).run(
       paidAt || todayLocalDate(),
       receipt ?? existing.receipt,
       notes !== undefined ? notes : existing.notes,
       bankAccountId ?? null,
-      id
+      id,
     );
   });
   run();
@@ -134,7 +134,7 @@ export function unpayExpense(db: Database.Database, uploadsDir: string, id: numb
       bankAccountsRepository.creditBankAccount(db, existing.bank_account_id, existing.amount);
     }
     db.prepare(
-      'UPDATE expenses SET is_paid = 0, paid_at = NULL, receipt = NULL, bank_account_id = NULL WHERE id = ?'
+      'UPDATE expenses SET is_paid = 0, paid_at = NULL, receipt = NULL, bank_account_id = NULL WHERE id = ?',
     ).run(id);
   });
   run();

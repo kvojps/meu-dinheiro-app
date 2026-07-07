@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { api } from '@/api/client';
 import { DefaultIncome } from '@shared/types/income';
+import { api } from '@/api/client';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 
 export function useDefaultIncomes() {
@@ -36,7 +36,7 @@ export function useDefaultIncomes() {
 
   async function save(
     data: { name: string; expected_day?: number; amount: number; bank_account_id?: number | null },
-    editingId?: number
+    editingId?: number,
   ) {
     try {
       if (editingId) {

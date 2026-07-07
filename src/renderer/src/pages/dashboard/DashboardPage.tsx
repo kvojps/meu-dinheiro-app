@@ -1,31 +1,31 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ErrorOutline, ReportProblemOutlined } from '@mui/icons-material';
 import {
-  Grid,
-  Card,
-  CardContent,
-  CardActionArea,
-  Typography,
   Box,
+  Button,
+  Card,
+  CardActionArea,
+  CardContent,
   Chip,
-  Paper,
   Divider,
   FormControl,
+  Grid,
   InputLabel,
-  Select,
-  MenuItem,
-  Stack,
-  Button,
   LinearProgress,
+  MenuItem,
+  Paper,
+  Select,
   Skeleton,
+  Stack,
+  Typography,
 } from '@mui/material';
-import { ErrorOutline, ReportProblemOutlined } from '@mui/icons-material';
-import { api } from '@/api/client';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Month } from '@shared/types/month';
+import { api } from '@/api/client';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 import { useBankAccounts } from '@/hooks/bank-accounts/useBankAccounts';
-import { formatCurrencyBRL } from '@/utils/format';
 import { monthDetailPath } from '@/routes';
+import { formatCurrencyBRL } from '@/utils/format';
 
 const INITIAL_VISIBLE = 12;
 const LOAD_MORE_STEP = 12;
@@ -46,7 +46,7 @@ export function DashboardPage() {
   const { bankAccounts } = useBankAccounts();
   const totalBankBalance = useMemo(
     () => bankAccounts.reduce((sum, a) => sum + a.balance, 0),
-    [bankAccounts]
+    [bankAccounts],
   );
 
   const loadMonths = useCallback(() => {
@@ -140,9 +140,9 @@ export function DashboardPage() {
           received: acc.received + (m.received_income ?? 0),
           pendingIncome: acc.pendingIncome + (m.pending_income ?? 0),
         }),
-        { paid: 0, pending: 0, received: 0, pendingIncome: 0 }
+        { paid: 0, pending: 0, received: 0, pendingIncome: 0 },
       ),
-    [filteredMonths]
+    [filteredMonths],
   );
 
   const balance = summary.received - summary.paid;

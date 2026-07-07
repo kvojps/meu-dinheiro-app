@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const bankAccountIdField = z.preprocess(
   (val) => (val === '' || val === undefined || val === null ? undefined : Number(val)),
-  z.number().int().positive().optional().nullable()
+  z.number().int().positive().optional().nullable(),
 );
 
 export const createDefaultIncomeSchema = z.object({

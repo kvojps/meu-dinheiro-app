@@ -12,7 +12,7 @@ const optionalDayField = (label: string) =>
     .trim()
     .refine(
       (v) => v === '' || (Number.isInteger(Number(v)) && Number(v) >= 1 && Number(v) <= 31),
-      `${label} deve ser um dia entre 1 e 31`
+      `${label} deve ser um dia entre 1 e 31`,
     );
 
 export const bankAccountFormSchema = z.object({

@@ -23,7 +23,7 @@ export function getBankAccountById(db: Database.Database, id: number): BankAccou
 
 export function createBankAccount(
   db: Database.Database,
-  data: { name: string; balance?: number }
+  data: { name: string; balance?: number },
 ): BankAccountRow {
   const result = db
     .prepare('INSERT INTO bank_accounts (name, balance) VALUES (?, ?)')
@@ -34,14 +34,14 @@ export function createBankAccount(
 export function updateBankAccount(
   db: Database.Database,
   id: number,
-  data: { name?: string; balance?: number }
+  data: { name?: string; balance?: number },
 ): BankAccountRow {
   const existing = getBankAccountById(db, id);
 
   db.prepare('UPDATE bank_accounts SET name = ?, balance = ? WHERE id = ?').run(
     data.name ?? existing.name,
     data.balance !== undefined ? data.balance : existing.balance,
-    id
+    id,
   );
 
   return getBankAccountById(db, id);

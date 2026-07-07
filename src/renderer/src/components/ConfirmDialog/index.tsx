@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import {
   Button,
   Dialog,
@@ -7,6 +6,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
+import { ReactNode } from 'react';
 
 interface ConfirmDialogProps {
   open: boolean;

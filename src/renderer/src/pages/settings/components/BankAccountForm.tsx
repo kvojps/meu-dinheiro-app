@@ -1,15 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { BankAccount } from '@shared/types/bank-account';
-import { bankAccountFormSchema, BankAccountFormValues } from './formSchemas';
+import { BankAccountFormValues, bankAccountFormSchema } from './formSchemas';
 
 interface BankAccountFormProps {
   open: boolean;

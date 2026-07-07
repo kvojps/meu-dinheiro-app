@@ -27,7 +27,7 @@ export interface MonthsApi {
     fromYear: number,
     fromMonth: number,
     toYear: number,
-    toMonth: number
+    toMonth: number,
   ) => Promise<{ created: Month[]; errors: string[] }>;
   delete: (id: number) => Promise<{ message: string }>;
 }
@@ -37,7 +37,7 @@ export interface DefaultExpensesApi {
   create: (data: { name: string; due_day?: number; amount: number }) => Promise<DefaultExpense>;
   update: (
     id: number,
-    data: { name?: string; due_day?: number; amount?: number }
+    data: { name?: string; due_day?: number; amount?: number },
   ) => Promise<DefaultExpense>;
   delete: (id: number) => Promise<{ message: string }>;
 }
@@ -57,7 +57,7 @@ export interface DefaultIncomesApi {
       expected_day?: number;
       amount?: number;
       bank_account_id?: number | null;
-    }
+    },
   ) => Promise<DefaultIncome>;
   delete: (id: number) => Promise<{ message: string }>;
 }
@@ -73,11 +73,11 @@ export interface ExpensesApi {
   listForMonth: (monthId: number) => Promise<Expense[]>;
   create: (
     monthId: number,
-    data: { name: string; due_date?: string; amount: number }
+    data: { name: string; due_date?: string; amount: number },
   ) => Promise<Expense>;
   update: (
     id: number,
-    data: { name?: string; due_date?: string; amount?: number; notes?: string }
+    data: { name?: string; due_date?: string; amount?: number; notes?: string },
   ) => Promise<Expense>;
   delete: (id: number) => Promise<{ message: string }>;
   pay: (
@@ -87,7 +87,7 @@ export interface ExpensesApi {
       notes?: string;
       paid_at?: string;
       bank_account_id?: number;
-    }
+    },
   ) => Promise<Expense>;
   unpay: (id: number) => Promise<Expense>;
 }
@@ -96,7 +96,7 @@ export interface IncomesApi {
   listForMonth: (monthId: number) => Promise<Income[]>;
   create: (
     monthId: number,
-    data: { name: string; expected_date?: string; amount: number; bank_account_id?: number | null }
+    data: { name: string; expected_date?: string; amount: number; bank_account_id?: number | null },
   ) => Promise<Income>;
   update: (
     id: number,
@@ -106,14 +106,14 @@ export interface IncomesApi {
       amount?: number;
       notes?: string;
       bank_account_id?: number | null;
-    }
+    },
   ) => Promise<Income>;
   delete: (id: number) => Promise<{ message: string }>;
   receive: (
     id: number,
     notes?: string,
     receivedAt?: string,
-    bankAccountId?: number
+    bankAccountId?: number,
   ) => Promise<Income>;
   unreceive: (id: number) => Promise<Income>;
 }

@@ -1,11 +1,11 @@
 import Database from 'better-sqlite3';
 import { AppError } from '../errors/AppError';
-import { createMonthWithDefaults, MonthRow } from './monthsRepository';
+import { MonthRow, createMonthWithDefaults } from './monthsRepository';
 
 export function runSetup(
   db: Database.Database,
   initialYear: number,
-  initialMonth: number
+  initialMonth: number,
 ): MonthRow[] {
   const existing = db.prepare('SELECT COUNT(*) as count FROM months').get() as { count: number };
   if (existing.count > 0) {

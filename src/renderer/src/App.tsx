@@ -1,12 +1,12 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROUTES } from './routes';
-import { Layout } from './components/Layout';
-import { SnackbarProvider } from './contexts/SnackbarContext';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { HistoryPage } from './pages/history/HistoryPage';
 import { MonthDetailPage } from './pages/month-detail/MonthDetailPage';
 import { NotFoundPage } from './pages/not-found/NotFoundPage';
 import { SettingsPage } from './pages/settings/SettingsPage';
+import { Layout } from './components/Layout';
+import { SnackbarProvider } from './contexts/SnackbarContext';
 
 export function App() {
   return (

@@ -51,7 +51,7 @@ export function useMonthRangeCreator() {
         range.fromYear,
         range.fromMonth,
         range.toYear,
-        range.toMonth
+        range.toMonth,
       );
       const msgs = [`${result.created.length} mes(es) adicionado(s)!`];
       if (result.errors.length > 0) msgs.push(...result.errors);

@@ -50,7 +50,7 @@ function ensureDefaultIncomeBankAccountColumn() {
   const columns = db.prepare('PRAGMA table_info(default_incomes)').all() as { name: string }[];
   if (!columns.some((c) => c.name === 'bank_account_id')) {
     db.exec(
-      'ALTER TABLE default_incomes ADD COLUMN bank_account_id INTEGER REFERENCES bank_accounts(id)'
+      'ALTER TABLE default_incomes ADD COLUMN bank_account_id INTEGER REFERENCES bank_accounts(id)',
     );
   }
 }

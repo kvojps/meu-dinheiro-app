@@ -1,29 +1,3 @@
-import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Typography,
-  Button,
-  Chip,
-  Grid,
-  IconButton,
-  Paper,
-  Stack,
-  Tabs,
-  Tab,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Menu,
-  ListItemIcon,
-  ListItemText,
-  Pagination,
-  Skeleton,
-  InputAdornment,
-  Tooltip,
-} from '@mui/material';
 import {
   ArrowBack,
   ArrowBackIosNew,
@@ -33,25 +7,51 @@ import {
   MoreVert,
   Search,
 } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Chip,
+  FormControl,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Pagination,
+  Paper,
+  Select,
+  Skeleton,
+  Stack,
+  Tab,
+  Tabs,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Expense } from '@shared/types/expense';
 import { Income } from '@shared/types/income';
-import { ExpenseCard } from './components/ExpenseCard';
-import { PayDialog } from './components/PayDialog';
-import { AddExpenseDialog } from './components/AddExpenseDialog';
-import { EditExpenseDialog } from './components/EditExpenseDialog';
-import { ExpenseDetailDialog } from './components/ExpenseDetailDialog';
-import { IncomeCard } from './components/IncomeCard';
-import { ReceiveDialog } from './components/ReceiveDialog';
-import { AddIncomeDialog } from './components/AddIncomeDialog';
-import { EditIncomeDialog } from './components/EditIncomeDialog';
-import { IncomeDetailDialog } from './components/IncomeDetailDialog';
-import { DeleteMonthDialog } from './components/DeleteMonthDialog';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
-import { useMonth } from '@/hooks/months/useMonth';
 import { useBankAccounts } from '@/hooks/bank-accounts/useBankAccounts';
+import { useMonth } from '@/hooks/months/useMonth';
+import { ROUTES, monthDetailPath } from '@/routes';
 import { todayDateString } from '@/utils/date';
 import { formatCurrencyBRL } from '@/utils/format';
-import { ROUTES, monthDetailPath } from '@/routes';
+import { AddExpenseDialog } from './components/AddExpenseDialog';
+import { AddIncomeDialog } from './components/AddIncomeDialog';
+import { DeleteMonthDialog } from './components/DeleteMonthDialog';
+import { EditExpenseDialog } from './components/EditExpenseDialog';
+import { EditIncomeDialog } from './components/EditIncomeDialog';
+import { ExpenseCard } from './components/ExpenseCard';
+import { ExpenseDetailDialog } from './components/ExpenseDetailDialog';
+import { IncomeCard } from './components/IncomeCard';
+import { IncomeDetailDialog } from './components/IncomeDetailDialog';
+import { PayDialog } from './components/PayDialog';
+import { ReceiveDialog } from './components/ReceiveDialog';
 
 const PAGE_SIZE = 12;
 
@@ -276,7 +276,7 @@ export function MonthDetailPage() {
       else acc.pending += e.amount ?? 0;
       return acc;
     },
-    { paid: 0, pending: 0 }
+    { paid: 0, pending: 0 },
   );
 
   const incomeSummary = month.incomes.reduce(
@@ -285,7 +285,7 @@ export function MonthDetailPage() {
       else acc.pending += i.amount ?? 0;
       return acc;
     },
-    { received: 0, pending: 0 }
+    { received: 0, pending: 0 },
   );
 
   const balance = incomeSummary.received - expenseSummary.paid;
@@ -323,7 +323,7 @@ export function MonthDetailPage() {
   const incomeTotalPages = Math.max(1, Math.ceil(filteredIncomes.length / PAGE_SIZE));
   const paginatedIncomes = filteredIncomes.slice(
     (incomePage - 1) * PAGE_SIZE,
-    incomePage * PAGE_SIZE
+    incomePage * PAGE_SIZE,
   );
 
   return (

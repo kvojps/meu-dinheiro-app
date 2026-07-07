@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { IPC_CHANNELS } from '@shared/ipc/channels';
 import type { ElectronApi, ReceiptPayload } from '@shared/ipc/api';
+import { IPC_CHANNELS } from '@shared/ipc/channels';
 
 const api: ElectronApi = {
   setup: {
@@ -45,7 +45,7 @@ const api: ElectronApi = {
         notes?: string;
         paid_at?: string;
         bank_account_id?: number;
-      }
+      },
     ) => ipcRenderer.invoke(IPC_CHANNELS.expensesPay, id, payload),
     unpay: (id) => ipcRenderer.invoke(IPC_CHANNELS.expensesUnpay, id),
   },

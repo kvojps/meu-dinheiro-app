@@ -1,8 +1,8 @@
+import type { ExportResult, ImportResult } from '@shared/ipc/api';
 import type { BankAccount } from '@shared/types/bank-account';
 import type { DefaultExpense, Expense } from '@shared/types/expense';
 import type { DefaultIncome, Income } from '@shared/types/income';
 import type { Month, MonthDetail } from '@shared/types/month';
-import type { ExportResult, ImportResult } from '@shared/ipc/api';
 
 function unwrapIpcError(err: unknown): never {
   if (err instanceof Error) {
@@ -83,7 +83,7 @@ export const api = {
 
   updateExpense(
     id: number,
-    data: { name?: string; due_date?: string; amount?: number; notes?: string }
+    data: { name?: string; due_date?: string; amount?: number; notes?: string },
   ) {
     return call<Expense>(() => window.api.expenses.update(id, data));
   },
@@ -97,7 +97,7 @@ export const api = {
     file?: File,
     notes?: string,
     paidAt?: string,
-    bankAccountId?: number
+    bankAccountId?: number,
   ) {
     const receipt = file
       ? { buffer: await file.arrayBuffer(), originalName: file.name, mimeType: file.type }
@@ -108,7 +108,7 @@ export const api = {
         notes,
         paid_at: paidAt,
         bank_account_id: bankAccountId,
-      })
+      }),
     );
   },
 
@@ -131,7 +131,12 @@ export const api = {
 
   updateDefaultIncome(
     id: number,
-    data: { name?: string; expected_day?: number; amount?: number; bank_account_id?: number | null }
+    data: {
+      name?: string;
+      expected_day?: number;
+      amount?: number;
+      bank_account_id?: number | null;
+    },
   ) {
     return call(() => window.api.defaultIncomes.update(id, data));
   },
@@ -142,7 +147,7 @@ export const api = {
 
   createIncome(
     monthId: number,
-    data: { name: string; expected_date?: string; amount: number; bank_account_id?: number | null }
+    data: { name: string; expected_date?: string; amount: number; bank_account_id?: number | null },
   ) {
     return call<Income>(() => window.api.incomes.create(monthId, data));
   },
@@ -155,7 +160,7 @@ export const api = {
       amount?: number;
       notes?: string;
       bank_account_id?: number | null;
-    }
+    },
   ) {
     return call<Income>(() => window.api.incomes.update(id, data));
   },

@@ -1,18 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   MenuItem,
+  TextField,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { BankAccount } from '@shared/types/bank-account';
 import { DefaultIncome } from '@shared/types/income';
 import { formatCurrencyBRL } from '@/utils/format';
-import { defaultIncomeFormSchema, DefaultIncomeFormValues } from './formSchemas';
+import { DefaultIncomeFormValues, defaultIncomeFormSchema } from './formSchemas';
 
 interface DefaultIncomeFormProps {
   open: boolean;

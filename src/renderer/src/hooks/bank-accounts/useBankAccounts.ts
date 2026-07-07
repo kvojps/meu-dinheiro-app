@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { api } from '@/api/client';
 import { BankAccount } from '@shared/types/bank-account';
+import { api } from '@/api/client';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 
 export function useBankAccounts() {

@@ -1,54 +1,54 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
-  Box,
-  Typography,
-  IconButton,
-  Paper,
-  Stack,
-  FormControl,
-  Select,
-  MenuItem,
-  ToggleButtonGroup,
-  ToggleButton,
-  Tabs,
-  Tab,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Skeleton,
-  Button,
-  useTheme,
-  useMediaQuery,
-} from '@mui/material';
-import {
+  BarChartOutlined,
   ChevronLeft,
   ChevronRight,
-  BarChartOutlined,
-  TableRowsOutlined,
   ErrorOutline,
+  TableRowsOutlined,
 } from '@mui/icons-material';
 import {
-  ComposedChart,
+  Box,
+  Button,
+  FormControl,
+  IconButton,
+  MenuItem,
+  Paper,
+  Select,
+  Skeleton,
+  Stack,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tabs,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
   Bar,
-  Cell,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
   CartesianGrid,
+  Cell,
+  ComposedChart,
+  Legend,
+  Line,
   ReferenceArea,
   ReferenceLine,
   ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
-import { api } from '@/api/client';
 import { Month } from '@shared/types/month';
+import { api } from '@/api/client';
 import { useSnackbar } from '@/contexts/SnackbarContext';
-import { formatCurrencyBRL } from '@/utils/format';
 import { monthDetailPath } from '@/routes';
+import { formatCurrencyBRL } from '@/utils/format';
 
 function monthKey(year: number, month: number) {
   return `${year}-${String(month).padStart(2, '0')}`;
@@ -132,7 +132,7 @@ export function HistoryPage() {
         overdue: acc.overdue + overdue,
       };
     },
-    { paid: 0, pending: 0, overdue: 0 }
+    { paid: 0, pending: 0, overdue: 0 },
   );
   const expenseYearTotal =
     expenseYearTotals.paid + expenseYearTotals.pending + expenseYearTotals.overdue;
@@ -155,7 +155,7 @@ export function HistoryPage() {
       received: acc.received + (m.received_income ?? 0),
       pending: acc.pending + (m.pending_income ?? 0),
     }),
-    { received: 0, pending: 0 }
+    { received: 0, pending: 0 },
   );
   const incomeYearTotal = incomeYearTotals.received + incomeYearTotals.pending;
   const incomeReceivedPct =
@@ -180,7 +180,7 @@ export function HistoryPage() {
       income: acc.income + (m.total_income ?? 0),
       expense: acc.expense + (m.total_amount ?? 0),
     }),
-    { income: 0, expense: 0 }
+    { income: 0, expense: 0 },
   );
   const comparativoBalance = comparativoTotals.income - comparativoTotals.expense;
 
@@ -380,7 +380,7 @@ export function HistoryPage() {
                             fillOpacity={0.08}
                             ifOverflow="visible"
                           />
-                        )
+                        ),
                     )}
                     <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} />
                     <XAxis
@@ -540,7 +540,7 @@ export function HistoryPage() {
                             fillOpacity={0.08}
                             ifOverflow="visible"
                           />
-                        )
+                        ),
                     )}
                     <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} />
                     <XAxis
@@ -675,7 +675,7 @@ export function HistoryPage() {
                             fillOpacity={0.08}
                             ifOverflow="visible"
                           />
-                        )
+                        ),
                     )}
                     <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} />
                     <XAxis

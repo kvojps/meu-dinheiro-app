@@ -1,3 +1,4 @@
+import { AttachFile } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -8,7 +9,6 @@ import {
   DialogTitle,
   Typography,
 } from '@mui/material';
-import { AttachFile } from '@mui/icons-material';
 import { Expense } from '@shared/types/expense';
 import { formatDateOnlyBR, formatPaidDateBR } from '@/utils/date';
 import { formatCurrencyBRLOrFallback } from '@/utils/format';

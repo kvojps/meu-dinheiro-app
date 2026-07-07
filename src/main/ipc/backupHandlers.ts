@@ -1,9 +1,9 @@
 import type Database from 'better-sqlite3';
 import { BrowserWindow, type IpcMainInvokeEvent, dialog, ipcMain } from 'electron';
-import { IPC_CHANNELS } from '@shared/ipc/channels';
 import type { ExportResult, ImportResult } from '@shared/ipc/api';
-import { AppError } from '../errors/AppError';
+import { IPC_CHANNELS } from '@shared/ipc/channels';
 import { exportToZipFile, importFromZipFile } from '../db/backupRepository';
+import { AppError } from '../errors/AppError';
 
 function windowFor(event: IpcMainInvokeEvent): BrowserWindow {
   const window = BrowserWindow.fromWebContents(event.sender);

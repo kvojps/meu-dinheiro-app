@@ -1,5 +1,5 @@
-import Database from 'better-sqlite3';
 import { ZipArchive } from 'archiver';
+import Database from 'better-sqlite3';
 import { app } from 'electron';
 import fs from 'fs';
 import path from 'path';
@@ -22,7 +22,7 @@ export function getExportData(db: Database.Database) {
 export async function exportToZipFile(
   db: Database.Database,
   uploadsDir: string,
-  filePath: string
+  filePath: string,
 ): Promise<void> {
   const data = getExportData(db);
 
@@ -46,7 +46,7 @@ export async function exportToZipFile(
 export async function importFromZipFile(
   db: Database.Database,
   uploadsDir: string,
-  filePath: string
+  filePath: string,
 ): Promise<void> {
   const tempDir = path.join(app.getPath('temp'), 'meu-dinheiro-import-' + Date.now());
   fs.mkdirSync(tempDir, { recursive: true });
@@ -86,33 +86,33 @@ export async function importFromZipFile(
         db.exec('DELETE FROM months');
 
         const insertDefault = db.prepare(
-          'INSERT INTO default_expenses (name, due_day, amount) VALUES (?, ?, ?)'
+          'INSERT INTO default_expenses (name, due_day, amount) VALUES (?, ?, ?)',
         );
         for (const exp of defaultExpenses) {
           insertDefault.run(exp.name, exp.due_day, exp.amount);
         }
 
         const insertDefaultIncome = db.prepare(
-          'INSERT INTO default_incomes (name, expected_day, amount, bank_account_id) VALUES (?, ?, ?, ?)'
+          'INSERT INTO default_incomes (name, expected_day, amount, bank_account_id) VALUES (?, ?, ?, ?)',
         );
         for (const inc of defaultIncomes) {
           insertDefaultIncome.run(
             inc.name,
             inc.expected_day,
             inc.amount,
-            inc.bank_account_id ?? null
+            inc.bank_account_id ?? null,
           );
         }
 
         const insertBankAccount = db.prepare(
-          'INSERT INTO bank_accounts (id, name, balance) VALUES (?, ?, ?)'
+          'INSERT INTO bank_accounts (id, name, balance) VALUES (?, ?, ?)',
         );
         for (const acc of bankAccounts) {
           insertBankAccount.run(acc.id, acc.name, acc.balance);
         }
 
         const insertMonth = db.prepare(
-          'INSERT INTO months (id, label, year, month) VALUES (?, ?, ?, ?)'
+          'INSERT INTO months (id, label, year, month) VALUES (?, ?, ?, ?)',
         );
         for (const m of data.months) {
           insertMonth.run(m.id, m.label, m.year, m.month);
@@ -120,7 +120,7 @@ export async function importFromZipFile(
 
         const insertExpense = db.prepare(
           `INSERT INTO expenses (id, month_id, name, due_date, amount, is_paid, paid_at, receipt, notes, bank_account_id)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         );
         for (const e of expenses) {
           insertExpense.run(
@@ -133,13 +133,13 @@ export async function importFromZipFile(
             e.paid_at,
             e.receipt,
             e.notes,
-            e.bank_account_id ?? null
+            e.bank_account_id ?? null,
           );
         }
 
         const insertIncome = db.prepare(
           `INSERT INTO incomes (id, month_id, name, expected_date, amount, is_received, received_at, notes, bank_account_id)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         );
         for (const i of incomes) {
           insertIncome.run(
@@ -151,7 +151,7 @@ export async function importFromZipFile(
             i.is_received,
             i.received_at,
             i.notes,
-            i.bank_account_id ?? null
+            i.bank_account_id ?? null,
           );
         }
       });

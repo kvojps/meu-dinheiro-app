@@ -1,5 +1,5 @@
+import { CssBaseline, PaletteMode, ThemeProvider } from '@mui/material';
 import { ReactNode, useMemo, useState } from 'react';
-import { PaletteMode, ThemeProvider, CssBaseline } from '@mui/material';
 import { getAppTheme } from './index';
 import { ThemeModeContext } from './themeModeContext';
 

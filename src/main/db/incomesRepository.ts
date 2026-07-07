@@ -22,7 +22,7 @@ export function listIncomesForMonth(db: Database.Database, monthId: number) {
        FROM incomes i
        LEFT JOIN bank_accounts ba ON ba.id = i.bank_account_id
        WHERE i.month_id = ?
-       ORDER BY i.expected_date, i.name`
+       ORDER BY i.expected_date, i.name`,
     )
     .all(monthId) as (IncomeRow & { bank_account_name: string | null })[];
 }
@@ -43,7 +43,7 @@ export function createIncome(
     expected_date?: string | null;
     amount?: number;
     bank_account_id?: number | null;
-  }
+  },
 ): IncomeRow {
   const month = db.prepare('SELECT id FROM months WHERE id = ?').get(monthId);
   if (!month) {
@@ -52,14 +52,14 @@ export function createIncome(
 
   const result = db
     .prepare(
-      'INSERT INTO incomes (month_id, name, expected_date, amount, bank_account_id) VALUES (?, ?, ?, ?, ?)'
+      'INSERT INTO incomes (month_id, name, expected_date, amount, bank_account_id) VALUES (?, ?, ?, ?, ?)',
     )
     .run(
       monthId,
       data.name,
       data.expected_date || null,
       data.amount || 0,
-      data.bank_account_id || null
+      data.bank_account_id || null,
     );
 
   return db.prepare('SELECT * FROM incomes WHERE id = ?').get(result.lastInsertRowid) as IncomeRow;
@@ -74,19 +74,19 @@ export function updateIncome(
     amount?: number;
     notes?: string | null;
     bank_account_id?: number | null;
-  }
+  },
 ): IncomeRow {
   const existing = getIncomeById(db, id);
 
   db.prepare(
-    'UPDATE incomes SET name = ?, expected_date = ?, amount = ?, notes = ?, bank_account_id = ? WHERE id = ?'
+    'UPDATE incomes SET name = ?, expected_date = ?, amount = ?, notes = ?, bank_account_id = ? WHERE id = ?',
   ).run(
     data.name ?? existing.name,
     data.expected_date !== undefined ? data.expected_date : existing.expected_date,
     data.amount !== undefined ? data.amount : existing.amount,
     data.notes !== undefined ? data.notes : existing.notes,
     data.bank_account_id !== undefined ? data.bank_account_id : existing.bank_account_id,
-    id
+    id,
   );
 
   return getIncomeById(db, id);
@@ -100,7 +100,7 @@ export function deleteIncome(db: Database.Database, id: number) {
 function todayLocalDate(): string {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
-    now.getDate()
+    now.getDate(),
   ).padStart(2, '0')}`;
 }
 
@@ -109,7 +109,7 @@ export function receiveIncome(
   id: number,
   notes: string | undefined,
   receivedAt: string | undefined,
-  bankAccountId: number | undefined
+  bankAccountId: number | undefined,
 ): IncomeRow {
   const existing = getIncomeById(db, id);
 
@@ -118,12 +118,12 @@ export function receiveIncome(
       bankAccountsRepository.creditBankAccount(db, bankAccountId, existing.amount);
     }
     db.prepare(
-      'UPDATE incomes SET is_received = 1, received_at = ?, notes = ?, bank_account_id = ? WHERE id = ?'
+      'UPDATE incomes SET is_received = 1, received_at = ?, notes = ?, bank_account_id = ? WHERE id = ?',
     ).run(
       receivedAt || todayLocalDate(),
       notes !== undefined ? notes : existing.notes,
       bankAccountId ?? null,
-      id
+      id,
     );
   });
   run();

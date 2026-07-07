@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { expenseFormSchema, ExpenseFormValues } from './formSchemas';
+import { ExpenseFormValues, expenseFormSchema } from './formSchemas';
 
 const emptyValues: ExpenseFormValues = { name: '', amount: '', dueDate: '', notes: '' };
 

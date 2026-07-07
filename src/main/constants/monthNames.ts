@@ -20,7 +20,7 @@ export function monthLabel(year: number, month: number): string {
 export function formatDueDate(
   year: number,
   month: number,
-  day: number | null | undefined
+  day: number | null | undefined,
 ): string | null {
   if (!day) return null;
   return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;

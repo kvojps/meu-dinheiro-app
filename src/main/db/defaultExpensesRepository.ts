@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
-import { AppError } from '../errors/AppError';
 import { formatDueDate } from '../constants/monthNames';
+import { AppError } from '../errors/AppError';
 
 export interface DefaultExpenseRow {
   id: number;
@@ -16,7 +16,7 @@ export function listDefaultExpenses(db: Database.Database) {
 
 export function createDefaultExpense(
   db: Database.Database,
-  data: { name: string; due_day?: number | null; amount?: number }
+  data: { name: string; due_day?: number | null; amount?: number },
 ): DefaultExpenseRow {
   const create = db.transaction(() => {
     const result = db
@@ -31,14 +31,14 @@ export function createDefaultExpense(
       month: number;
     }[];
     const insertExpense = db.prepare(
-      'INSERT INTO expenses (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)'
+      'INSERT INTO expenses (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)',
     );
     for (const month of months) {
       insertExpense.run(
         month.id,
         data.name,
         formatDueDate(month.year, month.month, data.due_day),
-        data.amount || 0
+        data.amount || 0,
       );
     }
 
@@ -63,7 +63,7 @@ export function getDefaultExpenseById(db: Database.Database, id: number): Defaul
 export function updateDefaultExpense(
   db: Database.Database,
   id: number,
-  data: { name?: string; due_day?: number | null; amount?: number }
+  data: { name?: string; due_day?: number | null; amount?: number },
 ): DefaultExpenseRow {
   const existing = getDefaultExpenseById(db, id);
 
@@ -71,7 +71,7 @@ export function updateDefaultExpense(
     data.name ?? existing.name,
     data.due_day !== undefined ? data.due_day : existing.due_day,
     data.amount !== undefined ? data.amount : existing.amount,
-    id
+    id,
   );
 
   return getDefaultExpenseById(db, id);

@@ -1,20 +1,3 @@
-import { useState } from 'react';
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  Chip,
-  IconButton,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-  Tooltip,
-  Typography,
-  Button,
-} from '@mui/material';
 import {
   CheckCircle,
   Delete as DeleteIcon,
@@ -23,6 +6,23 @@ import {
   StickyNote2Outlined,
   Visibility,
 } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Chip,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import { useState } from 'react';
 import { Income } from '@shared/types/income';
 import { formatDateOnlyBR, formatPaidDateBR } from '@/utils/date';
 import { formatCurrencyBRLOrFallback } from '@/utils/format';

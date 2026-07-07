@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { api } from '@/api/client';
 import { MonthDetail } from '@shared/types/month';
+import { api } from '@/api/client';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 
 export function useMonth(id: string | undefined) {
@@ -54,7 +54,7 @@ export function useMonth(id: string | undefined) {
     file?: File,
     notes?: string,
     paidAt?: string,
-    bankAccountId?: number
+    bankAccountId?: number,
   ) {
     try {
       await api.payExpense(expenseId, file, notes, paidAt, bankAccountId);
@@ -94,7 +94,7 @@ export function useMonth(id: string | undefined) {
 
   async function editExpense(
     expenseId: number,
-    data: { name: string; amount: number; due_date?: string; notes?: string }
+    data: { name: string; amount: number; due_date?: string; notes?: string },
   ) {
     try {
       await api.updateExpense(expenseId, data);
@@ -123,7 +123,7 @@ export function useMonth(id: string | undefined) {
     incomeId: number,
     notes?: string,
     receivedAt?: string,
-    bankAccountId?: number
+    bankAccountId?: number,
   ) {
     try {
       await api.receiveIncome(incomeId, notes, receivedAt, bankAccountId);
@@ -174,7 +174,7 @@ export function useMonth(id: string | undefined) {
       expected_date?: string;
       notes?: string;
       bank_account_id?: number | null;
-    }
+    },
   ) {
     try {
       await api.updateIncome(incomeId, data);

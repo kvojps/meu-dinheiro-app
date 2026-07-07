@@ -1,4 +1,4 @@
-import { createTheme, PaletteMode, ThemeOptions } from '@mui/material';
+import { PaletteMode, ThemeOptions, createTheme } from '@mui/material';
 
 const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
   palette: {

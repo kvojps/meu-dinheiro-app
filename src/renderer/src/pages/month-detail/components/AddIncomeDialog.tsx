@@ -5,13 +5,13 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
   MenuItem,
+  TextField,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { BankAccount } from '@shared/types/bank-account';
 import { formatCurrencyBRL } from '@/utils/format';
-import { incomeFormSchema, IncomeFormValues } from './formSchemas';
+import { IncomeFormValues, incomeFormSchema } from './formSchemas';
 
 const emptyValues: IncomeFormValues = {
   name: '',

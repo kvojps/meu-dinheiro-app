@@ -1,23 +1,23 @@
-import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
   Box,
-  TextField,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   MenuItem,
+  TextField,
+  Typography,
 } from '@mui/material';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BankAccount } from '@shared/types/bank-account';
 import { Expense } from '@shared/types/expense';
 import { FileUploadButton } from '@/components/FileUploadButton';
 import { formatDateOnlyBR, todayDateString } from '@/utils/date';
 import { formatCurrencyBRL } from '@/utils/format';
-import { payFormSchema, PayFormValues } from './formSchemas';
+import { PayFormValues, payFormSchema } from './formSchemas';
 
 interface PayDialogProps {
   open: boolean;
@@ -52,7 +52,7 @@ export function PayDialog({ open, expense, bankAccounts, onClose, onConfirm }: P
       file || undefined,
       values.notes || undefined,
       values.paidAt || undefined,
-      values.bankAccountId ? Number(values.bankAccountId) : undefined
+      values.bankAccountId ? Number(values.bankAccountId) : undefined,
     );
     resetForm();
   });

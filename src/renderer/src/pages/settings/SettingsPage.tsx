@@ -1,50 +1,50 @@
-import { useState } from 'react';
 import {
+  AccountBalance,
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  ErrorOutline,
+  ExpandMore,
+  FileDownload as FileDownloadIcon,
+  FileUpload as FileUploadIcon,
+  Payments,
+  PlaylistAdd as PlaylistAddIcon,
+  ReceiptLong,
+} from '@mui/icons-material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Avatar,
   Box,
-  Typography,
   Button,
+  Chip,
+  Divider,
+  IconButton,
   List,
   ListItem,
-  ListItemText,
   ListItemAvatar,
-  Avatar,
   ListItemSecondaryAction,
-  IconButton,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Divider,
-  Stack,
-  Chip,
+  ListItemText,
   Skeleton,
+  Stack,
+  Typography,
 } from '@mui/material';
-import {
-  Add as AddIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  PlaylistAdd as PlaylistAddIcon,
-  FileUpload as FileUploadIcon,
-  FileDownload as FileDownloadIcon,
-  ExpandMore,
-  ReceiptLong,
-  Payments,
-  AccountBalance,
-  ErrorOutline,
-} from '@mui/icons-material';
+import { useState } from 'react';
 import { BankAccount } from '@shared/types/bank-account';
 import { DefaultExpense } from '@shared/types/expense';
 import { DefaultIncome } from '@shared/types/income';
-import { DefaultExpenseForm } from './components/DefaultExpenseForm';
-import { DefaultIncomeForm } from './components/DefaultIncomeForm';
-import { BankAccountForm } from './components/BankAccountForm';
-import { MonthYearPicker } from './components/MonthYearPicker';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
+import { useBankAccounts } from '@/hooks/bank-accounts/useBankAccounts';
 import { useDefaultExpenses } from '@/hooks/default-expenses/useDefaultExpenses';
 import { useDefaultIncomes } from '@/hooks/default-incomes/useDefaultIncomes';
-import { useBankAccounts } from '@/hooks/bank-accounts/useBankAccounts';
-import { useMonthRangeCreator, MAX_BATCH_MONTHS } from '@/hooks/months/useMonthRangeCreator';
+import { MAX_BATCH_MONTHS, useMonthRangeCreator } from '@/hooks/months/useMonthRangeCreator';
 import { useDataTransfer } from '@/hooks/settings/useDataTransfer';
 import { formatCurrencyBRL, formatCurrencyBRLOrFallback } from '@/utils/format';
+import { BankAccountForm } from './components/BankAccountForm';
+import { DefaultExpenseForm } from './components/DefaultExpenseForm';
+import { DefaultIncomeForm } from './components/DefaultIncomeForm';
+import { MonthYearPicker } from './components/MonthYearPicker';
 
 export function SettingsPage() {
   const { defaultExpenses, loading, error, retry, save, remove, reload } = useDefaultExpenses();

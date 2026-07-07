@@ -1,6 +1,19 @@
 {
   "semi": true,
   "singleQuote": true,
-  "trailingComma": "es5",
-  "printWidth": 100
+  "printWidth": 100,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "^@shared/(.*)$",
+    "^@(/|api/|components/|contexts/|pages/|hooks/|assets/|theme/)(.*)$",
+    "^\\.\\.?/.*routes",
+    "^\\.\\.?/.*pages",
+    "^\\.\\.?/.*components",
+    "^\\.\\.?/.*assets",
+    "\\.css$",
+    "^[.]"
+  ],
+  "importOrderSeparation": false,
+  "importOrderSortSpecifiers": true
 }

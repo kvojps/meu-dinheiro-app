@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { Expense } from '@shared/types/expense';
-import { expenseFormSchema, ExpenseFormValues } from './formSchemas';
+import { ExpenseFormValues, expenseFormSchema } from './formSchemas';
 
 interface EditExpenseDialogProps {
   open: boolean;

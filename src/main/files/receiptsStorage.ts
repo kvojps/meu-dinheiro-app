@@ -1,6 +1,6 @@
+import { shell } from 'electron';
 import fs from 'fs';
 import path from 'path';
-import { shell } from 'electron';
 import { AppError } from '../errors/AppError';
 
 const ALLOWED = /jpeg|jpg|png|gif|pdf/;
@@ -13,7 +13,7 @@ export function saveReceiptFile(
   expenseId: number,
   originalName: string,
   mimeType: string,
-  buffer: Buffer
+  buffer: Buffer,
 ): string {
   const ext = path.extname(originalName).toLowerCase();
   const extOk = ALLOWED.test(ext);

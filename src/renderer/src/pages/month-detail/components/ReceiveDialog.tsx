@@ -1,21 +1,21 @@
-import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
-  Typography,
-  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   MenuItem,
+  TextField,
+  Typography,
 } from '@mui/material';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BankAccount } from '@shared/types/bank-account';
 import { Income } from '@shared/types/income';
 import { formatDateOnlyBR, todayDateString } from '@/utils/date';
 import { formatCurrencyBRL } from '@/utils/format';
-import { receiveFormSchema, ReceiveFormValues } from './formSchemas';
+import { ReceiveFormValues, receiveFormSchema } from './formSchemas';
 
 interface ReceiveDialogProps {
   open: boolean;
@@ -57,7 +57,7 @@ export function ReceiveDialog({
     onConfirm(
       values.notes || undefined,
       values.receivedAt || undefined,
-      values.bankAccountId ? Number(values.bankAccountId) : undefined
+      values.bankAccountId ? Number(values.bankAccountId) : undefined,
     );
     reset({ receivedAt: todayDateString(), bankAccountId: '', notes: '' });
   });

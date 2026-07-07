@@ -18,6 +18,6 @@ export const payExpenseSchema = z.object({
   paid_at: z.string().optional(),
   bank_account_id: z.preprocess(
     (val) => (val === '' || val === undefined || val === null ? undefined : Number(val)),
-    z.number().int().positive().optional()
+    z.number().int().positive().optional(),
   ),
 });

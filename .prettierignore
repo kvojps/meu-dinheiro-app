@@ -6,3 +6,5 @@ data.db-shm
 data.db-wal
 package-lock.json
 *.tsbuildinfo
+out
+build

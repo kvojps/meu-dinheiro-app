@@ -21,5 +21,5 @@ export const createMonthsBatchSchema = z
     (data) =>
       data.toYear * 12 + data.toMonth - (data.fromYear * 12 + data.fromMonth) + 1 <=
       MAX_BATCH_MONTHS,
-    { message: `O intervalo não pode ultrapassar ${MAX_BATCH_MONTHS} meses` }
+    { message: `O intervalo não pode ultrapassar ${MAX_BATCH_MONTHS} meses` },
   );

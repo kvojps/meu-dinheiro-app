@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
+import { formatDueDate, monthLabel } from '../constants/monthNames';
 import { AppError } from '../errors/AppError';
-import { monthLabel, formatDueDate } from '../constants/monthNames';
 
 export interface MonthRow {
   id: number;
@@ -29,11 +29,11 @@ function insertExpensesFromDefaults(
   db: Database.Database,
   monthId: number,
   year: number,
-  month: number
+  month: number,
 ) {
   const defaults = db.prepare('SELECT * FROM default_expenses').all() as DefaultExpenseRow[];
   const insertExpense = db.prepare(
-    'INSERT INTO expenses (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)'
+    'INSERT INTO expenses (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)',
   );
   for (const def of defaults) {
     insertExpense.run(monthId, def.name, formatDueDate(year, month, def.due_day), def.amount);
@@ -44,11 +44,11 @@ function insertIncomesFromDefaults(
   db: Database.Database,
   monthId: number,
   year: number,
-  month: number
+  month: number,
 ) {
   const defaults = db.prepare('SELECT * FROM default_incomes').all() as DefaultIncomeRow[];
   const insertIncome = db.prepare(
-    'INSERT INTO incomes (month_id, name, expected_date, amount, bank_account_id) VALUES (?, ?, ?, ?, ?)'
+    'INSERT INTO incomes (month_id, name, expected_date, amount, bank_account_id) VALUES (?, ?, ?, ?, ?)',
   );
   for (const def of defaults) {
     insertIncome.run(
@@ -56,7 +56,7 @@ function insertIncomesFromDefaults(
       def.name,
       formatDueDate(year, month, def.expected_day),
       def.amount,
-      def.bank_account_id
+      def.bank_account_id,
     );
   }
 }
@@ -69,7 +69,7 @@ export function findMonthByYearMonth(db: Database.Database, year: number, month:
 export function createMonthWithDefaults(
   db: Database.Database,
   year: number,
-  month: number
+  month: number,
 ): MonthRow {
   const label = monthLabel(year, month);
 
@@ -117,7 +117,7 @@ export function listMonths(db: Database.Database) {
       (SELECT COALESCE(SUM(i.amount), 0) FROM incomes i WHERE i.month_id = m.id) as total_income
     FROM months m
     ORDER BY m.year DESC, m.month DESC
-  `
+  `,
     )
     .all();
 }
@@ -134,7 +134,7 @@ export function getMonthWithExpenses(db: Database.Database, id: number) {
        FROM expenses e
        LEFT JOIN bank_accounts ba ON ba.id = e.bank_account_id
        WHERE e.month_id = ?
-       ORDER BY e.due_date, e.name`
+       ORDER BY e.due_date, e.name`,
     )
     .all(id);
 
@@ -144,7 +144,7 @@ export function getMonthWithExpenses(db: Database.Database, id: number) {
        FROM incomes i
        LEFT JOIN bank_accounts ba ON ba.id = i.bank_account_id
        WHERE i.month_id = ?
-       ORDER BY i.expected_date, i.name`
+       ORDER BY i.expected_date, i.name`,
     )
     .all(id);
 
@@ -189,7 +189,7 @@ export function createMonthsBatch(
   fromYear: number,
   fromMonth: number,
   toYear: number,
-  toMonth: number
+  toMonth: number,
 ) {
   const created: MonthRow[] = [];
   const errors: string[] = [];
