@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROUTES } from './routes';
 import { Layout } from './components/Layout';
+import { SnackbarProvider } from './contexts/SnackbarContext';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { HistoryPage } from './pages/history/HistoryPage';
 import { MonthDetailPage } from './pages/month-detail/MonthDetailPage';
@@ -9,15 +10,17 @@ import { SettingsPage } from './pages/settings/SettingsPage';
 
 export function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Navigate replace to={ROUTES.DASHBOARD} />} />
-        <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
-        <Route path={ROUTES.HISTORY} element={<HistoryPage />} />
-        <Route path={ROUTES.MONTH_DETAIL} element={<MonthDetailPage />} />
-        <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </Layout>
+    <SnackbarProvider>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Navigate replace to={ROUTES.DASHBOARD} />} />
+          <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
+          <Route path={ROUTES.HISTORY} element={<HistoryPage />} />
+          <Route path={ROUTES.MONTH_DETAIL} element={<MonthDetailPage />} />
+          <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Layout>
+    </SnackbarProvider>
   );
 }

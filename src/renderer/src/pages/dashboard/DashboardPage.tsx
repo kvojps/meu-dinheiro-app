@@ -22,8 +22,7 @@ import {
 import { ErrorOutline, ReportProblemOutlined } from '@mui/icons-material';
 import { api } from '@/api/client';
 import { Month } from '@/types/models';
-import { AppSnackbar } from '@/components/AppSnackbar';
-import { useSnackbar } from '@/hooks/useSnackbar';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 import { useBankAccounts } from '@/hooks/bank-accounts/useBankAccounts';
 import { formatCurrencyBRL } from '@/utils/format';
 import { monthDetailPath } from '@/routes';
@@ -43,8 +42,8 @@ export function DashboardPage() {
   const [toOverride, setToOverride] = useState('');
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
   const navigate = useNavigate();
-  const { snackbar, showSnackbar, showError, closeSnackbar } = useSnackbar();
-  const { bankAccounts } = useBankAccounts(showError, showSnackbar);
+  const { showError } = useSnackbar();
+  const { bankAccounts } = useBankAccounts();
   const totalBankBalance = useMemo(
     () => bankAccounts.reduce((sum, a) => sum + a.balance, 0),
     [bankAccounts]
@@ -180,7 +179,6 @@ export function DashboardPage() {
         <Button variant="contained" onClick={handleRetry}>
           Tentar novamente
         </Button>
-        <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
       </Box>
     );
   }
@@ -194,7 +192,6 @@ export function DashboardPage() {
         <Typography color="text.secondary" sx={{ mb: 2 }}>
           Vá para a página de Configuração para iniciar.
         </Typography>
-        <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
       </Box>
     );
   }
@@ -417,8 +414,6 @@ export function DashboardPage() {
           </Button>
         </Box>
       )}
-
-      <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
     </Box>
   );
 }

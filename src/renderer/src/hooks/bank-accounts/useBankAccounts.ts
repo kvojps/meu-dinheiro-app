@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/api/client';
 import { BankAccount } from '@/types/models';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 
-export function useBankAccounts(
-  showError: (err: unknown) => void,
-  showSnackbar: (message: string) => void
-) {
+export function useBankAccounts() {
+  const { showError, showSnackbar } = useSnackbar();
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);

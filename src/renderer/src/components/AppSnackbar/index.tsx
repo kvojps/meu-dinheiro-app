@@ -1,5 +1,5 @@
 import { Alert, Snackbar } from '@mui/material';
-import { SnackbarState } from '@/hooks/useSnackbar';
+import type { SnackbarState } from '@/contexts/SnackbarContext';
 
 interface AppSnackbarProps {
   snackbar: SnackbarState | null;

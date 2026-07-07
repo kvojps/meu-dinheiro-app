@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/api/client';
 import { DefaultExpense } from '@/types/models';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 
-export function useDefaultExpenses(
-  showError: (err: unknown) => void,
-  showSnackbar: (message: string) => void
-) {
+export function useDefaultExpenses() {
+  const { showError, showSnackbar } = useSnackbar();
   const [defaultExpenses, setDefaultExpenses] = useState<DefaultExpense[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);

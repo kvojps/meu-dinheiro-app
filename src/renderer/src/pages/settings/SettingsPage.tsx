@@ -36,9 +36,7 @@ import { DefaultExpenseForm } from './components/DefaultExpenseForm';
 import { DefaultIncomeForm } from './components/DefaultIncomeForm';
 import { BankAccountForm } from './components/BankAccountForm';
 import { MonthYearPicker } from './components/MonthYearPicker';
-import { AppSnackbar } from '@/components/AppSnackbar';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
-import { useSnackbar } from '@/hooks/useSnackbar';
 import { useDefaultExpenses } from '@/hooks/default-expenses/useDefaultExpenses';
 import { useDefaultIncomes } from '@/hooks/default-incomes/useDefaultIncomes';
 import { useBankAccounts } from '@/hooks/bank-accounts/useBankAccounts';
@@ -47,30 +45,24 @@ import { useDataTransfer } from '@/hooks/settings/useDataTransfer';
 import { formatCurrencyBRL, formatCurrencyBRLOrFallback } from '@/utils/format';
 
 export function SettingsPage() {
-  const { snackbar, showSnackbar, showError, closeSnackbar } = useSnackbar();
-  const { defaultExpenses, loading, error, retry, save, remove, reload } = useDefaultExpenses(
-    showError,
-    showSnackbar
-  );
+  const { defaultExpenses, loading, error, retry, save, remove, reload } = useDefaultExpenses();
   const {
     defaultIncomes,
     loading: defaultIncomesLoading,
     save: saveDefaultIncome,
     remove: removeDefaultIncome,
     reload: reloadDefaultIncomes,
-  } = useDefaultIncomes(showError, showSnackbar);
+  } = useDefaultIncomes();
   const {
     bankAccounts,
     loading: bankAccountsLoading,
     save: saveBankAccount,
     remove: removeBankAccount,
     reload: reloadBankAccounts,
-  } = useBankAccounts(showError, showSnackbar);
-  const { range, setRange, creating, createRange, monthsCount, rangeValid } = useMonthRangeCreator(
-    showSnackbar,
-    showError
-  );
-  const { importing, exportData, importData } = useDataTransfer(showSnackbar, showError, () => {
+  } = useBankAccounts();
+  const { range, setRange, creating, createRange, monthsCount, rangeValid } =
+    useMonthRangeCreator();
+  const { importing, exportData, importData } = useDataTransfer(() => {
     reload();
     reloadDefaultIncomes();
     reloadBankAccounts();
@@ -224,7 +216,6 @@ export function SettingsPage() {
         <Button variant="contained" onClick={retry}>
           Tentar novamente
         </Button>
-        <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
       </Box>
     );
   }
@@ -590,8 +581,6 @@ export function SettingsPage() {
         onClose={() => setImportConfirmOpen(false)}
         onConfirm={handleConfirmImport}
       />
-
-      <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
     </Box>
   );
 }

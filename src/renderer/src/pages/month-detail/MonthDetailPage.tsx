@@ -46,7 +46,6 @@ import { EditIncomeDialog } from './components/EditIncomeDialog';
 import { IncomeDetailDialog } from './components/IncomeDetailDialog';
 import { DeleteMonthDialog } from './components/DeleteMonthDialog';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
-import { AppSnackbar } from '@/components/AppSnackbar';
 import { useMonth } from '@/hooks/months/useMonth';
 import { useBankAccounts } from '@/hooks/bank-accounts/useBankAccounts';
 import { todayDateString } from '@/utils/date';
@@ -70,10 +69,6 @@ export function MonthDetailPage() {
     prevMonthId,
     nextMonthId,
     deleting,
-    snackbar,
-    showSnackbar,
-    showError,
-    closeSnackbar,
     retry,
     pay,
     unpay,
@@ -87,7 +82,7 @@ export function MonthDetailPage() {
     deleteIncome,
     deleteMonth,
   } = useMonth(id);
-  const { bankAccounts } = useBankAccounts(showError, showSnackbar);
+  const { bankAccounts } = useBankAccounts();
 
   const [tab, setTab] = useState<'expenses' | 'incomes'>('expenses');
 
@@ -255,7 +250,6 @@ export function MonthDetailPage() {
         <Button variant="contained" onClick={retry}>
           Tentar novamente
         </Button>
-        <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
       </Box>
     );
   }
@@ -267,7 +261,6 @@ export function MonthDetailPage() {
         <Button startIcon={<ArrowBack />} onClick={() => navigate(ROUTES.DASHBOARD)} sx={{ mt: 2 }}>
           Voltar
         </Button>
-        <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
       </Box>
     );
   }
@@ -818,8 +811,6 @@ export function MonthDetailPage() {
         onClose={() => setUnreceiveTarget(null)}
         onConfirm={handleUnreceive}
       />
-
-      <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
     </Box>
   );
 }

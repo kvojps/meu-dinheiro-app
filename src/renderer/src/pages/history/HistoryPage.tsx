@@ -46,8 +46,7 @@ import {
 } from 'recharts';
 import { api } from '@/api/client';
 import { Month } from '@/types/models';
-import { AppSnackbar } from '@/components/AppSnackbar';
-import { useSnackbar } from '@/hooks/useSnackbar';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 import { formatCurrencyBRL } from '@/utils/format';
 import { monthDetailPath } from '@/routes';
 
@@ -63,7 +62,7 @@ export function HistoryPage() {
   const [error, setError] = useState(false);
   const [tab, setTab] = useState<TabValue>('expenses');
   const [view, setView] = useState<'chart' | 'table'>('chart');
-  const { snackbar, showError, closeSnackbar } = useSnackbar();
+  const { showError } = useSnackbar();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
@@ -209,7 +208,6 @@ export function HistoryPage() {
         <Button variant="contained" onClick={retry}>
           Tentar novamente
         </Button>
-        <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
       </Box>
     );
   }
@@ -754,8 +752,6 @@ export function HistoryPage() {
           )}
         </>
       )}
-
-      <AppSnackbar snackbar={snackbar} onClose={closeSnackbar} />
     </Box>
   );
 }

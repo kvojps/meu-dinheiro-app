@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { api } from '@/api/client';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 
-export function useDataTransfer(
-  showSnackbar: (message: string) => void,
-  showError: (err: unknown) => void,
-  onImported: () => void
-) {
+export function useDataTransfer(onImported: () => void) {
+  const { showSnackbar, showError } = useSnackbar();
   const [importing, setImporting] = useState(false);
 
   async function exportData() {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/api/client';
 import { MonthDetail } from '@/types/models';
-import { useSnackbar } from '@/hooks/useSnackbar';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 
 export function useMonth(id: string | undefined) {
   const [month, setMonth] = useState<MonthDetail | null>(null);
@@ -11,7 +11,7 @@ export function useMonth(id: string | undefined) {
   const [prevMonthId, setPrevMonthId] = useState<number | null>(null);
   const [nextMonthId, setNextMonthId] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const { snackbar, showSnackbar, showError, closeSnackbar } = useSnackbar();
+  const { showSnackbar, showError } = useSnackbar();
 
   async function reload() {
     if (!id) return;
@@ -221,10 +221,6 @@ export function useMonth(id: string | undefined) {
     prevMonthId,
     nextMonthId,
     deleting,
-    snackbar,
-    showSnackbar,
-    showError,
-    closeSnackbar,
     retry,
     pay,
     unpay,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { api } from '@/api/client';
-import { SnackbarSeverity } from '@/hooks/useSnackbar';
+import { useSnackbar } from '@/contexts/SnackbarContext';
 
 export const MAX_BATCH_MONTHS = 60;
 
@@ -15,10 +15,8 @@ function monthIndex(year: number, month: number) {
   return year * 12 + month;
 }
 
-export function useMonthRangeCreator(
-  showSnackbar: (message: string, severity?: SnackbarSeverity) => void,
-  showError: (err: unknown) => void
-) {
+export function useMonthRangeCreator() {
+  const { showSnackbar, showError } = useSnackbar();
   const currentYear = new Date().getFullYear();
   const [range, setRangeState] = useState<MonthRange>({
     fromYear: currentYear,
