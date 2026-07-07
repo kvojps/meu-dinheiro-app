@@ -26,6 +26,12 @@
     "asarUnpack": [
       "**/*.node"
     ],
+    "extraResources": [
+      {
+        "from": "resources",
+        "to": "resources"
+      }
+    ],
     "win": {
       "target": "nsis",
       "icon": "build/icon.ico"
