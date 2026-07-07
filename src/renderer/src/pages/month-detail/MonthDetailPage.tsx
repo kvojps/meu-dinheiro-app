@@ -33,7 +33,8 @@ import {
   MoreVert,
   Search,
 } from '@mui/icons-material';
-import { Expense, Income } from '@shared/types/models';
+import { Expense } from '@shared/types/expense';
+import { Income } from '@shared/types/income';
 import { ExpenseCard } from './components/ExpenseCard';
 import { PayDialog } from './components/PayDialog';
 import { AddExpenseDialog } from './components/AddExpenseDialog';

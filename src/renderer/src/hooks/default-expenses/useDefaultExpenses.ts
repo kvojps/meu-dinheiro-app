@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/api/client';
-import { DefaultExpense } from '@shared/types/models';
+import { DefaultExpense } from '@shared/types/expense';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 
 export function useDefaultExpenses() {

@@ -1,12 +1,7 @@
-import type {
-  BankAccount,
-  DefaultExpense,
-  DefaultIncome,
-  Expense,
-  Income,
-  Month,
-  MonthDetail,
-} from '../types/models';
+import type { BankAccount } from '../types/bank-account';
+import type { DefaultExpense, Expense } from '../types/expense';
+import type { DefaultIncome, Income } from '../types/income';
+import type { Month, MonthDetail } from '../types/month';
 
 export type ExportResult =
   { success: true; filePath: string } | { success: false; error: 'canceled' };

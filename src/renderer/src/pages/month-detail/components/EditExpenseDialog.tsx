@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { Expense } from '@shared/types/models';
+import { Expense } from '@shared/types/expense';
 import { expenseFormSchema, ExpenseFormValues } from './formSchemas';
 
 interface EditExpenseDialogProps {

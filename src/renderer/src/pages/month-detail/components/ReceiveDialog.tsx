@@ -11,7 +11,8 @@ import {
   MenuItem,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import { BankAccount, Income } from '@shared/types/models';
+import { BankAccount } from '@shared/types/bank-account';
+import { Income } from '@shared/types/income';
 import { formatDateOnlyBR, todayDateString } from '@/utils/date';
 import { formatCurrencyBRL } from '@/utils/format';
 import { receiveFormSchema, ReceiveFormValues } from './formSchemas';

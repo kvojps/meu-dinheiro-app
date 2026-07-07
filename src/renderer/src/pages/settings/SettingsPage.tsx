@@ -31,7 +31,9 @@ import {
   AccountBalance,
   ErrorOutline,
 } from '@mui/icons-material';
-import { DefaultExpense, DefaultIncome, BankAccount } from '@shared/types/models';
+import { BankAccount } from '@shared/types/bank-account';
+import { DefaultExpense } from '@shared/types/expense';
+import { DefaultIncome } from '@shared/types/income';
 import { DefaultExpenseForm } from './components/DefaultExpenseForm';
 import { DefaultIncomeForm } from './components/DefaultIncomeForm';
 import { BankAccountForm } from './components/BankAccountForm';

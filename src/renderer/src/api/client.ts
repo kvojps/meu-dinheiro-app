@@ -1,12 +1,7 @@
-import type {
-  Month,
-  MonthDetail,
-  DefaultExpense,
-  DefaultIncome,
-  Expense,
-  Income,
-  BankAccount,
-} from '@shared/types/models';
+import type { BankAccount } from '@shared/types/bank-account';
+import type { DefaultExpense, Expense } from '@shared/types/expense';
+import type { DefaultIncome, Income } from '@shared/types/income';
+import type { Month, MonthDetail } from '@shared/types/month';
 import type { ExportResult, ImportResult } from '@shared/ipc/api';
 
 function unwrapIpcError(err: unknown): never {

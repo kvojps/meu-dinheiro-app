@@ -23,7 +23,7 @@ import {
   StickyNote2Outlined,
   Visibility,
 } from '@mui/icons-material';
-import { Income } from '@shared/types/models';
+import { Income } from '@shared/types/income';
 import { formatDateOnlyBR, formatPaidDateBR } from '@/utils/date';
 import { formatCurrencyBRLOrFallback } from '@/utils/format';
 

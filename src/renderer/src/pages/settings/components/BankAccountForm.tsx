@@ -8,7 +8,7 @@ import {
   Button,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { BankAccount } from '@shared/types/models';
+import { BankAccount } from '@shared/types/bank-account';
 import { bankAccountFormSchema, BankAccountFormValues } from './formSchemas';
 
 interface BankAccountFormProps {

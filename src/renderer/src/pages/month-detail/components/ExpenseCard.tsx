@@ -24,7 +24,7 @@ import {
   StickyNote2Outlined,
   Visibility,
 } from '@mui/icons-material';
-import { Expense } from '@shared/types/models';
+import { Expense } from '@shared/types/expense';
 import { formatDateOnlyBR, formatPaidDateBR, todayDateString } from '@/utils/date';
 import { formatCurrencyBRLOrFallback } from '@/utils/format';
 
