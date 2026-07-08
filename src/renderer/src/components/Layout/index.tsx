@@ -24,7 +24,7 @@ import {
 } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import logo from '@/assets/logo-32x32.svg';
+import logo from '@/assets/logo.png';
 import { useThemeMode } from '@/hooks/useThemeMode';
 import { ROUTES } from '@/routes';
 
