@@ -4,6 +4,7 @@ export const createExpenseSchema = z.object({
   name: z.string().min(1),
   due_date: z.string().optional().nullable(),
   amount: z.number().optional(),
+  category_id: z.number().int().positive().optional().nullable(),
 });
 
 export const updateExpenseSchema = z.object({
@@ -11,6 +12,7 @@ export const updateExpenseSchema = z.object({
   due_date: z.string().optional().nullable(),
   amount: z.number().optional(),
   notes: z.string().optional().nullable(),
+  category_id: z.number().int().positive().optional().nullable(),
 });
 
 export const payExpenseSchema = z.object({

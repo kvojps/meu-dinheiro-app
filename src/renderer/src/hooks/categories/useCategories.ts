@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
-import { DefaultExpense } from '@shared/types/expense';
+import { Category } from '@shared/types/category';
 import { api } from '@/api/client';
 import { useSnackbar } from '@/contexts/SnackbarContext';
 
-export function useDefaultExpenses() {
+export function useCategories() {
   const { showError, showSnackbar } = useSnackbar();
-  const [defaultExpenses, setDefaultExpenses] = useState<DefaultExpense[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   async function reload() {
     try {
-      const d = await api.getDefaultExpenses();
+      const d = await api.getCategories();
       d.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
-      setDefaultExpenses(d);
+      setCategories(d);
       setError(false);
     } catch (err) {
       setError(true);
@@ -34,17 +34,14 @@ export function useDefaultExpenses() {
     reload();
   }
 
-  async function save(
-    data: { name: string; due_day?: number; amount: number; category_id?: number | null },
-    editingId?: number,
-  ) {
+  async function save(data: { name: string; color: string }, editingId?: number) {
     try {
       if (editingId) {
-        await api.updateDefaultExpense(editingId, data);
-        showSnackbar('Despesa padrão atualizada');
+        await api.updateCategory(editingId, data);
+        showSnackbar('Categoria atualizada');
       } else {
-        await api.createDefaultExpense(data);
-        showSnackbar('Despesa padrão adicionada');
+        await api.createCategory(data);
+        showSnackbar('Categoria adicionada');
       }
       await reload();
       return true;
@@ -56,13 +53,13 @@ export function useDefaultExpenses() {
 
   async function remove(id: number) {
     try {
-      await api.deleteDefaultExpense(id);
-      showSnackbar('Despesa padrão removida');
+      await api.deleteCategory(id);
+      showSnackbar('Categoria removida');
       await reload();
     } catch (err) {
       showError(err);
     }
   }
 
-  return { defaultExpenses, loading, error, retry, save, remove, reload };
+  return { categories, loading, error, retry, save, remove, reload };
 }

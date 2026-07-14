@@ -1,5 +1,6 @@
 import type { ExportResult, ImportResult } from '@shared/ipc/api';
 import type { BankAccount } from '@shared/types/bank-account';
+import type { Category } from '@shared/types/category';
 import type { DefaultExpense, Expense } from '@shared/types/expense';
 import type { DefaultIncome, Income } from '@shared/types/income';
 import type { Month, MonthDetail } from '@shared/types/month';
@@ -49,11 +50,19 @@ export const api = {
     return call<DefaultExpense[]>(() => window.api.defaultExpenses.list());
   },
 
-  createDefaultExpense(data: { name: string; due_day?: number; amount: number }) {
+  createDefaultExpense(data: {
+    name: string;
+    due_day?: number;
+    amount: number;
+    category_id?: number | null;
+  }) {
     return call(() => window.api.defaultExpenses.create(data));
   },
 
-  updateDefaultExpense(id: number, data: { name?: string; due_day?: number; amount?: number }) {
+  updateDefaultExpense(
+    id: number,
+    data: { name?: string; due_day?: number; amount?: number; category_id?: number | null },
+  ) {
     return call(() => window.api.defaultExpenses.update(id, data));
   },
 
@@ -77,13 +86,38 @@ export const api = {
     return call(() => window.api.bankAccounts.delete(id));
   },
 
-  createExpense(monthId: number, data: { name: string; due_date?: string; amount: number }) {
+  getCategories() {
+    return call<Category[]>(() => window.api.categories.list());
+  },
+
+  createCategory(data: { name: string; color: string }) {
+    return call(() => window.api.categories.create(data));
+  },
+
+  updateCategory(id: number, data: { name?: string; color?: string }) {
+    return call(() => window.api.categories.update(id, data));
+  },
+
+  deleteCategory(id: number) {
+    return call(() => window.api.categories.delete(id));
+  },
+
+  createExpense(
+    monthId: number,
+    data: { name: string; due_date?: string; amount: number; category_id?: number | null },
+  ) {
     return call<Expense>(() => window.api.expenses.create(monthId, data));
   },
 
   updateExpense(
     id: number,
-    data: { name?: string; due_date?: string; amount?: number; notes?: string },
+    data: {
+      name?: string;
+      due_date?: string;
+      amount?: number;
+      notes?: string;
+      category_id?: number | null;
+    },
   ) {
     return call<Expense>(() => window.api.expenses.update(id, data));
   },

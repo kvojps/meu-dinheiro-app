@@ -5,22 +5,37 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  MenuItem,
   TextField,
 } from '@mui/material';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import { useCategories } from '@/hooks/categories/useCategories';
 import { ExpenseFormValues, expenseFormSchema } from './formSchemas';
 
-const emptyValues: ExpenseFormValues = { name: '', amount: '', dueDate: '', notes: '' };
+const emptyValues: ExpenseFormValues = {
+  name: '',
+  amount: '',
+  dueDate: '',
+  notes: '',
+  categoryId: '',
+};
 
 interface AddExpenseDialogProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: { name: string; amount: number; due_date?: string }) => Promise<boolean>;
+  onSubmit: (data: {
+    name: string;
+    amount: number;
+    due_date?: string;
+    category_id?: number | null;
+  }) => Promise<boolean>;
 }
 
 export function AddExpenseDialog({ open, onClose, onSubmit }: AddExpenseDialogProps) {
+  const { categories } = useCategories();
   const {
     register,
+    control,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
@@ -39,6 +54,7 @@ export function AddExpenseDialog({ open, onClose, onSubmit }: AddExpenseDialogPr
       name: values.name,
       amount: Number(values.amount) || 0,
       due_date: values.dueDate || undefined,
+      category_id: values.categoryId ? Number(values.categoryId) : null,
     });
     if (success) handleClose();
   });
@@ -70,7 +86,24 @@ export function AddExpenseDialog({ open, onClose, onSubmit }: AddExpenseDialogPr
           type="date"
           fullWidth
           InputLabelProps={{ shrink: true }}
+          sx={{ mb: 2 }}
           {...register('dueDate')}
+        />
+        <Controller
+          name="categoryId"
+          control={control}
+          render={({ field }) => (
+            <TextField select label="Categoria" fullWidth {...field}>
+              <MenuItem value="">
+                <em>Sem categoria</em>
+              </MenuItem>
+              {categories.map((category) => (
+                <MenuItem key={category.id} value={String(category.id)}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
         />
       </DialogContent>
       <DialogActions>

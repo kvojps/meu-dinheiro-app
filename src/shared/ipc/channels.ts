@@ -22,6 +22,11 @@ export const IPC_CHANNELS = {
   bankAccountsUpdate: 'bankAccounts:update',
   bankAccountsDelete: 'bankAccounts:delete',
 
+  categoriesList: 'categories:list',
+  categoriesCreate: 'categories:create',
+  categoriesUpdate: 'categories:update',
+  categoriesDelete: 'categories:delete',
+
   expensesListForMonth: 'expenses:listForMonth',
   expensesCreate: 'expenses:create',
   expensesUpdate: 'expenses:update',

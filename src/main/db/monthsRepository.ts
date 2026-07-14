@@ -15,6 +15,7 @@ interface DefaultExpenseRow {
   name: string;
   due_day: number | null;
   amount: number;
+  category_id: number | null;
 }
 
 interface DefaultIncomeRow {
@@ -33,10 +34,16 @@ function insertExpensesFromDefaults(
 ) {
   const defaults = db.prepare('SELECT * FROM default_expenses').all() as DefaultExpenseRow[];
   const insertExpense = db.prepare(
-    'INSERT INTO expenses (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)',
+    'INSERT INTO expenses (month_id, name, due_date, amount, category_id) VALUES (?, ?, ?, ?, ?)',
   );
   for (const def of defaults) {
-    insertExpense.run(monthId, def.name, formatDueDate(year, month, def.due_day), def.amount);
+    insertExpense.run(
+      monthId,
+      def.name,
+      formatDueDate(year, month, def.due_day),
+      def.amount,
+      def.category_id,
+    );
   }
 }
 
@@ -130,9 +137,10 @@ export function getMonthWithExpenses(db: Database.Database, id: number) {
 
   const expenses = db
     .prepare(
-      `SELECT e.*, ba.name as bank_account_name
+      `SELECT e.*, ba.name as bank_account_name, c.name as category_name, c.color as category_color
        FROM expenses e
        LEFT JOIN bank_accounts ba ON ba.id = e.bank_account_id
+       LEFT JOIN categories c ON c.id = e.category_id
        WHERE e.month_id = ?
        ORDER BY e.due_date, e.name`,
     )

@@ -14,19 +14,25 @@ export interface ExpenseRow {
   receipt: string | null;
   notes: string | null;
   bank_account_id: number | null;
+  category_id: number | null;
   created_at: string;
 }
 
 export function listExpensesForMonth(db: Database.Database, monthId: number) {
   return db
     .prepare(
-      `SELECT e.*, ba.name as bank_account_name
+      `SELECT e.*, ba.name as bank_account_name, c.name as category_name, c.color as category_color
        FROM expenses e
        LEFT JOIN bank_accounts ba ON ba.id = e.bank_account_id
+       LEFT JOIN categories c ON c.id = e.category_id
        WHERE e.month_id = ?
        ORDER BY e.due_date, e.name`,
     )
-    .all(monthId) as (ExpenseRow & { bank_account_name: string | null })[];
+    .all(monthId) as (ExpenseRow & {
+    bank_account_name: string | null;
+    category_name: string | null;
+    category_color: string | null;
+  })[];
 }
 
 export function getExpenseById(db: Database.Database, id: number): ExpenseRow {
@@ -49,7 +55,7 @@ export function getExpenseForFilename(db: Database.Database, id: number) {
 export function createExpense(
   db: Database.Database,
   monthId: number,
-  data: { name: string; due_date?: string | null; amount?: number },
+  data: { name: string; due_date?: string | null; amount?: number; category_id?: number | null },
 ): ExpenseRow {
   const month = db.prepare('SELECT id FROM months WHERE id = ?').get(monthId);
   if (!month) {
@@ -57,8 +63,10 @@ export function createExpense(
   }
 
   const result = db
-    .prepare('INSERT INTO expenses (month_id, name, due_date, amount) VALUES (?, ?, ?, ?)')
-    .run(monthId, data.name, data.due_date || null, data.amount || 0);
+    .prepare(
+      'INSERT INTO expenses (month_id, name, due_date, amount, category_id) VALUES (?, ?, ?, ?, ?)',
+    )
+    .run(monthId, data.name, data.due_date || null, data.amount || 0, data.category_id ?? null);
 
   return db
     .prepare('SELECT * FROM expenses WHERE id = ?')
@@ -68,15 +76,24 @@ export function createExpense(
 export function updateExpense(
   db: Database.Database,
   id: number,
-  data: { name?: string; due_date?: string | null; amount?: number; notes?: string | null },
+  data: {
+    name?: string;
+    due_date?: string | null;
+    amount?: number;
+    notes?: string | null;
+    category_id?: number | null;
+  },
 ): ExpenseRow {
   const existing = getExpenseById(db, id);
 
-  db.prepare('UPDATE expenses SET name = ?, due_date = ?, amount = ?, notes = ? WHERE id = ?').run(
+  db.prepare(
+    'UPDATE expenses SET name = ?, due_date = ?, amount = ?, notes = ?, category_id = ? WHERE id = ?',
+  ).run(
     data.name ?? existing.name,
     data.due_date !== undefined ? data.due_date : existing.due_date,
     data.amount !== undefined ? data.amount : existing.amount,
     data.notes !== undefined ? data.notes : existing.notes,
+    data.category_id !== undefined ? data.category_id : existing.category_id,
     id,
   );
 

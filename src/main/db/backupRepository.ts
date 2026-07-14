@@ -10,6 +10,7 @@ export function getExportData(db: Database.Database) {
   return {
     version: 1,
     exported_at: new Date().toISOString(),
+    categories: db.prepare('SELECT * FROM categories').all(),
     default_expenses: db.prepare('SELECT * FROM default_expenses').all(),
     default_incomes: db.prepare('SELECT * FROM default_incomes').all(),
     bank_accounts: db.prepare('SELECT * FROM bank_accounts').all(),
@@ -70,6 +71,8 @@ export async function importFromZipFile(
     // Backups anteriores à criação de entradas não têm essas chaves.
     const incomes = data.incomes ?? [];
     const defaultIncomes = data.default_incomes ?? [];
+    // Backups anteriores à criação de categorias não têm essa chave.
+    const categories = data.categories ?? [];
 
     if (!data.version || !data.months || !expenses) {
       throw new AppError(400, 'Formato de dados inválido');
@@ -84,12 +87,20 @@ export async function importFromZipFile(
         db.exec('DELETE FROM default_incomes');
         db.exec('DELETE FROM bank_accounts');
         db.exec('DELETE FROM months');
+        db.exec('DELETE FROM categories');
+
+        const insertCategory = db.prepare(
+          'INSERT INTO categories (id, name, color) VALUES (?, ?, ?)',
+        );
+        for (const cat of categories) {
+          insertCategory.run(cat.id, cat.name, cat.color);
+        }
 
         const insertDefault = db.prepare(
-          'INSERT INTO default_expenses (name, due_day, amount) VALUES (?, ?, ?)',
+          'INSERT INTO default_expenses (name, due_day, amount, category_id) VALUES (?, ?, ?, ?)',
         );
         for (const exp of defaultExpenses) {
-          insertDefault.run(exp.name, exp.due_day, exp.amount);
+          insertDefault.run(exp.name, exp.due_day, exp.amount, exp.category_id ?? null);
         }
 
         const insertDefaultIncome = db.prepare(
@@ -119,8 +130,8 @@ export async function importFromZipFile(
         }
 
         const insertExpense = db.prepare(
-          `INSERT INTO expenses (id, month_id, name, due_date, amount, is_paid, paid_at, receipt, notes, bank_account_id)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO expenses (id, month_id, name, due_date, amount, is_paid, paid_at, receipt, notes, bank_account_id, category_id)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         );
         for (const e of expenses) {
           insertExpense.run(
@@ -134,6 +145,7 @@ export async function importFromZipFile(
             e.receipt,
             e.notes,
             e.bank_account_id ?? null,
+            e.category_id ?? null,
           );
         }
 

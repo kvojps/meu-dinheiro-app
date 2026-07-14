@@ -3,6 +3,7 @@ import { ipcMain } from 'electron';
 import type { ReceiptPayload } from '@shared/ipc/api';
 import { IPC_CHANNELS } from '@shared/ipc/channels';
 import * as bankAccountsRepository from '../db/bankAccountsRepository';
+import * as categoriesRepository from '../db/categoriesRepository';
 import { getUploadsDir } from '../db/connection';
 import * as defaultExpensesRepository from '../db/defaultExpensesRepository';
 import * as defaultIncomesRepository from '../db/defaultIncomesRepository';
@@ -12,6 +13,7 @@ import * as monthsRepository from '../db/monthsRepository';
 import { runSetup } from '../db/setupRepository';
 import { openReceiptFile, saveReceiptFile } from '../files/receiptsStorage';
 import { createBankAccountSchema, updateBankAccountSchema } from '../schemas/bankAccounts.schema';
+import { createCategorySchema, updateCategorySchema } from '../schemas/categories.schema';
 import {
   createDefaultExpenseSchema,
   updateDefaultExpenseSchema,
@@ -121,6 +123,20 @@ export function registerIpcHandlers(db: Database.Database): void {
   ipcMain.handle(IPC_CHANNELS.bankAccountsDelete, (_e, id: number) => {
     bankAccountsRepository.deleteBankAccount(db, parseId(id));
     return { message: 'Bank account deleted' };
+  });
+
+  ipcMain.handle(IPC_CHANNELS.categoriesList, () => categoriesRepository.listCategories(db));
+  ipcMain.handle(IPC_CHANNELS.categoriesCreate, (_e, data: unknown) => {
+    const body = parseOrThrow(createCategorySchema, data);
+    return categoriesRepository.createCategory(db, body);
+  });
+  ipcMain.handle(IPC_CHANNELS.categoriesUpdate, (_e, id: number, data: unknown) => {
+    const body = parseOrThrow(updateCategorySchema, data);
+    return categoriesRepository.updateCategory(db, parseId(id), body);
+  });
+  ipcMain.handle(IPC_CHANNELS.categoriesDelete, (_e, id: number) => {
+    categoriesRepository.deleteCategory(db, parseId(id));
+    return { message: 'Category deleted' };
   });
 
   ipcMain.handle(IPC_CHANNELS.expensesListForMonth, (_e, monthId: number) =>

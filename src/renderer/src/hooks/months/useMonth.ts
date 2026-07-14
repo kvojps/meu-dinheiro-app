@@ -79,7 +79,12 @@ export function useMonth(id: string | undefined) {
     }
   }
 
-  async function addExpense(data: { name: string; amount: number; due_date?: string }) {
+  async function addExpense(data: {
+    name: string;
+    amount: number;
+    due_date?: string;
+    category_id?: number | null;
+  }) {
     if (!id) return false;
     try {
       await api.createExpense(Number(id), data);
@@ -94,7 +99,13 @@ export function useMonth(id: string | undefined) {
 
   async function editExpense(
     expenseId: number,
-    data: { name: string; amount: number; due_date?: string; notes?: string },
+    data: {
+      name: string;
+      amount: number;
+      due_date?: string;
+      notes?: string;
+      category_id?: number | null;
+    },
   ) {
     try {
       await api.updateExpense(expenseId, data);

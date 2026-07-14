@@ -5,22 +5,31 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  MenuItem,
   TextField,
 } from '@mui/material';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { DefaultExpense } from '@shared/types/expense';
+import { useCategories } from '@/hooks/categories/useCategories';
 import { DefaultExpenseFormValues, defaultExpenseFormSchema } from './formSchemas';
 
 interface DefaultExpenseFormProps {
   open: boolean;
   onClose: () => void;
-  onSave: (data: { name: string; due_day?: number; amount: number }) => void;
+  onSave: (data: {
+    name: string;
+    due_day?: number;
+    amount: number;
+    category_id?: number | null;
+  }) => void;
   initial?: DefaultExpense | null;
 }
 
 export function DefaultExpenseForm({ open, onClose, onSave, initial }: DefaultExpenseFormProps) {
+  const { categories } = useCategories();
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<DefaultExpenseFormValues>({
@@ -29,6 +38,7 @@ export function DefaultExpenseForm({ open, onClose, onSave, initial }: DefaultEx
       name: initial?.name ?? '',
       amount: initial ? String(initial.amount) : '',
       dueDay: initial?.due_day ? String(initial.due_day) : '',
+      categoryId: initial?.category_id ? String(initial.category_id) : '',
     },
   });
 
@@ -37,6 +47,7 @@ export function DefaultExpenseForm({ open, onClose, onSave, initial }: DefaultEx
       name: values.name,
       due_day: values.dueDay ? Number(values.dueDay) : undefined,
       amount: Number(values.amount) || 0,
+      category_id: values.categoryId ? Number(values.categoryId) : null,
     });
   });
 
@@ -69,7 +80,24 @@ export function DefaultExpenseForm({ open, onClose, onSave, initial }: DefaultEx
           error={!!errors.dueDay}
           helperText={errors.dueDay?.message ?? 'Opcional. Dia do mês em que a despesa vence.'}
           inputProps={{ min: 1, max: 31 }}
+          sx={{ mb: 2 }}
           {...register('dueDay')}
+        />
+        <Controller
+          name="categoryId"
+          control={control}
+          render={({ field }) => (
+            <TextField select label="Categoria" fullWidth {...field}>
+              <MenuItem value="">
+                <em>Sem categoria</em>
+              </MenuItem>
+              {categories.map((category) => (
+                <MenuItem key={category.id} value={String(category.id)}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
         />
       </DialogContent>
       <DialogActions>

@@ -22,6 +22,7 @@ import {
   Stack,
   Tooltip,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { useState } from 'react';
 import { Expense } from '@shared/types/expense';
@@ -46,6 +47,7 @@ export function ExpenseCard({
   onDelete,
 }: ExpenseCardProps) {
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
+  const theme = useTheme();
 
   const isOverdue = !expense.is_paid && !!expense.due_date && expense.due_date < todayDateString();
 
@@ -92,6 +94,19 @@ export function ExpenseCard({
         <Typography variant="h5" sx={{ fontWeight: 700 }} gutterBottom>
           {formatCurrencyBRLOrFallback(expense.amount)}
         </Typography>
+        {expense.category_name && (
+          <Chip
+            label={expense.category_name}
+            size="small"
+            sx={{
+              bgcolor: expense.category_color ?? undefined,
+              color: expense.category_color
+                ? theme.palette.getContrastText(expense.category_color)
+                : undefined,
+              mb: 1,
+            }}
+          />
+        )}
         {expense.due_date && (
           <Typography variant="body2" color="text.secondary">
             Vencimento: {formatDateOnlyBR(expense.due_date)}

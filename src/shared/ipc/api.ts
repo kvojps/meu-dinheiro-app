@@ -1,4 +1,5 @@
 import type { BankAccount } from '../types/bank-account';
+import type { Category } from '../types/category';
 import type { DefaultExpense, Expense } from '../types/expense';
 import type { DefaultIncome, Income } from '../types/income';
 import type { Month, MonthDetail } from '../types/month';
@@ -34,11 +35,23 @@ export interface MonthsApi {
 
 export interface DefaultExpensesApi {
   list: () => Promise<DefaultExpense[]>;
-  create: (data: { name: string; due_day?: number; amount: number }) => Promise<DefaultExpense>;
+  create: (data: {
+    name: string;
+    due_day?: number;
+    amount: number;
+    category_id?: number | null;
+  }) => Promise<DefaultExpense>;
   update: (
     id: number,
-    data: { name?: string; due_day?: number; amount?: number },
+    data: { name?: string; due_day?: number; amount?: number; category_id?: number | null },
   ) => Promise<DefaultExpense>;
+  delete: (id: number) => Promise<{ message: string }>;
+}
+
+export interface CategoriesApi {
+  list: () => Promise<Category[]>;
+  create: (data: { name: string; color: string }) => Promise<Category>;
+  update: (id: number, data: { name?: string; color?: string }) => Promise<Category>;
   delete: (id: number) => Promise<{ message: string }>;
 }
 
@@ -73,11 +86,17 @@ export interface ExpensesApi {
   listForMonth: (monthId: number) => Promise<Expense[]>;
   create: (
     monthId: number,
-    data: { name: string; due_date?: string; amount: number },
+    data: { name: string; due_date?: string; amount: number; category_id?: number | null },
   ) => Promise<Expense>;
   update: (
     id: number,
-    data: { name?: string; due_date?: string; amount?: number; notes?: string },
+    data: {
+      name?: string;
+      due_date?: string;
+      amount?: number;
+      notes?: string;
+      category_id?: number | null;
+    },
   ) => Promise<Expense>;
   delete: (id: number) => Promise<{ message: string }>;
   pay: (
@@ -133,6 +152,7 @@ export interface ElectronApi {
   defaultExpenses: DefaultExpensesApi;
   defaultIncomes: DefaultIncomesApi;
   bankAccounts: BankAccountsApi;
+  categories: CategoriesApi;
   expenses: ExpensesApi;
   incomes: IncomesApi;
   receipts: ReceiptsApi;

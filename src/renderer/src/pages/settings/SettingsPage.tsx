@@ -7,6 +7,7 @@ import {
   ExpandMore,
   FileDownload as FileDownloadIcon,
   FileUpload as FileUploadIcon,
+  Label,
   Payments,
   PlaylistAdd as PlaylistAddIcon,
   ReceiptLong,
@@ -32,16 +33,19 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { BankAccount } from '@shared/types/bank-account';
+import { Category } from '@shared/types/category';
 import { DefaultExpense } from '@shared/types/expense';
 import { DefaultIncome } from '@shared/types/income';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { useBankAccounts } from '@/hooks/bank-accounts/useBankAccounts';
+import { useCategories } from '@/hooks/categories/useCategories';
 import { useDefaultExpenses } from '@/hooks/default-expenses/useDefaultExpenses';
 import { useDefaultIncomes } from '@/hooks/default-incomes/useDefaultIncomes';
 import { MAX_BATCH_MONTHS, useMonthRangeCreator } from '@/hooks/months/useMonthRangeCreator';
 import { useDataTransfer } from '@/hooks/settings/useDataTransfer';
 import { formatCurrencyBRL, formatCurrencyBRLOrFallback } from '@/utils/format';
 import { BankAccountForm } from './components/BankAccountForm';
+import { CategoryForm } from './components/CategoryForm';
 import { DefaultExpenseForm } from './components/DefaultExpenseForm';
 import { DefaultIncomeForm } from './components/DefaultIncomeForm';
 import { MonthYearPicker } from './components/MonthYearPicker';
@@ -62,12 +66,20 @@ export function SettingsPage() {
     remove: removeBankAccount,
     reload: reloadBankAccounts,
   } = useBankAccounts();
+  const {
+    categories,
+    loading: categoriesLoading,
+    save: saveCategory,
+    remove: removeCategory,
+    reload: reloadCategories,
+  } = useCategories();
   const { range, setRange, creating, createRange, monthsCount, rangeValid } =
     useMonthRangeCreator();
   const { importing, exportData, importData } = useDataTransfer(() => {
     reload();
     reloadDefaultIncomes();
     reloadBankAccounts();
+    reloadCategories();
   });
 
   const [formOpen, setFormOpen] = useState(false);
@@ -90,6 +102,13 @@ export function SettingsPage() {
 
   const [deleteBankAccountTarget, setDeleteBankAccountTarget] = useState<BankAccount | null>(null);
   const [deletingBankAccount, setDeletingBankAccount] = useState(false);
+
+  const [categoryFormOpen, setCategoryFormOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [categoryFormKey, setCategoryFormKey] = useState(0);
+
+  const [deleteCategoryTarget, setDeleteCategoryTarget] = useState<Category | null>(null);
+  const [deletingCategory, setDeletingCategory] = useState(false);
 
   const [importConfirmOpen, setImportConfirmOpen] = useState(false);
 
@@ -124,6 +143,35 @@ export function SettingsPage() {
     setDeleteBankAccountTarget(null);
   }
 
+  function openEditCategory(category: Category) {
+    setEditingCategory(category);
+    setCategoryFormKey((k) => k + 1);
+    setCategoryFormOpen(true);
+  }
+
+  function openAddCategory() {
+    setEditingCategory(null);
+    setCategoryFormKey((k) => k + 1);
+    setCategoryFormOpen(true);
+  }
+
+  function handleSaveCategory(data: { name: string; color: string }) {
+    saveCategory(data, editingCategory?.id).then((success) => {
+      if (success) {
+        setCategoryFormOpen(false);
+        setEditingCategory(null);
+      }
+    });
+  }
+
+  async function handleConfirmDeleteCategory() {
+    if (!deleteCategoryTarget) return;
+    setDeletingCategory(true);
+    await removeCategory(deleteCategoryTarget.id);
+    setDeletingCategory(false);
+    setDeleteCategoryTarget(null);
+  }
+
   function openEdit(expense: DefaultExpense) {
     setEditingExpense(expense);
     setFormKey((k) => k + 1);
@@ -136,7 +184,12 @@ export function SettingsPage() {
     setFormOpen(true);
   }
 
-  function handleSaveDefault(data: { name: string; due_day?: number; amount: number }) {
+  function handleSaveDefault(data: {
+    name: string;
+    due_day?: number;
+    amount: number;
+    category_id?: number | null;
+  }) {
     save(data, editingExpense?.id).then((success) => {
       if (success) {
         setFormOpen(false);
@@ -264,7 +317,7 @@ export function SettingsPage() {
                     <ListItemText
                       primary={acc.name}
                       primaryTypographyProps={{ fontWeight: 600 }}
-                      secondary={`${formatCurrencyBRLOrFallback(acc.amount, 'Valor variável')}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}`}
+                      secondary={`${formatCurrencyBRLOrFallback(acc.amount, 'Valor variável')}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}${acc.category_name ? ` - ${acc.category_name}` : ''}`}
                     />
                     <ListItemSecondaryAction>
                       <IconButton edge="end" onClick={() => openEdit(acc)} sx={{ mr: 1 }}>
@@ -333,6 +386,64 @@ export function SettingsPage() {
                         <EditIcon />
                       </IconButton>
                       <IconButton edge="end" onClick={() => setDeleteIncomeTarget(inc)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="h6">Categorias</Typography>
+              <Chip label={categories.length} size="small" />
+            </Stack>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                Categorias usadas para classificar despesas.
+              </Typography>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={openAddCategory}
+                size="small"
+              >
+                Adicionar
+              </Button>
+            </Box>
+            <Divider sx={{ mb: 2 }} />
+            {categoriesLoading ? (
+              <Stack spacing={1}>
+                <Skeleton variant="rounded" height={56} />
+                <Skeleton variant="rounded" height={56} />
+              </Stack>
+            ) : categories.length === 0 ? (
+              <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
+                Nenhuma categoria cadastrada.
+              </Typography>
+            ) : (
+              <List disablePadding>
+                {categories.map((category) => (
+                  <ListItem key={category.id} divider sx={{ px: 0 }}>
+                    <ListItemAvatar>
+                      <Avatar sx={{ bgcolor: category.color }}>
+                        <Label fontSize="small" />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={category.name} primaryTypographyProps={{ fontWeight: 600 }} />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" onClick={() => openEditCategory(category)} sx={{ mr: 1 }}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton edge="end" onClick={() => setDeleteCategoryTarget(category)}>
                         <DeleteIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
@@ -566,6 +677,31 @@ export function SettingsPage() {
         loading={deletingBankAccount}
         onClose={() => setDeleteBankAccountTarget(null)}
         onConfirm={handleConfirmDeleteBankAccount}
+      />
+
+      <CategoryForm
+        key={categoryFormKey}
+        open={categoryFormOpen}
+        onClose={() => {
+          setCategoryFormOpen(false);
+          setEditingCategory(null);
+        }}
+        onSave={handleSaveCategory}
+        initial={editingCategory}
+      />
+
+      <ConfirmDialog
+        open={!!deleteCategoryTarget}
+        title="Excluir categoria?"
+        message={
+          <>
+            Tem certeza que deseja excluir <strong>{deleteCategoryTarget?.name}</strong>? Despesas
+            que usam essa categoria ficarão sem categoria.
+          </>
+        }
+        loading={deletingCategory}
+        onClose={() => setDeleteCategoryTarget(null)}
+        onConfirm={handleConfirmDeleteCategory}
       />
 
       <ConfirmDialog

@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { Expense } from '@shared/types/expense';
 import { formatDateOnlyBR, formatPaidDateBR } from '@/utils/date';
@@ -20,6 +21,8 @@ interface ExpenseDetailDialogProps {
 }
 
 export function ExpenseDetailDialog({ open, expense, onClose }: ExpenseDetailDialogProps) {
+  const theme = useTheme();
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{expense?.name}</DialogTitle>
@@ -32,6 +35,26 @@ export function ExpenseDetailDialog({ open, expense, onClose }: ExpenseDetailDia
               </Typography>
               <Typography>{formatCurrencyBRLOrFallback(expense.amount)}</Typography>
             </Box>
+            {expense.category_name && (
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  Categoria
+                </Typography>
+                <Box>
+                  <Chip
+                    label={expense.category_name}
+                    size="small"
+                    sx={{
+                      bgcolor: expense.category_color ?? undefined,
+                      color: expense.category_color
+                        ? theme.palette.getContrastText(expense.category_color)
+                        : undefined,
+                      mt: 0.5,
+                    }}
+                  />
+                </Box>
+              </Box>
+            )}
             {expense.due_date && (
               <Box>
                 <Typography variant="caption" color="text.secondary">

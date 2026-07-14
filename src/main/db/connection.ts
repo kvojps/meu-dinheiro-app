@@ -55,6 +55,57 @@ function ensureDefaultIncomeBankAccountColumn() {
   }
 }
 
+const DEFAULT_CATEGORIES: { name: string; color: string }[] = [
+  { name: 'Moradia', color: '#5C6BC0' },
+  { name: 'Alimentação', color: '#FB8C00' },
+  { name: 'Transporte', color: '#1E88E5' },
+  { name: 'Saúde', color: '#E53935' },
+  { name: 'Educação', color: '#8E24AA' },
+  { name: 'Lazer', color: '#43A047' },
+  { name: 'Assinaturas', color: '#00ACC1' },
+  { name: 'Compras', color: '#D81B60' },
+  { name: 'Contas e Serviços', color: '#6D4C41' },
+  { name: 'Outros', color: '#757575' },
+];
+
+function ensureCategoriesTable() {
+  const tableExists = !!db
+    .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'categories'")
+    .get();
+
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS categories (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      color TEXT NOT NULL,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+  `);
+
+  if (!tableExists) {
+    const insert = db.prepare('INSERT INTO categories (name, color) VALUES (?, ?)');
+    for (const category of DEFAULT_CATEGORIES) {
+      insert.run(category.name, category.color);
+    }
+  }
+}
+
+function ensureExpenseCategoryColumn() {
+  const columns = db.prepare('PRAGMA table_info(expenses)').all() as { name: string }[];
+  if (!columns.some((c) => c.name === 'category_id')) {
+    db.exec('ALTER TABLE expenses ADD COLUMN category_id INTEGER REFERENCES categories(id)');
+  }
+}
+
+function ensureDefaultExpenseCategoryColumn() {
+  const columns = db.prepare('PRAGMA table_info(default_expenses)').all() as { name: string }[];
+  if (!columns.some((c) => c.name === 'category_id')) {
+    db.exec(
+      'ALTER TABLE default_expenses ADD COLUMN category_id INTEGER REFERENCES categories(id)',
+    );
+  }
+}
+
 function initializeSchema() {
   migrateLegacyTableNames();
 
@@ -121,6 +172,9 @@ function initializeSchema() {
 
   ensureExpenseBankAccountColumn();
   ensureDefaultIncomeBankAccountColumn();
+  ensureCategoriesTable();
+  ensureExpenseCategoryColumn();
+  ensureDefaultExpenseCategoryColumn();
 }
 
 export function getUploadsDir(): string {

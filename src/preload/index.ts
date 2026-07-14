@@ -33,6 +33,12 @@ const api: ElectronApi = {
     update: (id, data) => ipcRenderer.invoke(IPC_CHANNELS.bankAccountsUpdate, id, data),
     delete: (id) => ipcRenderer.invoke(IPC_CHANNELS.bankAccountsDelete, id),
   },
+  categories: {
+    list: () => ipcRenderer.invoke(IPC_CHANNELS.categoriesList),
+    create: (data) => ipcRenderer.invoke(IPC_CHANNELS.categoriesCreate, data),
+    update: (id, data) => ipcRenderer.invoke(IPC_CHANNELS.categoriesUpdate, id, data),
+    delete: (id) => ipcRenderer.invoke(IPC_CHANNELS.categoriesDelete, id),
+  },
   expenses: {
     listForMonth: (monthId) => ipcRenderer.invoke(IPC_CHANNELS.expensesListForMonth, monthId),
     create: (monthId, data) => ipcRenderer.invoke(IPC_CHANNELS.expensesCreate, monthId, data),

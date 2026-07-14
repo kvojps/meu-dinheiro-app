@@ -26,9 +26,17 @@ export const defaultExpenseFormSchema = z.object({
   name: z.string().trim().min(1, 'Nome é obrigatório'),
   amount: optionalNumberField('Valor'),
   dueDay: optionalDayField('Dia de vencimento'),
+  categoryId: z.string(),
 });
 
 export type DefaultExpenseFormValues = z.infer<typeof defaultExpenseFormSchema>;
+
+export const categoryFormSchema = z.object({
+  name: z.string().trim().min(1, 'Nome é obrigatório'),
+  color: z.string().min(1, 'Escolha uma cor'),
+});
+
+export type CategoryFormValues = z.infer<typeof categoryFormSchema>;
 
 export const defaultIncomeFormSchema = z.object({
   name: z.string().trim().min(1, 'Nome é obrigatório'),

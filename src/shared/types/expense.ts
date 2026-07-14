@@ -10,6 +10,9 @@ export interface Expense {
   notes: string | null;
   bank_account_id: number | null;
   bank_account_name?: string | null;
+  category_id: number | null;
+  category_name?: string | null;
+  category_color?: string | null;
   created_at: string;
 }
 
@@ -18,5 +21,8 @@ export interface DefaultExpense {
   name: string;
   due_day: number | null;
   amount: number;
+  category_id: number | null;
+  category_name?: string | null;
+  category_color?: string | null;
   created_at: string;
 }

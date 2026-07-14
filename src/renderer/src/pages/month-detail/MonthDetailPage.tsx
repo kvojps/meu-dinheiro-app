@@ -37,6 +37,7 @@ import { Expense } from '@shared/types/expense';
 import { Income } from '@shared/types/income';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { useBankAccounts } from '@/hooks/bank-accounts/useBankAccounts';
+import { useCategories } from '@/hooks/categories/useCategories';
 import { useMonth } from '@/hooks/months/useMonth';
 import { ROUTES, monthDetailPath } from '@/routes';
 import { todayDateString } from '@/utils/date';
@@ -84,6 +85,7 @@ export function MonthDetailPage() {
     deleteMonth,
   } = useMonth(id);
   const { bankAccounts } = useBankAccounts();
+  const { categories } = useCategories();
 
   const [tab, setTab] = useState<'expenses' | 'incomes'>('expenses');
 
@@ -110,6 +112,7 @@ export function MonthDetailPage() {
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [categoryFilter, setCategoryFilter] = useState('');
   const [sortBy, setSortBy] = useState<SortBy>('due_date');
   const [page, setPage] = useState(1);
 
@@ -193,6 +196,11 @@ export function MonthDetailPage() {
 
   function handleStatusFilter(value: StatusFilter) {
     setStatusFilter(value);
+    setPage(1);
+  }
+
+  function handleCategoryFilter(value: string) {
+    setCategoryFilter(value);
     setPage(1);
   }
 
@@ -298,6 +306,7 @@ export function MonthDetailPage() {
       if (statusFilter === 'overdue') return !e.is_paid && !!e.due_date && e.due_date < today;
       return !e.is_paid;
     })
+    .filter((e) => categoryFilter === '' || String(e.category_id ?? '') === categoryFilter)
     .sort((a, b) => {
       if (sortBy === 'name') return a.name.localeCompare(b.name, 'pt-BR');
       if (sortBy === 'amount') return (b.amount ?? 0) - (a.amount ?? 0);
@@ -481,6 +490,22 @@ export function MonthDetailPage() {
                       onClick={() => handleStatusFilter('overdue')}
                     />
                   </Stack>
+
+                  <FormControl size="small" sx={{ minWidth: 160 }}>
+                    <InputLabel>Categoria</InputLabel>
+                    <Select
+                      value={categoryFilter}
+                      label="Categoria"
+                      onChange={(e) => handleCategoryFilter(e.target.value)}
+                    >
+                      <MenuItem value="">Todas</MenuItem>
+                      {categories.map((category) => (
+                        <MenuItem key={category.id} value={String(category.id)}>
+                          {category.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
 
                   <FormControl size="small" sx={{ minWidth: 160, ml: 'auto' }}>
                     <InputLabel>Ordenar por</InputLabel>

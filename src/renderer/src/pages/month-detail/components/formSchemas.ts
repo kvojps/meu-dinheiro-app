@@ -11,6 +11,7 @@ export const expenseFormSchema = z.object({
   amount: optionalNumberField('Valor'),
   dueDate: z.string(),
   notes: z.string(),
+  categoryId: z.string(),
 });
 
 export type ExpenseFormValues = z.infer<typeof expenseFormSchema>;
