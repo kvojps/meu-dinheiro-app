@@ -85,6 +85,49 @@ const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
         },
       },
     },
+    MuiAccordion: {
+      defaultProps: {
+        disableGutters: true,
+        elevation: 0,
+      },
+      styleOverrides: {
+        root: {
+          border: `1px solid ${mode === 'light' ? '#E4E8F1' : '#2A2F3D'}`,
+          boxShadow:
+            mode === 'light' ? '0 1px 2px rgba(16, 24, 40, 0.04)' : '0 1px 2px rgba(0, 0, 0, 0.2)',
+          '&:before': {
+            display: 'none',
+          },
+          '&.Mui-expanded': {
+            margin: 0,
+          },
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          minHeight: 72,
+          padding: '0 20px',
+          '&.Mui-expanded': {
+            minHeight: 72,
+          },
+        },
+        content: {
+          margin: '16px 0',
+          '&.Mui-expanded': {
+            margin: '16px 0',
+          },
+        },
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          padding: '4px 20px 20px',
+        },
+      },
+    },
   },
 });
 

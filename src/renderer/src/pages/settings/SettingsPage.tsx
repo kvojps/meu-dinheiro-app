@@ -1,12 +1,14 @@
 import {
   AccountBalance,
   Add as AddIcon,
+  CalendarMonth,
   Delete as DeleteIcon,
   Edit as EditIcon,
   ErrorOutline,
   ExpandMore,
   FileDownload as FileDownloadIcon,
   FileUpload as FileUploadIcon,
+  ImportExport,
   Label,
   Payments,
   PlaylistAdd as PlaylistAddIcon,
@@ -278,205 +280,40 @@ export function SettingsPage() {
   return (
     <Box>
       <Typography variant="h4" gutterBottom>
-        Configuração de Pagamento
+        Configurações
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+        Gerencie despesas e entradas padrão, categorias, contas e os dados do aplicativo.
       </Typography>
 
-      <Stack spacing={2}>
-        <Accordion defaultExpanded>
+      <Stack spacing={3}>
+        <Accordion>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="h6">Despesas Padrão</Typography>
-              <Chip label={defaultExpenses.length} size="small" />
-            </Stack>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box
-              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
-            >
-              <Typography variant="body2" color="text.secondary">
-                Despesas que serão criadas automaticamente em cada novo mês.
-              </Typography>
-              <Button variant="contained" startIcon={<AddIcon />} onClick={openAdd} size="small">
-                Adicionar
-              </Button>
-            </Box>
-            <Divider sx={{ mb: 2 }} />
-            {defaultExpenses.length === 0 ? (
-              <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
-                Nenhuma despesa padrão cadastrada.
-              </Typography>
-            ) : (
-              <List disablePadding>
-                {defaultExpenses.map((acc) => (
-                  <ListItem key={acc.id} divider sx={{ px: 0 }}>
-                    <ListItemAvatar>
-                      <Avatar sx={{ bgcolor: 'primary.main' }}>
-                        <ReceiptLong fontSize="small" />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={acc.name}
-                      primaryTypographyProps={{ fontWeight: 600 }}
-                      secondary={`${formatCurrencyBRLOrFallback(acc.amount, 'Valor variável')}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}${acc.category_name ? ` - ${acc.category_name}` : ''}`}
-                    />
-                    <ListItemSecondaryAction>
-                      <IconButton edge="end" onClick={() => openEdit(acc)} sx={{ mr: 1 }}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton edge="end" onClick={() => setDeleteTarget(acc)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
-            )}
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="h6">Entradas Padrão</Typography>
-              <Chip label={defaultIncomes.length} size="small" />
-            </Stack>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box
-              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
-            >
-              <Typography variant="body2" color="text.secondary">
-                Entradas que serão criadas automaticamente em cada novo mês.
-              </Typography>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={openAddIncome}
-                size="small"
-              >
-                Adicionar
-              </Button>
-            </Box>
-            <Divider sx={{ mb: 2 }} />
-            {defaultIncomesLoading ? (
-              <Stack spacing={1}>
-                <Skeleton variant="rounded" height={56} />
-                <Skeleton variant="rounded" height={56} />
-              </Stack>
-            ) : defaultIncomes.length === 0 ? (
-              <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
-                Nenhuma entrada padrão cadastrada.
-              </Typography>
-            ) : (
-              <List disablePadding>
-                {defaultIncomes.map((inc) => (
-                  <ListItem key={inc.id} divider sx={{ px: 0 }}>
-                    <ListItemAvatar>
-                      <Avatar sx={{ bgcolor: 'success.main' }}>
-                        <Payments fontSize="small" />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={inc.name}
-                      primaryTypographyProps={{ fontWeight: 600 }}
-                      secondary={`${formatCurrencyBRLOrFallback(inc.amount, 'Valor variável')}${inc.expected_day ? ` - Previsto dia ${inc.expected_day}` : ''}${inc.bank_account_name ? ` - Conta: ${inc.bank_account_name}` : ''}`}
-                    />
-                    <ListItemSecondaryAction>
-                      <IconButton edge="end" onClick={() => openEditIncome(inc)} sx={{ mr: 1 }}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton edge="end" onClick={() => setDeleteIncomeTarget(inc)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
-            )}
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="h6">Categorias</Typography>
-              <Chip label={categories.length} size="small" />
-            </Stack>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box
-              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
-            >
-              <Typography variant="body2" color="text.secondary">
-                Categorias usadas para classificar despesas.
-              </Typography>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={openAddCategory}
-                size="small"
-              >
-                Adicionar
-              </Button>
-            </Box>
-            <Divider sx={{ mb: 2 }} />
-            {categoriesLoading ? (
-              <Stack spacing={1}>
-                <Skeleton variant="rounded" height={56} />
-                <Skeleton variant="rounded" height={56} />
-              </Stack>
-            ) : categories.length === 0 ? (
-              <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
-                Nenhuma categoria cadastrada.
-              </Typography>
-            ) : (
-              <List disablePadding>
-                {categories.map((category) => (
-                  <ListItem key={category.id} divider sx={{ px: 0 }}>
-                    <ListItemAvatar>
-                      <Avatar sx={{ bgcolor: category.color }}>
-                        <Label fontSize="small" />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={category.name} primaryTypographyProps={{ fontWeight: 600 }} />
-                    <ListItemSecondaryAction>
-                      <IconButton edge="end" onClick={() => openEditCategory(category)} sx={{ mr: 1 }}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton edge="end" onClick={() => setDeleteCategoryTarget(category)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
-            )}
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="h6">Contas Bancárias</Typography>
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%', pr: 1 }}>
+              <Avatar sx={{ bgcolor: 'primary.main', width: 40, height: 40 }}>
+                <AccountBalance fontSize="small" />
+              </Avatar>
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography variant="h6">Contas Bancárias</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Usadas para debitar despesas ou creditar entradas
+                </Typography>
+              </Box>
               <Chip label={bankAccounts.length} size="small" />
               {bankAccounts.length > 0 && (
                 <Chip
                   label={`Total: ${formatCurrencyBRL(totalBankBalance)}`}
                   size="small"
                   variant="outlined"
-                  color={totalBankBalance < 0 ? 'error' : 'default'}
+                  color={
+                    totalBankBalance < 0 ? 'error' : totalBankBalance > 0 ? 'success' : 'default'
+                  }
                 />
               )}
             </Stack>
           </AccordionSummary>
           <AccordionDetails>
-            <Box
-              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
-            >
-              <Typography variant="body2" color="text.secondary">
-                Contas usadas opcionalmente para debitar o valor ao pagar uma despesa ou creditar ao
-                receber uma entrada.
-              </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
@@ -493,9 +330,18 @@ export function SettingsPage() {
                 <Skeleton variant="rounded" height={56} />
               </Stack>
             ) : bankAccounts.length === 0 ? (
-              <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
-                Nenhuma conta cadastrada.
-              </Typography>
+              <Box
+                sx={{
+                  py: 4,
+                  textAlign: 'center',
+                  border: '1px dashed',
+                  borderColor: 'divider',
+                  borderRadius: 2,
+                }}
+              >
+                <AccountBalance sx={{ fontSize: 32, color: 'text.disabled', mb: 1 }} />
+                <Typography color="text.secondary">Nenhuma conta cadastrada.</Typography>
+              </Box>
             ) : (
               <List disablePadding>
                 {bankAccounts.map((account) => (
@@ -529,15 +375,229 @@ export function SettingsPage() {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion defaultExpanded>
+        <Accordion>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography variant="h6">Adicionar Meses</Typography>
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%', pr: 1 }}>
+              <Avatar sx={{ bgcolor: 'action.selected', color: 'text.secondary', width: 40, height: 40 }}>
+                <Label fontSize="small" />
+              </Avatar>
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography variant="h6">Categorias</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Usadas para classificar despesas
+                </Typography>
+              </Box>
+              <Chip label={categories.length} size="small" />
+            </Stack>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Adicione meses passados ou futuros. As despesas e entradas padrão serão copiadas
-              automaticamente.
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={openAddCategory}
+                size="small"
+              >
+                Adicionar
+              </Button>
+            </Box>
+            <Divider sx={{ mb: 2 }} />
+            {categoriesLoading ? (
+              <Stack spacing={1}>
+                <Skeleton variant="rounded" height={56} />
+                <Skeleton variant="rounded" height={56} />
+              </Stack>
+            ) : categories.length === 0 ? (
+              <Box
+                sx={{
+                  py: 4,
+                  textAlign: 'center',
+                  border: '1px dashed',
+                  borderColor: 'divider',
+                  borderRadius: 2,
+                }}
+              >
+                <Label sx={{ fontSize: 32, color: 'text.disabled', mb: 1 }} />
+                <Typography color="text.secondary">Nenhuma categoria cadastrada.</Typography>
+              </Box>
+            ) : (
+              <List disablePadding>
+                {categories.map((category) => (
+                  <ListItem key={category.id} divider sx={{ px: 0 }}>
+                    <ListItemAvatar>
+                      <Avatar sx={{ bgcolor: category.color }}>
+                        <Label fontSize="small" />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={category.name} primaryTypographyProps={{ fontWeight: 600 }} />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" onClick={() => openEditCategory(category)} sx={{ mr: 1 }}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton edge="end" onClick={() => setDeleteCategoryTarget(category)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%', pr: 1 }}>
+              <Avatar sx={{ bgcolor: 'primary.main', width: 40, height: 40 }}>
+                <ReceiptLong fontSize="small" />
+              </Avatar>
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography variant="h6">Despesas Padrão</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Criadas automaticamente em cada novo mês
+                </Typography>
+              </Box>
+              <Chip label={defaultExpenses.length} size="small" />
+            </Stack>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+              <Button variant="contained" startIcon={<AddIcon />} onClick={openAdd} size="small">
+                Adicionar
+              </Button>
+            </Box>
+            <Divider sx={{ mb: 2 }} />
+            {defaultExpenses.length === 0 ? (
+              <Box
+                sx={{
+                  py: 4,
+                  textAlign: 'center',
+                  border: '1px dashed',
+                  borderColor: 'divider',
+                  borderRadius: 2,
+                }}
+              >
+                <ReceiptLong sx={{ fontSize: 32, color: 'text.disabled', mb: 1 }} />
+                <Typography color="text.secondary">Nenhuma despesa padrão cadastrada.</Typography>
+              </Box>
+            ) : (
+              <List disablePadding>
+                {defaultExpenses.map((acc) => (
+                  <ListItem key={acc.id} divider sx={{ px: 0 }}>
+                    <ListItemAvatar>
+                      <Avatar sx={{ bgcolor: 'primary.main' }}>
+                        <ReceiptLong fontSize="small" />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={acc.name}
+                      primaryTypographyProps={{ fontWeight: 600 }}
+                      secondary={`${formatCurrencyBRLOrFallback(acc.amount, 'Valor variável')}${acc.due_day ? ` - Vencimento dia ${acc.due_day}` : ''}${acc.category_name ? ` - ${acc.category_name}` : ''}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" onClick={() => openEdit(acc)} sx={{ mr: 1 }}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton edge="end" onClick={() => setDeleteTarget(acc)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%', pr: 1 }}>
+              <Avatar sx={{ bgcolor: 'secondary.main', width: 40, height: 40 }}>
+                <Payments fontSize="small" />
+              </Avatar>
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography variant="h6">Entradas Padrão</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Criadas automaticamente em cada novo mês
+                </Typography>
+              </Box>
+              <Chip label={defaultIncomes.length} size="small" />
+            </Stack>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={openAddIncome}
+                size="small"
+              >
+                Adicionar
+              </Button>
+            </Box>
+            <Divider sx={{ mb: 2 }} />
+            {defaultIncomesLoading ? (
+              <Stack spacing={1}>
+                <Skeleton variant="rounded" height={56} />
+                <Skeleton variant="rounded" height={56} />
+              </Stack>
+            ) : defaultIncomes.length === 0 ? (
+              <Box
+                sx={{
+                  py: 4,
+                  textAlign: 'center',
+                  border: '1px dashed',
+                  borderColor: 'divider',
+                  borderRadius: 2,
+                }}
+              >
+                <Payments sx={{ fontSize: 32, color: 'text.disabled', mb: 1 }} />
+                <Typography color="text.secondary">Nenhuma entrada padrão cadastrada.</Typography>
+              </Box>
+            ) : (
+              <List disablePadding>
+                {defaultIncomes.map((inc) => (
+                  <ListItem key={inc.id} divider sx={{ px: 0 }}>
+                    <ListItemAvatar>
+                      <Avatar sx={{ bgcolor: 'secondary.main' }}>
+                        <Payments fontSize="small" />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={inc.name}
+                      primaryTypographyProps={{ fontWeight: 600 }}
+                      secondary={`${formatCurrencyBRLOrFallback(inc.amount, 'Valor variável')}${inc.expected_day ? ` - Previsto dia ${inc.expected_day}` : ''}${inc.bank_account_name ? ` - Conta: ${inc.bank_account_name}` : ''}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" onClick={() => openEditIncome(inc)} sx={{ mr: 1 }}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton edge="end" onClick={() => setDeleteIncomeTarget(inc)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%', pr: 1 }}>
+              <Avatar sx={{ bgcolor: 'action.selected', color: 'text.secondary', width: 40, height: 40 }}>
+                <CalendarMonth fontSize="small" />
+              </Avatar>
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography variant="h6">Adicionar Meses</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Copia despesas e entradas padrão para novos meses
+                </Typography>
+              </Box>
+            </Stack>
+          </AccordionSummary>
+          <AccordionDetails>
             <Stack direction="row" spacing={2} alignItems="flex-end" flexWrap="wrap" useFlexGap>
               <MonthYearPicker
                 label="De:"
@@ -578,13 +638,19 @@ export function SettingsPage() {
 
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography variant="h6">Exportar / Importar Dados</Typography>
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%', pr: 1 }}>
+              <Avatar sx={{ bgcolor: 'action.selected', color: 'text.secondary', width: 40, height: 40 }}>
+                <ImportExport fontSize="small" />
+              </Avatar>
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography variant="h6">Exportar / Importar Dados</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Backup completo em ZIP, com meses, despesas e comprovantes
+                </Typography>
+              </Box>
+            </Stack>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Exporta todos os meses, despesas, entradas e comprovantes em um arquivo ZIP. A
-              importação substitui todos os dados atuais.
-            </Typography>
             <Stack direction="row" spacing={2}>
               <Button variant="outlined" startIcon={<FileDownloadIcon />} onClick={exportData}>
                 Exportar
