@@ -1,6 +1,6 @@
 import type { ExportResult, ImportResult } from '@shared/ipc/api';
 import type { BankAccount } from '@shared/types/bank-account';
-import type { Category } from '@shared/types/category';
+import type { Category, CategoryTotal } from '@shared/types/category';
 import type { DefaultExpense, Expense } from '@shared/types/expense';
 import type { DefaultIncome, Income } from '@shared/types/income';
 import type { Month, MonthDetail } from '@shared/types/month';
@@ -213,6 +213,10 @@ export const api = {
 
   openReceipt(filename: string) {
     return call(() => window.api.receipts.open(filename));
+  },
+
+  getCategoryTotalsForYear(year: number) {
+    return call<CategoryTotal[]>(() => window.api.reports.categoryTotalsForYear(year));
   },
 
   exportData() {

@@ -67,6 +67,10 @@ const api: ElectronApi = {
   receipts: {
     open: (filename) => ipcRenderer.invoke(IPC_CHANNELS.receiptsOpen, filename),
   },
+  reports: {
+    categoryTotalsForYear: (year) =>
+      ipcRenderer.invoke(IPC_CHANNELS.reportsCategoryTotalsForYear, year),
+  },
   data: {
     export: () => ipcRenderer.invoke(IPC_CHANNELS.dataExport),
     import: () => ipcRenderer.invoke(IPC_CHANNELS.dataImport),

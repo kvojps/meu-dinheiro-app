@@ -237,6 +237,10 @@ export function registerIpcHandlers(db: Database.Database): void {
     incomesRepository.unreceiveIncome(db, parseId(id)),
   );
 
+  ipcMain.handle(IPC_CHANNELS.reportsCategoryTotalsForYear, (_e, year: number) =>
+    categoriesRepository.getCategoryTotalsForYear(db, parseId(year)),
+  );
+
   ipcMain.handle(IPC_CHANNELS.receiptsOpen, (_e, filename: string) =>
     openReceiptFile(uploadsDir, filename),
   );

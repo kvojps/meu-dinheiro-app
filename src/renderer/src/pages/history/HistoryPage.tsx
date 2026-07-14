@@ -9,6 +9,7 @@ import {
   Box,
   Button,
   FormControl,
+  Grid,
   IconButton,
   MenuItem,
   Paper,
@@ -32,11 +33,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Bar,
+  BarChart,
   CartesianGrid,
   Cell,
   ComposedChart,
-  Legend,
   Line,
+  LabelList,
   ReferenceArea,
   ReferenceLine,
   ResponsiveContainer,
@@ -47,20 +49,22 @@ import {
 import { Month } from '@shared/types/month';
 import { api } from '@/api/client';
 import { useSnackbar } from '@/contexts/SnackbarContext';
+import { useCategoryTotals } from '@/hooks/categories/useCategoryTotals';
 import { monthDetailPath } from '@/routes';
 import { formatCurrencyBRL } from '@/utils/format';
+import { StatTile } from './components/StatTile';
 
 function monthKey(year: number, month: number) {
   return `${year}-${String(month).padStart(2, '0')}`;
 }
 
-type TabValue = 'expenses' | 'incomes' | 'comparativo';
+type TabValue = 'comparativo' | 'categories';
 
 export function HistoryPage() {
   const [data, setData] = useState<Month[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [tab, setTab] = useState<TabValue>('expenses');
+  const [tab, setTab] = useState<TabValue>('comparativo');
   const [view, setView] = useState<'chart' | 'table'>('chart');
   const { showError } = useSnackbar();
   const theme = useTheme();
@@ -110,58 +114,6 @@ export function HistoryPage() {
   const now = new Date();
   const currentKey = monthKey(now.getFullYear(), now.getMonth() + 1);
 
-  const expenseChartData = yearMonths.map((m) => {
-    const overdue = m.overdue_amount ?? 0;
-    const pending = Math.max(0, (m.unpaid_amount ?? 0) - overdue);
-    return {
-      id: m.id,
-      label: m.label,
-      isCurrent: monthKey(m.year, m.month) === currentKey,
-      Pago: m.paid_amount ?? 0,
-      Pendente: pending,
-      Vencida: overdue,
-    };
-  });
-
-  const expenseYearTotals = yearMonths.reduce(
-    (acc, m) => {
-      const overdue = m.overdue_amount ?? 0;
-      return {
-        paid: acc.paid + (m.paid_amount ?? 0),
-        pending: acc.pending + Math.max(0, (m.unpaid_amount ?? 0) - overdue),
-        overdue: acc.overdue + overdue,
-      };
-    },
-    { paid: 0, pending: 0, overdue: 0 },
-  );
-  const expenseYearTotal =
-    expenseYearTotals.paid + expenseYearTotals.pending + expenseYearTotals.overdue;
-  const expensePaidPct =
-    expenseYearTotal > 0 ? (expenseYearTotals.paid / expenseYearTotal) * 100 : 0;
-  const expensePendingPct =
-    expenseYearTotal > 0 ? (expenseYearTotals.pending / expenseYearTotal) * 100 : 0;
-  const expenseOverduePct = expenseYearTotal > 0 ? 100 - expensePaidPct - expensePendingPct : 0;
-
-  const incomeChartData = yearMonths.map((m) => ({
-    id: m.id,
-    label: m.label,
-    isCurrent: monthKey(m.year, m.month) === currentKey,
-    Recebido: m.received_income ?? 0,
-    Pendente: m.pending_income ?? 0,
-  }));
-
-  const incomeYearTotals = yearMonths.reduce(
-    (acc, m) => ({
-      received: acc.received + (m.received_income ?? 0),
-      pending: acc.pending + (m.pending_income ?? 0),
-    }),
-    { received: 0, pending: 0 },
-  );
-  const incomeYearTotal = incomeYearTotals.received + incomeYearTotals.pending;
-  const incomeReceivedPct =
-    incomeYearTotal > 0 ? (incomeYearTotals.received / incomeYearTotal) * 100 : 0;
-  const incomePendingPct = incomeYearTotal > 0 ? 100 - incomeReceivedPct : 0;
-
   const comparativoData = yearMonths.map((m) => {
     const income = m.total_income ?? 0;
     const expense = m.total_amount ?? 0;
@@ -183,6 +135,29 @@ export function HistoryPage() {
     { income: 0, expense: 0 },
   );
   const comparativoBalance = comparativoTotals.income - comparativoTotals.expense;
+
+  const previousYearMonths = useMemo(() => {
+    return data.filter((m) => m.year === selectedYear - 1);
+  }, [data, selectedYear]);
+
+  const previousYearTotals = previousYearMonths.reduce(
+    (acc, m) => ({
+      income: acc.income + (m.total_income ?? 0),
+      expense: acc.expense + (m.total_amount ?? 0),
+    }),
+    { income: 0, expense: 0 },
+  );
+
+  function yoyPercent(current: number, previous: number): number | null {
+    if (previous <= 0) return null;
+    return ((current - previous) / previous) * 100;
+  }
+
+  const expenseDeltaPercent = yoyPercent(comparativoTotals.expense, previousYearTotals.expense);
+  const incomeDeltaPercent = yoyPercent(comparativoTotals.income, previousYearTotals.income);
+
+  const { chartRows: categoryChartRows, tableRows: categoryTableRows } =
+    useCategoryTotals(selectedYear);
 
   if (loading) {
     return (
@@ -277,10 +252,53 @@ export function HistoryPage() {
         </IconButton>
       </Paper>
 
+      <Grid container spacing={2} sx={{ mb: 3 }}>
+        <Grid item xs={12} sm={4}>
+          <StatTile
+            label="Saldo do ano"
+            value={formatCurrencyBRL(comparativoBalance)}
+            valueColor={comparativoBalance >= 0 ? theme.palette.success.main : theme.palette.error.main}
+            caption={comparativoBalance >= 0 ? 'Positivo' : 'Negativo'}
+            dotColor={comparativoBalance >= 0 ? theme.palette.success.main : theme.palette.error.main}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <StatTile
+            label="Total recebido"
+            value={formatCurrencyBRL(comparativoTotals.income)}
+            valueColor={theme.palette.success.main}
+            delta={
+              incomeDeltaPercent === null
+                ? null
+                : {
+                    percent: incomeDeltaPercent,
+                    increaseIsGood: true,
+                    comparisonLabel: `vs. ${selectedYear - 1}`,
+                  }
+            }
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <StatTile
+            label="Total gasto"
+            value={formatCurrencyBRL(comparativoTotals.expense)}
+            valueColor={theme.palette.error.main}
+            delta={
+              expenseDeltaPercent === null
+                ? null
+                : {
+                    percent: expenseDeltaPercent,
+                    increaseIsGood: false,
+                    comparisonLabel: `vs. ${selectedYear - 1}`,
+                  }
+            }
+          />
+        </Grid>
+      </Grid>
+
       <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 3 }}>
-        <Tab value="expenses" label="Despesas" />
-        <Tab value="incomes" label="Entradas" />
         <Tab value="comparativo" label="Comparativo" />
+        <Tab value="categories" label="Categorias" />
       </Tabs>
 
       {yearMonths.length === 0 ? (
@@ -307,357 +325,8 @@ export function HistoryPage() {
             </ToggleButtonGroup>
           </Box>
 
-          {tab === 'expenses' && (
-            <>
-              <Paper sx={{ p: 3, mb: 3 }}>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  Total em {selectedYear}
-                </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 800 }}>
-                  {formatCurrencyBRL(expenseYearTotal)}
-                </Typography>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    height: 8,
-                    borderRadius: 1,
-                    overflow: 'hidden',
-                    mt: 2,
-                    mb: 1.5,
-                    bgcolor: 'action.hover',
-                  }}
-                >
-                  {expenseYearTotal > 0 && (
-                    <>
-                      <Box sx={{ width: `${expensePaidPct}%`, bgcolor: 'success.main' }} />
-                      <Box sx={{ width: `${expensePendingPct}%`, bgcolor: 'warning.main' }} />
-                      <Box sx={{ width: `${expenseOverduePct}%`, bgcolor: 'error.main' }} />
-                    </>
-                  )}
-                </Box>
-                <Stack direction="row" spacing={3} flexWrap="wrap">
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Box
-                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }}
-                    />
-                    <Typography variant="body2" color="text.secondary">
-                      Pago: <strong>{formatCurrencyBRL(expenseYearTotals.paid)}</strong>
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Box
-                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'warning.main' }}
-                    />
-                    <Typography variant="body2" color="text.secondary">
-                      Pendente: <strong>{formatCurrencyBRL(expenseYearTotals.pending)}</strong>
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Box
-                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'error.main' }}
-                    />
-                    <Typography variant="body2" color="text.secondary">
-                      Vencida: <strong>{formatCurrencyBRL(expenseYearTotals.overdue)}</strong>
-                    </Typography>
-                  </Stack>
-                </Stack>
-              </Paper>
-
-              {view === 'chart' ? (
-                <ResponsiveContainer width="100%" height={isMobile ? 320 : 500}>
-                  <ComposedChart
-                    data={expenseChartData}
-                    margin={isMobile ? { bottom: 40 } : undefined}
-                  >
-                    {expenseChartData.map(
-                      (entry) =>
-                        entry.isCurrent && (
-                          <ReferenceArea
-                            key={entry.label}
-                            x1={entry.label}
-                            x2={entry.label}
-                            fill={theme.palette.primary.main}
-                            fillOpacity={0.08}
-                            ifOverflow="visible"
-                          />
-                        ),
-                    )}
-                    <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} />
-                    <XAxis
-                      dataKey="label"
-                      stroke={theme.palette.text.secondary}
-                      angle={isMobile ? -40 : 0}
-                      textAnchor={isMobile ? 'end' : 'middle'}
-                      height={isMobile ? 50 : 30}
-                      interval={0}
-                      tick={{ fontSize: isMobile ? 11 : 12 }}
-                    />
-                    <YAxis stroke={theme.palette.text.secondary} />
-                    <Tooltip
-                      cursor={{ fill: theme.palette.action.hover }}
-                      formatter={(value) => formatCurrencyBRL(Number(value) || 0)}
-                      contentStyle={{
-                        backgroundColor: theme.palette.background.paper,
-                        border: `1px solid ${theme.palette.divider}`,
-                        borderRadius: 8,
-                      }}
-                    />
-                    <Legend />
-                    <Bar dataKey="Pago" fill={theme.palette.success.main} stackId="a">
-                      {expenseChartData.map((entry) => (
-                        <Cell
-                          key={entry.id}
-                          cursor="pointer"
-                          onClick={() => navigate(monthDetailPath(entry.id))}
-                        />
-                      ))}
-                    </Bar>
-                    <Bar dataKey="Pendente" fill={theme.palette.warning.main} stackId="a">
-                      {expenseChartData.map((entry) => (
-                        <Cell
-                          key={entry.id}
-                          cursor="pointer"
-                          onClick={() => navigate(monthDetailPath(entry.id))}
-                        />
-                      ))}
-                    </Bar>
-                    <Bar
-                      dataKey="Vencida"
-                      fill={theme.palette.error.main}
-                      stackId="a"
-                      radius={[4, 4, 0, 0]}
-                    >
-                      {expenseChartData.map((entry) => (
-                        <Cell
-                          key={entry.id}
-                          cursor="pointer"
-                          onClick={() => navigate(monthDetailPath(entry.id))}
-                        />
-                      ))}
-                    </Bar>
-                  </ComposedChart>
-                </ResponsiveContainer>
-              ) : (
-                <Paper sx={{ overflowX: 'auto' }}>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Mês</TableCell>
-                        <TableCell align="right">Pago</TableCell>
-                        <TableCell align="right">Pendente</TableCell>
-                        <TableCell align="right">Vencida</TableCell>
-                        <TableCell align="right">Total</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {expenseChartData.map((row) => (
-                        <TableRow
-                          key={row.id}
-                          hover
-                          onClick={() => navigate(monthDetailPath(row.id))}
-                          sx={{ cursor: 'pointer' }}
-                        >
-                          <TableCell sx={{ fontWeight: row.isCurrent ? 700 : 400 }}>
-                            {row.label}
-                            {row.isCurrent && ' (atual)'}
-                          </TableCell>
-                          <TableCell align="right">{formatCurrencyBRL(row.Pago)}</TableCell>
-                          <TableCell align="right">{formatCurrencyBRL(row.Pendente)}</TableCell>
-                          <TableCell align="right">{formatCurrencyBRL(row.Vencida)}</TableCell>
-                          <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            {formatCurrencyBRL(row.Pago + row.Pendente + row.Vencida)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Paper>
-              )}
-            </>
-          )}
-
-          {tab === 'incomes' && (
-            <>
-              <Paper sx={{ p: 3, mb: 3 }}>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  Total em {selectedYear}
-                </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 800 }}>
-                  {formatCurrencyBRL(incomeYearTotal)}
-                </Typography>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    height: 8,
-                    borderRadius: 1,
-                    overflow: 'hidden',
-                    mt: 2,
-                    mb: 1.5,
-                    bgcolor: 'action.hover',
-                  }}
-                >
-                  {incomeYearTotal > 0 && (
-                    <>
-                      <Box sx={{ width: `${incomeReceivedPct}%`, bgcolor: 'success.main' }} />
-                      <Box sx={{ width: `${incomePendingPct}%`, bgcolor: 'warning.main' }} />
-                    </>
-                  )}
-                </Box>
-                <Stack direction="row" spacing={3} flexWrap="wrap">
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Box
-                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }}
-                    />
-                    <Typography variant="body2" color="text.secondary">
-                      Recebido: <strong>{formatCurrencyBRL(incomeYearTotals.received)}</strong>
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Box
-                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'warning.main' }}
-                    />
-                    <Typography variant="body2" color="text.secondary">
-                      A receber: <strong>{formatCurrencyBRL(incomeYearTotals.pending)}</strong>
-                    </Typography>
-                  </Stack>
-                </Stack>
-              </Paper>
-
-              {view === 'chart' ? (
-                <ResponsiveContainer width="100%" height={isMobile ? 320 : 500}>
-                  <ComposedChart
-                    data={incomeChartData}
-                    margin={isMobile ? { bottom: 40 } : undefined}
-                  >
-                    {incomeChartData.map(
-                      (entry) =>
-                        entry.isCurrent && (
-                          <ReferenceArea
-                            key={entry.label}
-                            x1={entry.label}
-                            x2={entry.label}
-                            fill={theme.palette.primary.main}
-                            fillOpacity={0.08}
-                            ifOverflow="visible"
-                          />
-                        ),
-                    )}
-                    <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} />
-                    <XAxis
-                      dataKey="label"
-                      stroke={theme.palette.text.secondary}
-                      angle={isMobile ? -40 : 0}
-                      textAnchor={isMobile ? 'end' : 'middle'}
-                      height={isMobile ? 50 : 30}
-                      interval={0}
-                      tick={{ fontSize: isMobile ? 11 : 12 }}
-                    />
-                    <YAxis stroke={theme.palette.text.secondary} />
-                    <Tooltip
-                      cursor={{ fill: theme.palette.action.hover }}
-                      formatter={(value) => formatCurrencyBRL(Number(value) || 0)}
-                      contentStyle={{
-                        backgroundColor: theme.palette.background.paper,
-                        border: `1px solid ${theme.palette.divider}`,
-                        borderRadius: 8,
-                      }}
-                    />
-                    <Legend />
-                    <Bar dataKey="Recebido" fill={theme.palette.success.main} stackId="a">
-                      {incomeChartData.map((entry) => (
-                        <Cell
-                          key={entry.id}
-                          cursor="pointer"
-                          onClick={() => navigate(monthDetailPath(entry.id))}
-                        />
-                      ))}
-                    </Bar>
-                    <Bar
-                      dataKey="Pendente"
-                      fill={theme.palette.warning.main}
-                      stackId="a"
-                      radius={[4, 4, 0, 0]}
-                    >
-                      {incomeChartData.map((entry) => (
-                        <Cell
-                          key={entry.id}
-                          cursor="pointer"
-                          onClick={() => navigate(monthDetailPath(entry.id))}
-                        />
-                      ))}
-                    </Bar>
-                  </ComposedChart>
-                </ResponsiveContainer>
-              ) : (
-                <Paper sx={{ overflowX: 'auto' }}>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Mês</TableCell>
-                        <TableCell align="right">Recebido</TableCell>
-                        <TableCell align="right">Pendente</TableCell>
-                        <TableCell align="right">Total</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {incomeChartData.map((row) => (
-                        <TableRow
-                          key={row.id}
-                          hover
-                          onClick={() => navigate(monthDetailPath(row.id))}
-                          sx={{ cursor: 'pointer' }}
-                        >
-                          <TableCell sx={{ fontWeight: row.isCurrent ? 700 : 400 }}>
-                            {row.label}
-                            {row.isCurrent && ' (atual)'}
-                          </TableCell>
-                          <TableCell align="right">{formatCurrencyBRL(row.Recebido)}</TableCell>
-                          <TableCell align="right">{formatCurrencyBRL(row.Pendente)}</TableCell>
-                          <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            {formatCurrencyBRL(row.Recebido + row.Pendente)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Paper>
-              )}
-            </>
-          )}
-
           {tab === 'comparativo' && (
             <>
-              <Paper sx={{ p: 3, mb: 3 }}>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  Saldo em {selectedYear} (entradas - despesas)
-                </Typography>
-                <Typography
-                  variant="h4"
-                  sx={{ fontWeight: 800 }}
-                  color={comparativoBalance >= 0 ? 'success.main' : 'error.main'}
-                >
-                  {formatCurrencyBRL(comparativoBalance)}
-                </Typography>
-                <Stack direction="row" spacing={3} flexWrap="wrap" sx={{ mt: 2 }}>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Box
-                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main' }}
-                    />
-                    <Typography variant="body2" color="text.secondary">
-                      Entradas: <strong>{formatCurrencyBRL(comparativoTotals.income)}</strong>
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Box
-                      sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'error.main' }}
-                    />
-                    <Typography variant="body2" color="text.secondary">
-                      Despesas: <strong>{formatCurrencyBRL(comparativoTotals.expense)}</strong>
-                    </Typography>
-                  </Stack>
-                </Stack>
-              </Paper>
-
               {view === 'chart' ? (
                 <ResponsiveContainer width="100%" height={isMobile ? 320 : 420}>
                   <ComposedChart
@@ -747,6 +416,103 @@ export function HistoryPage() {
                     </TableBody>
                   </Table>
                 </Paper>
+              )}
+            </>
+          )}
+
+          {tab === 'categories' && (
+            <>
+              {categoryTableRows.length === 0 ? (
+                <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
+                  Nenhuma despesa categorizada em {selectedYear}.
+                </Typography>
+              ) : (
+                <>
+                  {view === 'chart' ? (
+                    <ResponsiveContainer width="100%" height={Math.max(280, categoryChartRows.length * 48)}>
+                      <BarChart
+                        data={categoryChartRows}
+                        layout="vertical"
+                        margin={{ left: 8, right: 48 }}
+                      >
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke={theme.palette.divider}
+                          horizontal={false}
+                        />
+                        <XAxis type="number" stroke={theme.palette.text.secondary} hide />
+                        <YAxis
+                          type="category"
+                          dataKey="name"
+                          stroke={theme.palette.text.secondary}
+                          width={140}
+                          tick={{ fontSize: 12 }}
+                        />
+                        <Tooltip
+                          cursor={{ fill: theme.palette.action.hover }}
+                          formatter={(value, _name, entry) => {
+                            const row = entry.payload as (typeof categoryChartRows)[number];
+                            return [
+                              `${formatCurrencyBRL(Number(value) || 0)} · ${row.count} despesa(s) · ${row.percent.toFixed(1)}%`,
+                              'Total',
+                            ];
+                          }}
+                          contentStyle={{
+                            backgroundColor: theme.palette.background.paper,
+                            border: `1px solid ${theme.palette.divider}`,
+                            borderRadius: 8,
+                          }}
+                        />
+                        <Bar dataKey="total" barSize={20} radius={[0, 4, 4, 0]}>
+                          {categoryChartRows.map((row) => (
+                            <Cell key={row.key} fill={row.color} />
+                          ))}
+                          <LabelList
+                            dataKey="total"
+                            position="right"
+                            formatter={(value) => formatCurrencyBRL(Number(value) || 0)}
+                            style={{ fill: theme.palette.text.secondary, fontSize: 12 }}
+                          />
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <Paper sx={{ overflowX: 'auto' }}>
+                      <Table size="small">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Categoria</TableCell>
+                            <TableCell align="right">Valor</TableCell>
+                            <TableCell align="right">%</TableCell>
+                            <TableCell align="right">Despesas</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {categoryTableRows.map((row) => (
+                            <TableRow key={row.key} hover>
+                              <TableCell>
+                                <Stack direction="row" spacing={1} alignItems="center">
+                                  <Box
+                                    sx={{
+                                      width: 10,
+                                      height: 10,
+                                      borderRadius: '50%',
+                                      bgcolor: row.color,
+                                    }}
+                                  />
+                                  {row.name}
+                                </Stack>
+                              </TableCell>
+                              <TableCell align="right">{formatCurrencyBRL(row.total)}</TableCell>
+                              <TableCell align="right">{row.percent.toFixed(1)}%</TableCell>
+                              <TableCell align="right">{row.count}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </Paper>
+                  )}
+                </>
               )}
             </>
           )}

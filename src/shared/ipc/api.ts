@@ -1,5 +1,5 @@
 import type { BankAccount } from '../types/bank-account';
-import type { Category } from '../types/category';
+import type { Category, CategoryTotal } from '../types/category';
 import type { DefaultExpense, Expense } from '../types/expense';
 import type { DefaultIncome, Income } from '../types/income';
 import type { Month, MonthDetail } from '../types/month';
@@ -141,6 +141,10 @@ export interface ReceiptsApi {
   open: (filename: string) => Promise<void>;
 }
 
+export interface ReportsApi {
+  categoryTotalsForYear: (year: number) => Promise<CategoryTotal[]>;
+}
+
 export interface DataApi {
   export: () => Promise<ExportResult>;
   import: () => Promise<ImportResult>;
@@ -156,5 +160,6 @@ export interface ElectronApi {
   expenses: ExpensesApi;
   incomes: IncomesApi;
   receipts: ReceiptsApi;
+  reports: ReportsApi;
   data: DataApi;
 }

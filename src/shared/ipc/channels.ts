@@ -41,6 +41,8 @@ export const IPC_CHANNELS = {
   incomesReceive: 'incomes:receive',
   incomesUnreceive: 'incomes:unreceive',
 
+  reportsCategoryTotalsForYear: 'reports:categoryTotalsForYear',
+
   receiptsOpen: 'receipts:open',
 
   dataExport: 'data:export',

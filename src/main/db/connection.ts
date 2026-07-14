@@ -60,11 +60,11 @@ const DEFAULT_CATEGORIES: { name: string; color: string }[] = [
   { name: 'Alimentação', color: '#FB8C00' },
   { name: 'Transporte', color: '#1E88E5' },
   { name: 'Saúde', color: '#E53935' },
-  { name: 'Educação', color: '#8E24AA' },
+  { name: 'Educação', color: '#7B1FA2' },
   { name: 'Lazer', color: '#43A047' },
   { name: 'Assinaturas', color: '#00ACC1' },
   { name: 'Compras', color: '#D81B60' },
-  { name: 'Contas e Serviços', color: '#6D4C41' },
+  { name: 'Contas e Serviços', color: '#B85C38' },
   { name: 'Outros', color: '#757575' },
 ];
 

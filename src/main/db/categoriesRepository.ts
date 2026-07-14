@@ -47,6 +47,29 @@ export function updateCategory(
   return getCategoryById(db, id);
 }
 
+export interface CategoryTotalRow {
+  category_id: number | null;
+  name: string | null;
+  color: string | null;
+  total: number;
+  count: number;
+}
+
+export function getCategoryTotalsForYear(db: Database.Database, year: number) {
+  return db
+    .prepare(
+      `SELECT c.id as category_id, c.name as name, c.color as color,
+              COALESCE(SUM(e.amount), 0) as total, COUNT(e.id) as count
+       FROM expenses e
+       JOIN months m ON m.id = e.month_id
+       LEFT JOIN categories c ON c.id = e.category_id
+       WHERE m.year = ?
+       GROUP BY c.id
+       ORDER BY total DESC`,
+    )
+    .all(year) as CategoryTotalRow[];
+}
+
 export function deleteCategory(db: Database.Database, id: number) {
   getCategoryById(db, id);
   const run = db.transaction(() => {
