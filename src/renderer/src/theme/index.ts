@@ -98,9 +98,6 @@ const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
           '&:before': {
             display: 'none',
           },
-          '&.Mui-expanded': {
-            margin: 0,
-          },
         },
       },
     },
