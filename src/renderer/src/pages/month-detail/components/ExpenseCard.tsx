@@ -14,6 +14,7 @@ import {
   CardActions,
   CardContent,
   Chip,
+  Divider,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -94,45 +95,69 @@ export function ExpenseCard({
         <Typography variant="h5" sx={{ fontWeight: 700 }} gutterBottom>
           {formatCurrencyBRLOrFallback(expense.amount)}
         </Typography>
-        {expense.category_name && (
-          <Chip
-            label={expense.category_name}
-            size="small"
-            sx={{
-              bgcolor: expense.category_color ?? undefined,
-              color: expense.category_color
-                ? theme.palette.getContrastText(expense.category_color)
-                : undefined,
-              mb: 1,
-            }}
-          />
-        )}
-        {expense.due_date && (
-          <Typography variant="body2" color="text.secondary">
-            Vencimento: {formatDateOnlyBR(expense.due_date)}
-          </Typography>
-        )}
-        {expense.paid_at && (
-          <Typography variant="body2" color="text.secondary">
-            Pago em: {formatPaidDateBR(expense.paid_at)}
-          </Typography>
-        )}
-        {expense.bank_account_name && (
-          <Typography variant="body2" color="text.secondary">
-            Conta: {expense.bank_account_name}
-          </Typography>
-        )}
-        {expense.receipt && (
-          <Box sx={{ mt: 1 }}>
-            <Button
-              size="small"
-              startIcon={<AttachFile />}
-              onClick={() => window.api.receipts.open(expense.receipt!)}
-            >
-              Comprovante
-            </Button>
+        <Divider sx={{ mb: 1 }} />
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            columnGap: 2,
+            rowGap: 1,
+          }}
+        >
+          <Box>
+            <Typography variant="caption" color="text.secondary" component="div">
+              Categoria
+            </Typography>
+            {expense.category_name ? (
+              <Chip
+                label={expense.category_name}
+                size="small"
+                sx={{
+                  bgcolor: expense.category_color ?? undefined,
+                  color: expense.category_color
+                    ? theme.palette.getContrastText(expense.category_color)
+                    : undefined,
+                  mt: 0.5,
+                }}
+              />
+            ) : (
+              <Typography variant="body2">—</Typography>
+            )}
           </Box>
-        )}
+          <Box>
+            <Typography variant="caption" color="text.secondary" component="div">
+              Vencimento
+            </Typography>
+            <Typography variant="body2">
+              {expense.due_date ? formatDateOnlyBR(expense.due_date) : '—'}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="caption" color="text.secondary" component="div">
+              Pago em
+            </Typography>
+            <Typography variant="body2">
+              {expense.paid_at ? formatPaidDateBR(expense.paid_at) : '—'}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="caption" color="text.secondary" component="div">
+              Comprovante
+            </Typography>
+            {expense.receipt ? (
+              <Button
+                size="small"
+                startIcon={<AttachFile fontSize="small" />}
+                onClick={() => window.api.receipts.open(expense.receipt!)}
+                sx={{ minWidth: 0, px: 0.5 }}
+              >
+                Ver
+              </Button>
+            ) : (
+              <Typography variant="body2">—</Typography>
+            )}
+          </Box>
+        </Box>
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
         {expense.is_paid ? (
