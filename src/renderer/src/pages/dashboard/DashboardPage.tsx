@@ -41,6 +41,7 @@ export function DashboardPage() {
   const [fromOverride, setFromOverride] = useState('');
   const [toOverride, setToOverride] = useState('');
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
+  const [defaultYearApplied, setDefaultYearApplied] = useState(false);
   const navigate = useNavigate();
   const { showError } = useSnackbar();
   const { bankAccounts } = useBankAccounts();
@@ -88,6 +89,24 @@ export function DashboardPage() {
   const toValue = toOverride || lastOption;
   const isFiltered = fromValue !== firstOption || toValue !== lastOption;
 
+  const last3Range = useMemo(() => {
+    if (monthOptions.length === 0) return null;
+    const start = monthOptions[Math.max(0, monthOptions.length - 3)].value;
+    return { from: start, to: lastOption };
+  }, [monthOptions, lastOption]);
+
+  const thisYearRange = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const yearOptions = monthOptions.filter((opt) => opt.value.startsWith(`${currentYear}`));
+    if (yearOptions.length === 0) return null;
+    return { from: yearOptions[0].value, to: yearOptions[yearOptions.length - 1].value };
+  }, [monthOptions]);
+
+  const isLast3Active = !!last3Range && fromValue === last3Range.from && toValue === last3Range.to;
+  const isThisYearActive =
+    !!thisYearRange && fromValue === thisYearRange.from && toValue === thisYearRange.to;
+  const isAllActive = !isFiltered;
+
   function applyRange(from: string, to: string) {
     setFromOverride(from);
     setToOverride(to);
@@ -118,6 +137,14 @@ export function DashboardPage() {
     if (yearOptions.length === 0) return;
     applyRange(yearOptions[0].value, yearOptions[yearOptions.length - 1].value);
   }
+
+  useEffect(() => {
+    if (!defaultYearApplied && monthOptions.length > 0) {
+      handleQuickThisYear();
+      setDefaultYearApplied(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [monthOptions, defaultYearApplied]);
 
   const filteredMonths = useMemo(() => {
     return months
@@ -284,11 +311,24 @@ export function DashboardPage() {
             <Chip
               label="Últimos 3 meses"
               size="small"
-              variant="outlined"
+              variant={isLast3Active ? 'filled' : 'outlined'}
+              color={isLast3Active ? 'primary' : 'default'}
               onClick={handleQuickLast3}
             />
-            <Chip label="Este ano" size="small" variant="outlined" onClick={handleQuickThisYear} />
-            <Chip label="Tudo" size="small" variant="outlined" onClick={handleClearRange} />
+            <Chip
+              label="Este ano"
+              size="small"
+              variant={isThisYearActive ? 'filled' : 'outlined'}
+              color={isThisYearActive ? 'primary' : 'default'}
+              onClick={handleQuickThisYear}
+            />
+            <Chip
+              label="Tudo"
+              size="small"
+              variant={isAllActive ? 'filled' : 'outlined'}
+              color={isAllActive ? 'primary' : 'default'}
+              onClick={handleClearRange}
+            />
           </Stack>
 
           {isFiltered && (
