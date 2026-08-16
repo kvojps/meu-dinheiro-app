@@ -34,13 +34,19 @@ export const APP_ERROR_DESCRIPTIONS: Record<AppErrorCode, string> = {
   unknown: 'Falha ao ler os dados locais.',
 };
 
-const MARKER = 'MDAPP';
+const MARKER = 'APPERR';
 const SEPARATOR = '/';
 
 export interface DecodedAppError {
   code: AppErrorCode;
   /** Mensagem técnica original, exibida como detalhe. */
   message: string;
+  /**
+   * `true` quando o erro veio do main já classificado. `false` é um erro nascido
+   * no próprio renderer — o código é 'unknown' por falta de informação, não por
+   * diagnóstico.
+   */
+  encoded: boolean;
 }
 
 function isAppErrorCode(value: string): value is AppErrorCode {
@@ -53,7 +59,7 @@ export function encodeAppError(code: AppErrorCode, message: string): string {
 
 export function decodeAppError(err: unknown, fallback = 'Ocorreu um erro'): DecodedAppError {
   const raw = err instanceof Error ? err.message : typeof err === 'string' ? err : '';
-  if (!raw) return { code: 'unknown', message: fallback };
+  if (!raw) return { code: 'unknown', message: fallback, encoded: false };
 
   const prefix = `${MARKER}${SEPARATOR}`;
   if (raw.startsWith(prefix)) {
@@ -61,9 +67,23 @@ export function decodeAppError(err: unknown, fallback = 'Ocorreu um erro'): Deco
     const at = rest.indexOf(SEPARATOR);
     const code = at >= 0 ? rest.slice(0, at) : '';
     if (isAppErrorCode(code)) {
-      return { code, message: rest.slice(at + 1) || fallback };
+      return { code, message: rest.slice(at + 1) || fallback, encoded: true };
     }
   }
 
-  return { code: 'unknown', message: raw };
+  return { code: 'unknown', message: raw, encoded: false };
+}
+
+/**
+ * Texto pronto para exibir ao usuário. Erros de domínio (`AppError`) já vêm com
+ * uma mensagem própria, escrita para ser lida; para falhas de sistema o texto
+ * técnico não ajuda ninguém e entra a descrição do código.
+ */
+export function describeAppError(err: unknown, fallback = 'Ocorreu um erro'): string {
+  const { code, message, encoded } = decodeAppError(err, fallback);
+  if (code === 'not-found' || code === 'invalid-input') return message;
+  // Erro que não atravessou o IPC (bug no renderer): sem classificação, a
+  // descrição de sistema afirmaria uma causa que ninguém apurou.
+  if (!encoded) return fallback;
+  return APP_ERROR_DESCRIPTIONS[code];
 }
