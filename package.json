@@ -4,7 +4,7 @@
   "private": true,
   "description": "Meu Dinheiro - controle de finanças pessoais",
   "author": "kvojps <62623689+kvojps@users.noreply.github.com>",
-  "homepage": "https://github.com/kvojps/my-desktop-apps",
+  "homepage": "https://github.com/kvojps/meu-dinheiro-app",
   "main": "./out/main/index.js",
   "license": "MIT",
   "scripts": {
