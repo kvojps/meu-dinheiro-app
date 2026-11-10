@@ -34,3 +34,6 @@ profiles/
 .env
 .env.*
 !.env.example
+
+# Candidatos privados de release
+release-assets/

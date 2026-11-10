@@ -1,8 +1,8 @@
 {
   "name": "meu-dinheiro-app",
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta.1",
   "private": true,
-  "description": "Meu Dinheiro - controle de finan\u00e7as pessoais",
+  "description": "Meu Dinheiro - controle de finanças pessoais",
   "author": "kvojps <62623689+kvojps@users.noreply.github.com>",
   "homepage": "https://github.com/kvojps/my-desktop-apps",
   "main": "./out/main/index.js",
@@ -13,8 +13,8 @@
     "build": "electron-vite build",
     "typecheck": "tsc --noEmit",
     "notices": "node scripts/generate-third-party-notices.mjs",
-    "dist:win": "npm run notices && electron-vite build && electron-builder --win",
-    "dist:linux": "npm run notices && electron-vite build && electron-builder --linux deb",
+    "dist:win": "npm run notices && electron-vite build && electron-builder --win nsis --x64 --publish never",
+    "dist:linux": "npm run notices && electron-vite build && electron-builder --linux deb --x64 --publish never",
     "postinstall": "install-electron && electron-builder install-app-deps",
     "lint": "eslint .",
     "test": "vitest run",
@@ -50,13 +50,29 @@
     ],
     "win": {
       "icon": "build/icon.ico",
-      "target": "nsis"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "meu-dinheiro-${version}-windows-${arch}.${ext}"
     },
     "linux": {
       "icon": "resources/icon.png",
-      "target": "deb",
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "category": "Office",
-      "maintainer": "kvojps <62623689+kvojps@users.noreply.github.com>"
+      "maintainer": "kvojps <62623689+kvojps@users.noreply.github.com>",
+      "artifactName": "meu-dinheiro-${version}-linux-${arch}.${ext}"
     },
     "nsis": {
       "oneClick": false,
