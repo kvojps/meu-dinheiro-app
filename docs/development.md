@@ -54,11 +54,11 @@ Não adicione perfis, ZIPs, bancos, logs ou comprovantes ao Git ou a `resources/
 
 ```bash
 npm run dist:linux
-npm run dist:win
 ```
 
-Geram os alvos `.deb` e NSIS definidos em `package.json`, incluindo build e avisos.
-Execute cada alvo no ambiente correspondente e confira os recursos e licenças.
+Gera o alvo `.deb` definido em `package.json`, incluindo build e avisos.
+Execute em Linux x64 e confira os recursos e licenças. O comando `dist:win`
+permanece experimental, fora desta pré-release e sem suporte validado.
 Para inspecionar o diretório Linux antes do instalador:
 
 ```bash
@@ -69,6 +69,7 @@ npx electron-builder --linux --dir
 
 Compilar não comprova instalação ou continuidade dos dados. Os comandos de build
 Linux e verificações autônomas já foram executados; empacotamento e instalação
-Windows, atualização e uso dos candidatos continuam pendentes. O ensaio local
+Windows estão fora desta entrega; atualização e uso do candidato Linux continuam
+pendentes. O ensaio local
 com diretório não instalado precisou de `--no-sandbox` por falta de helper SUID;
 não acrescente essa opção aos scripts ou às instruções de instalação.

@@ -6,6 +6,9 @@ Todas as imagens abaixo são capturas reais do bundle Electron em Linux x64,
 realizadas em 2026-11-10, com área de conteúdo de 1440 × 960 e tema claro como
 padrão. O perfil foi criado exclusivamente para demonstração, fora do repositório.
 Nenhum dado, backup ou log pessoal foi utilizado. Não são imagens geradas.
+O selo `1.0.0-beta` identifica o bundle usado nas capturas; o candidato de
+empacotamento é `1.0.0-beta.1`. As telas ilustram os fluxos, sem comprovar
+instalação ou validação dessa pré-release.
 
 ## Visão Geral
 

@@ -77,5 +77,6 @@ byte a byte com o ZIP. O tema e um arquivo órfão permaneceram no destino.
 A confirmação de importação foi percorrida na interface. Somente os caminhos dos
 diálogos nativos foram automatizados via DevTools; IPC, serviços, SQLite e ZIP
 foram os reais. Isso não valida a interação dos seletores nativos em cada sistema.
-Instalação, atualização e restauração pelos instaladores Linux/Windows e backups
-de versões anteriores ainda dependem da conferência dos candidatos.
+Instalação, atualização e restauração pelo instalador Linux e backups de versões
+anteriores ainda dependem da conferência do candidato. Windows está fora desta
+pré-release; o caminho esperado acima é referência técnica, sem suporte validado.

@@ -1,5 +1,9 @@
 # Tema Orca — Meu Dinheiro
 
+> Registro histórico da origem. Evidências e documentos de planejamento citados
+> não integram esta extração; os resultados abaixo descrevem os ensaios daquela
+> etapa, não uma validação dos instaladores independentes.
+
 ## Referência e alcance
 
 Referência fixa: [Orca, f2d5711b2d32e9f11277cd63805c76b0b5f9ddf7](https://github.com/stablyai/orca/tree/f2d5711b2d32e9f11277cd63805c76b0b5f9ddf7),
@@ -426,7 +430,7 @@ O CSS de referência consultado tem SHA-256
 
 Medido no app em execução, lendo as cores computadas dos elementos e a cor de
 fundo efetiva de cada um. Relatórios em
-[evidence/02](../../../.scratch/meu-dinheiro-design-orca/evidence/02/).
+evidence/02 (referência histórica na origem).
 
 ### Medições da issue 03 (superfícies reais, Electron)
 
@@ -455,7 +459,7 @@ Menor par de texto 5,27:1 (o valor no resumo do diálogo, sobre `accent`); menor
 marca 3,19:1 (a borda do campo de busca sobre o fundo da faixa de conteúdo). O
 ponto de categoria é cor escolhida pelo usuário entre os dez swatches do design
 system (§1.7); o medido acima é o primeiro deles. Relatórios em
-[evidence/03](../../../.scratch/meu-dinheiro-design-orca/evidence/03/).
+evidence/03 (referência histórica na origem).
 
 ### Medições da issue 04 (superfícies reais, Electron)
 
@@ -491,7 +495,7 @@ o valor ao lado dela, e a tabela repete os dois. A paleta oferecida no cadastro
 é assunto da issue 05.
 
 Relatórios em
-[evidence/04](../../../.scratch/meu-dinheiro-design-orca/evidence/04/).
+evidence/04 (referência histórica na origem).
 
 ### Medições da issue 05 (superfícies reais, Electron)
 
@@ -531,7 +535,7 @@ escolha passou a ser informada, no nome acessível da amostra e na nota do
 campo. Cores já cadastradas não foram tocadas.
 
 Relatórios em
-[evidence/05](../../../.scratch/meu-dinheiro-design-orca/evidence/05/).
+evidence/05 (referência histórica na origem).
 
 ### Medições da issue 06 (superfícies reais, Electron, sem MUI)
 
@@ -565,14 +569,14 @@ esqueleto sobre a faixa (1,04:1 e 1,31:1). O esqueleto é preenchido com
 `accent`, e é por isso que a faixa clara é `#fafafa` e não `#f5f5f5`: as duas
 iguais o apagariam. Com o azulado ele media 1,00:1 no claro — ou seja, a troca o
 tornou visível, não menos.
-[faixa-neutra.json](../../../.scratch/meu-dinheiro-design-orca/evidence/06/faixa-neutra.json).
+faixa-neutra.json (referência histórica na origem).
 
 O anel de foco foi conferido **por evento de teclado real** (o
 `:focus-visible` não responde a foco programático), inclusive no item do menu
 desenhado em portal, que é o caso que só a regra de documento alcança:
 2px `#3987e5` com offset 2px, e Escape devolvendo o foco ao gatilho.
-[transversais.json](../../../.scratch/meu-dinheiro-design-orca/evidence/06/transversais.json),
-[teclado.json](../../../.scratch/meu-dinheiro-design-orca/evidence/06/teclado.json).
+transversais.json (referência histórica na origem),
+teclado.json (referência histórica na origem).
 
 **A retirada foi medida, e não só observada.** O estilo computado e a caixa de
 cada nó visível **dentro de `.money-layout`** foram fotografados nas mesmas 24
@@ -592,12 +596,12 @@ acrescenta a esses mesmos dois contêineres o fundo deles — a única diferenç
 **intencional** desta issue. E o `<option>`, que tem caixa zero: ali ficam os dez
 botões de amostra do cadastro de categoria, que computam a fonte padrão do
 navegador por não declararem família — idênticos antes e depois, e sem texto.
-[regressao-visual.json](../../../.scratch/meu-dinheiro-design-orca/evidence/06/regressao-visual.json),
-[ancestrais](../../../.scratch/meu-dinheiro-design-orca/evidence/06/ancestrais-depois.json).
+regressao-visual.json (referência histórica na origem),
+ancestrais (referência histórica na origem).
 
 Validação Electron e capturas em
-[Comments da issue 01](../../../.scratch/meu-dinheiro-design-orca/issues/01-tema-e-navegacao.md)
-e [da issue 02](../../../.scratch/meu-dinheiro-design-orca/issues/02-visao-geral.md).
+Comments da issue 01 (referência histórica na origem)
+e da issue 02 (referência histórica na origem).
 A matriz cobriu cinco rotas, dois modos, duas larguras e lateral aberta/recolhida
 (40 combinações), sem overflow horizontal. Os controles foram exercitados com
 Tab, Shift+Tab, Enter e Espaço, com anel de foco de 2px nos dois modos.
