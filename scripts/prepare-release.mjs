@@ -12,7 +12,7 @@ if (
   execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim() !== commit
 )
   throw new Error('Commit não fixado');
-const names = [`meu-dinheiro-${version}-linux-x64.deb`, `meu-dinheiro-${version}-windows-x64.exe`];
+const names = [`meu-dinheiro-${version}-linux-x64.deb`];
 if (readdirSync('release-assets').sort().join('\n') !== [...names].sort().join('\n'))
   throw new Error('Conjunto de instaladores inesperado');
 const checksums = names

@@ -17,10 +17,13 @@ Veja as [demais telas e o cenário](docs/screenshots.md), incluindo o tema escur
 ## Instalação
 
 A publicação independente está em preparação. Ainda não há instalador independente
-validado indicado aqui. Os formatos previstos são **Windows x64 (NSIS, `.exe`)**
-e **Linux x64 (Debian/Ubuntu, `.deb`)**; os nomes e links definitivos serão
-conferidos com os candidatos da release. Não há instruções validadas para macOS
-ou outras arquiteturas.
+validado indicado aqui. Esta pré-release terá apenas **Linux x64
+(Debian/Ubuntu, `.deb`)**; o nome e link definitivos serão conferidos com o
+candidato da release.
+
+**Windows:** fora desta pré-release. Não há instalador independente oferecido
+nem validação nesse sistema; a configuração NSIS existente é experimental.
+Não há instruções validadas para macOS ou outras arquiteturas.
 
 O [guia de instalação](docs/installation.md) prepara os passos de conferência dos
 candidatos, incluindo integridade, atualização e limites da versão sem assinatura.

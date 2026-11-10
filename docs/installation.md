@@ -8,9 +8,13 @@ A release independente está em preparação. Este roteiro deve ser conferido no
 candidatos antes de acrescentar links de download e declarar suporte validado.
 Não há instaladores independentes aprovados por este documento.
 
-Estão previstos NSIS `.exe` para Windows x64 e `.deb` para Linux x64
-(Debian/Ubuntu). A versão final, os nomes dos arquivos, os requisitos mínimos e
-os avisos efetivos de instalação serão registrados junto da release candidata.
+Está previsto somente `.deb` para Linux x64 (Debian/Ubuntu). A versão final,
+o nome do arquivo, os requisitos mínimos e os avisos efetivos de instalação
+serão registrados junto da release candidata.
+
+**Windows:** fora desta pré-release. Não há instalador independente oferecido
+nem validação de instalação, atualização ou recuperação de dados nesse sistema.
+A configuração NSIS existente é experimental; não implica suporte validado.
 
 ## Conferir o arquivo
 
@@ -19,12 +23,6 @@ de executar. Substitua `ARQUIVO` pelo caminho real do candidato:
 
 ```bash
 sha256sum 'ARQUIVO.deb'
-```
-
-No PowerShell:
-
-```powershell
-Get-FileHash -Algorithm SHA256 -LiteralPath '.\ARQUIVO.exe'
 ```
 
 O checksum detecta diferença de conteúdo; não é assinatura digital nem prova
@@ -45,14 +43,7 @@ Abra **Meu Dinheiro** pelo menu de aplicativos. Confira a versão em
 **Configurações → Sobre**, a abertura das telas e a pasta de dados. Este comando
 é uma instrução preparada, ainda não uma prova de instalação do candidato.
 
-## Windows x64 — roteiro a validar
-
-Execute o `.exe` NSIS do candidato e siga as telas do assistente; a configuração
-atual permite escolher o diretório de instalação. Abra **Meu Dinheiro**, confira
-a versão e a pasta de dados, e registre eventuais avisos do Windows. O instalador
-não foi executado em Windows nesta etapa.
-
-## Atualização e recuperação — ambos os sistemas
+## Atualização e recuperação — Linux
 
 Exporte um backup antes de atualizar. No ensaio de continuidade, use somente
 cadastros e comprovantes fictícios: instale a versão anterior, prepare os dados,
