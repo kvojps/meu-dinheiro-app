@@ -34,6 +34,17 @@ Use `npm run format:check` para conferir formatação. A geração de avisos usa
 árvore instalada e falha se `npm ls` detectar inconsistências. Consulte os
 [detalhes da validação autônoma](standalone-validation.md).
 
+## Dependências e correções de segurança
+
+O runtime está fixado em Electron 43.8.8; a validação usa Zod 4.6.7 ou
+posterior compatível. O lockfile registra as versões efetivamente verificadas.
+O `override` de minimatch para a linha 11 corrige o alerta
+[GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249),
+que também afeta a linha 10 exigida por consumidores transitivos. Ao alterar
+esse override, confira backup com comprovantes, lint, testes, build e
+empacotamento, além de renovar os avisos de terceiros e o `npm audit`.
+Não use `npm audit fix --force` para trocar contratos automaticamente.
+
 ## Separar dados de ensaio
 
 Desenvolvimento também usa a identidade `meu-dinheiro`. Antes de iniciar, escolha
