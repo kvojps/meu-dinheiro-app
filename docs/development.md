@@ -38,9 +38,10 @@ Use `npm run format:check` para conferir formatação. A geração de avisos usa
 
 O runtime está fixado em Electron 43.8.8; a validação usa Zod 4.6.7 ou
 posterior compatível. O lockfile registra as versões efetivamente verificadas.
-O `override` de minimatch para a linha 11 corrige o alerta
+O `override` das linhas afetadas (7 a 10) de minimatch para a linha 11 corrige o alerta
 [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249),
-que também afeta a linha 10 exigida por consumidores transitivos. Ao alterar
+que também afeta a linha 10 exigida por consumidores transitivos. As linhas
+legadas 3 e 5 conservam suas APIs, pois não são afetadas por esse alerta. Ao alterar
 esse override, confira backup com comprovantes, lint, testes, build e
 empacotamento, além de renovar os avisos de terceiros e o `npm audit`.
 Não use `npm audit fix --force` para trocar contratos automaticamente.
