@@ -42,7 +42,12 @@ function licenseTextOf(dir) {
       const nested = licenseTextOf(path);
       if (nested) texts.push(`${entry.name}/\n${nested}`);
     } else if (entry.isFile() && LICENSE_FILE.test(entry.name)) {
-      texts.push(`${entry.name}\n${readFileSync(path, 'utf8').replace(/\r\n/g, '\n').trim()}`);
+      texts.push(
+        `${entry.name}\n${readFileSync(path, 'utf8')
+          .replace(/\r\n/g, '\n')
+          .replace(/[ \t]+$/gm, '')
+          .trim()}`,
+      );
     }
   }
   if (texts.length) return texts.join('\n\n');
