@@ -1,4 +1,4 @@
-# Avisos de terceiros — meu-dinheiro-app 1.0.0-beta
+# Avisos de terceiros — meu-dinheiro-app 1.0.0-beta.1
 
 Gerado por `scripts/generate-third-party-notices.mjs`; não editar à mão.
 Reúne 143 pacotes distribuídos junto com o aplicativo. O código

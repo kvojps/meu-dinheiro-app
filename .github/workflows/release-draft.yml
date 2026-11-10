@@ -47,6 +47,21 @@ jobs:
       - run: npm run dist:${{ matrix.target }}
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Conferir metadados deb
+        if: matrix.target == 'linux'
+        shell: bash
+        run: |
+          file=dist/meu-dinheiro-1.0.0-beta.1-linux-x64.deb
+          test "$(dpkg-deb -f "$file" Package)" = meu-dinheiro-app
+          test "$(dpkg-deb -f "$file" Version)" = 1.0.0~beta.1
+          test "$(dpkg-deb -f "$file" Architecture)" = amd64
+      - name: Conferir metadados NSIS
+        if: matrix.target == 'win'
+        shell: pwsh
+        run: |
+          $installer = Get-Item dist/meu-dinheiro-1.0.0-beta.1-windows-x64.exe
+          if ($installer.VersionInfo.ProductVersion -ne '1.0.0-beta.1') { throw 'Versão NSIS inesperada' }
+          if ($installer.VersionInfo.ProductName -ne 'Meu Dinheiro') { throw 'Produto NSIS inesperado' }
       - uses: actions/upload-artifact@v4
         with:
           name: installer-${{ matrix.target }}
