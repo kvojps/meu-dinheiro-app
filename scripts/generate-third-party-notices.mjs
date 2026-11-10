@@ -5,15 +5,10 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const app = process.argv[2];
-if (!app) {
-  console.error('uso: generate-third-party-notices.mjs <workspace>');
-  process.exit(1);
-}
-
-const root = new URL('..', import.meta.url).pathname;
-const appDir = join(root, 'apps', app);
+const root = fileURLToPath(new URL('..', import.meta.url));
+const appDir = root;
 
 const LICENSE_FILE = /^(LICEN[CS]E|COPYING|NOTICE|OFL)([.-].*)?$/i;
 
@@ -38,14 +33,25 @@ function licenseTextOf(dir) {
   } catch {
     return null;
   }
-  const match = files
-    .filter((entry) => entry.isFile() && LICENSE_FILE.test(entry.name))
-    .sort((a, b) => a.name.localeCompare(b.name))[0];
-  if (!match) return null;
-  // Alguns pacotes publicam o texto da licença com CRLF; normaliza para LF para
-  // o arquivo gerado casar com o `eol=lf` do `.gitattributes` e uma re-geração
-  // não sujar o working tree.
-  return readFileSync(join(dir, match.name), 'utf8').replace(/\r\n/g, '\n').trim();
+  // Inclui avisos de código vendorizado e arquivos NOTICE, sem percorrer
+  // dependências npm (coletadas separadamente) nem seguir links simbólicos.
+  const texts = [];
+  for (const entry of files.sort((a, b) => a.name.localeCompare(b.name))) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory() && entry.name !== 'node_modules') {
+      const nested = licenseTextOf(path);
+      if (nested) texts.push(`${entry.name}/\n${nested}`);
+    } else if (entry.isFile() && LICENSE_FILE.test(entry.name)) {
+      texts.push(`${entry.name}\n${readFileSync(path, 'utf8').replace(/\r\n/g, '\n').trim()}`);
+    }
+  }
+  if (texts.length) return texts.join('\n\n');
+  // Alguns pacotes antigos, como isarray, publicam a MIT só no README.
+  const readme = files.find((entry) => entry.isFile() && /^readme\.md$/i.test(entry.name));
+  if (!readme) return null;
+  const contents = readFileSync(join(dir, readme.name), 'utf8').replace(/\r\n/g, '\n');
+  const licenseSection = contents.match(/^##? Licen[cs]e\s*\n([\s\S]*?)(?=^##? |$(?![\s\S]))/im);
+  return licenseSection ? `${readme.name} — License\n${licenseSection[1].trim()}` : null;
 }
 
 function authorOf(pkg) {
@@ -61,8 +67,8 @@ const packages = new Map();
 
 function collect(node) {
   for (const [name, entry] of Object.entries(node.dependencies ?? {})) {
-    // Workspaces locais não são terceiros: o LICENSE da raiz já os cobre.
-    const local = entry.resolved?.startsWith('file:') || name === app;
+    // Dependências locais não são terceiros: o LICENSE da raiz já as cobre.
+    const local = entry.resolved?.startsWith('file:');
     const key = `${name}@${entry.version}`;
     if (!local && entry.path && !packages.has(key)) {
       packages.set(key, { name, version: entry.version, dir: entry.path });
@@ -71,21 +77,15 @@ function collect(node) {
   }
 }
 
-// `npm ls` sai com código != 0 quando a árvore tem qualquer problema (dep
-// extraneous, versão inválida herdada de outro workspace), mas ainda assim
-// emite o JSON completo no stdout. O que interessa aqui é a árvore; lê-se o
-// stdout do erro nesse caso em vez de abortar.
+// Uma árvore inválida não pode produzir avisos que aparentem estar completos.
 function npmLs() {
-  try {
-    return execFileSync('npm', ['ls', '--omit=dev', '--all', '--long', '--json', '-w', app], {
-      cwd: root,
-      encoding: 'utf8',
-      maxBuffer: 64 * 1024 * 1024,
-    });
-  } catch (err) {
-    if (err.stdout) return err.stdout;
-    throw err;
-  }
+  const npmCli = process.env.npm_execpath;
+  if (!npmCli) throw new Error('Execute o gerador com npm run notices.');
+  return execFileSync(process.execPath, [npmCli, 'ls', '--omit=dev', '--all', '--long', '--json'], {
+    cwd: root,
+    encoding: 'utf8',
+    maxBuffer: 64 * 1024 * 1024,
+  });
 }
 
 const tree = JSON.parse(npmLs());

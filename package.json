@@ -2,7 +2,7 @@
   "name": "meu-dinheiro-app",
   "version": "1.0.0-beta",
   "private": true,
-  "description": "Meu Dinheiro - controle de finanças pessoais",
+  "description": "Meu Dinheiro - controle de finan\u00e7as pessoais",
   "author": "kvojps <62623689+kvojps@users.noreply.github.com>",
   "homepage": "https://github.com/kvojps/my-desktop-apps",
   "main": "./out/main/index.js",
@@ -12,9 +12,14 @@
     "preview": "electron-vite preview",
     "build": "electron-vite build",
     "typecheck": "tsc --noEmit",
-    "notices": "node ../../scripts/generate-third-party-notices.mjs meu-dinheiro-app",
+    "notices": "node scripts/generate-third-party-notices.mjs",
     "dist:win": "npm run notices && electron-vite build && electron-builder --win",
-    "dist:linux": "npm run notices && electron-vite build && electron-builder --linux deb"
+    "dist:linux": "npm run notices && electron-vite build && electron-builder --linux deb",
+    "postinstall": "install-electron && electron-builder install-app-deps",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "build": {
     "appId": "com.meudinheiro.app",
@@ -39,7 +44,7 @@
         "to": "THIRD-PARTY-NOTICES.md"
       },
       {
-        "from": "../../LICENSE",
+        "from": "LICENSE",
         "to": "LICENSE"
       }
     ],
@@ -84,6 +89,16 @@
     "electron": "43.4.0",
     "electron-builder": "^26.15.3",
     "electron-vite": "^5.0.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "@eslint/js": "^10.0.1",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "eslint": "^10.6.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.7.0",
+    "prettier": "^3.9.4",
+    "typescript": "^5.8.0",
+    "typescript-eslint": "^8.63.0",
+    "vitest": "^4.1.11"
   }
 }

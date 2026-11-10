@@ -5,7 +5,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['**/node_modules', '**/out', '**/dist', '**/build'] },
+  { ignores: ['**/node_modules', '**/out', '**/dist', '**/build', '.agents/**', '.claude/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -13,15 +13,11 @@ export default tseslint.config(
     languageOptions: { globals: globals.node },
   },
   {
-    files: [
-      'apps/*/src/main/**/*.ts',
-      'apps/*/src/preload/**/*.ts',
-      'apps/*/electron.vite.config.ts',
-    ],
+    files: ['src/main/**/*.ts', 'src/preload/**/*.ts', 'electron.vite.config.ts'],
     languageOptions: { globals: globals.node },
   },
   {
-    files: ['apps/*/src/renderer/**/*.{ts,tsx}'],
+    files: ['src/renderer/**/*.{ts,tsx}'],
     languageOptions: { globals: globals.browser },
     plugins: { 'react-hooks': reactHooks },
     rules: {
@@ -59,7 +55,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['apps/*/src/renderer/src/api/client.ts'],
+    files: ['src/renderer/src/api/client.ts'],
     rules: { 'no-restricted-properties': 'off' },
   },
   prettier,

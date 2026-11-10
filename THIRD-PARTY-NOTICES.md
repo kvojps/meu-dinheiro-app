@@ -1,7 +1,7 @@
 # Avisos de terceiros — meu-dinheiro-app 1.0.0-beta
 
 Gerado por `scripts/generate-third-party-notices.mjs`; não editar à mão.
-Reúne 144 pacotes distribuídos junto com o aplicativo. O código
+Reúne 143 pacotes distribuídos junto com o aplicativo. O código
 próprio está sob a licença do `LICENSE` na raiz do repositório.
 
 O binário do Electron embarca Chromium e Node.js, cujos avisos completos são
@@ -14,6 +14,7 @@ Autoria: Google Inc.
 Origem: https://fontsource.org/fonts/geist
 
 ```
+LICENSE
 Copyright 2024 The Geist Project Authors (https://github.com/vercel/geist-font) Geist-Italic[wght].ttf: Copyright 2024 The Geist Project Authors (https://github.com/vercel/geist-font)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
@@ -109,13 +110,14 @@ FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
 OTHER DEALINGS IN THE FONT SOFTWARE.
 ```
 
-## @hookform/resolvers 5.9.0
+## @hookform/resolvers 5.9.2
 
 Licença: MIT
 Autoria: bluebill1049 <bluebill1049@hotmail.com>
 Origem: https://react-hook-form.com
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2019-present Beier(Bill) Luo
@@ -146,6 +148,7 @@ Autoria: Mark Erikson <mark@isquaredsoftware.com>
 Origem: https://redux-toolkit.js.org
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2018 Mark Erikson
@@ -176,6 +179,7 @@ Autoria: Colin McDonnell
 Origem: https://standardschema.dev
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2024 Colin McDonnell
@@ -205,6 +209,7 @@ Licença: MIT
 Autoria: Fabian Hiller
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2024 Fabian Hiller
@@ -234,6 +239,7 @@ Licença: MIT
 Origem: https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-array
 
 ```
+LICENSE
 MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -263,6 +269,7 @@ Licença: MIT
 Origem: https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-color
 
 ```
+LICENSE
 MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -292,6 +299,7 @@ Licença: MIT
 Origem: https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-ease
 
 ```
+LICENSE
 MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -321,6 +329,7 @@ Licença: MIT
 Origem: https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-interpolate
 
 ```
+LICENSE
 MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -350,6 +359,7 @@ Licença: MIT
 Origem: https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-path
 
 ```
+LICENSE
 MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -379,6 +389,7 @@ Licença: MIT
 Origem: https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-scale
 
 ```
+LICENSE
 MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -408,6 +419,7 @@ Licença: MIT
 Origem: https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-shape
 
 ```
+LICENSE
 MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -437,6 +449,7 @@ Licença: MIT
 Origem: https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-time
 
 ```
+LICENSE
 MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -466,6 +479,7 @@ Licença: MIT
 Origem: https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-timer
 
 ```
+LICENSE
 MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -495,6 +509,7 @@ Licença: MIT
 Origem: https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react
 
 ```
+LICENSE
 MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -524,6 +539,7 @@ Licença: MIT
 Origem: https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/use-sync-external-store
 
 ```
+LICENSE
 MIT License
 
     Copyright (c) Microsoft Corporation.
@@ -554,6 +570,7 @@ Autoria: Toru Nagashima (https://github.com/mysticatea)
 Origem: https://github.com/mysticatea/abort-controller#readme
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2017 Toru Nagashima
@@ -577,16 +594,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## ajv 6.15.0
+## ajv 8.20.0
 
 Licença: MIT
 Autoria: Evgeny Poberezkin
-Origem: https://github.com/ajv-validator/ajv
+Origem: https://ajv.js.org
 
 ```
+LICENSE
 The MIT License (MIT)
 
-Copyright (c) 2015-2017 Evgeny Poberezkin
+Copyright (c) 2015-2021 Evgeny Poberezkin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -614,6 +632,7 @@ Autoria: Chris Talkington
 Origem: https://github.com/archiverjs/node-archiver
 
 ```
+LICENSE
 Copyright (c) 2012-2014 Chris Talkington, contributors.
 
 Permission is hereby granted, free of charge, to any person
@@ -645,6 +664,7 @@ Autoria: Caolan McMahon
 Origem: https://caolan.github.io/async/
 
 ```
+LICENSE
 Copyright (c) 2010-2018 Caolan McMahon
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -673,6 +693,7 @@ Autoria: Holepunch
 Origem: https://github.com/holepunchto/b4a#readme
 
 ```
+LICENSE
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -881,6 +902,7 @@ Apache License
 Licença: MIT
 
 ```
+LICENSE.md
 (MIT)
 
 Original code Copyright Julian Gruber <julian@juliangruber.com>
@@ -913,6 +935,7 @@ Autoria: Holepunch
 Origem: https://github.com/holepunchto/bare-events#readme
 
 ```
+LICENSE
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -1123,6 +1146,7 @@ Autoria: Holepunch
 Origem: https://github.com/holepunchto/bare-fs#readme
 
 ```
+LICENSE
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -1333,6 +1357,7 @@ Autoria: Holepunch
 Origem: https://github.com/holepunchto/bare-path#readme
 
 ```
+LICENSE
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -1534,6 +1559,36 @@ Apache License
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+NOTICE
+Copyright 2023 Holepunch Inc
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+---
+
+Copyright Joyent, Inc. and other Node contributors.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the
+following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
 ```
 
 ## bare-stream 2.13.3
@@ -1543,6 +1598,7 @@ Autoria: Holepunch
 Origem: https://github.com/holepunchto/bare-stream#readme
 
 ```
+LICENSE
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -1753,6 +1809,7 @@ Autoria: Holepunch
 Origem: https://github.com/holepunchto/bare-url
 
 ```
+LICENSE
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -1963,6 +2020,7 @@ Autoria: T. Jameson Little <t.jameson.little@gmail.com>
 Origem: https://github.com/beatgammit/base64-js
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2014 Jameson Little
@@ -1993,6 +2051,7 @@ Autoria: Joshua Wise <joshuathomaswise@gmail.com>
 Origem: http://github.com/WiseLibs/better-sqlite3
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2017 Joshua Wise
@@ -2023,6 +2082,7 @@ Autoria: Nathan Rajlich <nathan@tootallnate.net> (http://tootallnate.net)
 Origem: https://github.com/TooTallNate/node-bindings
 
 ```
+LICENSE.md
 (The MIT License)
 
 Copyright (c) 2012 Nathan Rajlich &lt;nathan@tootallnate.net&gt;
@@ -2053,6 +2113,7 @@ Licença: MIT
 Origem: https://github.com/rvagg/bl
 
 ```
+LICENSE.md
 The MIT License (MIT)
 =====================
 
@@ -2075,6 +2136,7 @@ Autoria: Petka Antonov <petka_antonov@hotmail.com>
 Origem: https://github.com/petkaantonov/bluebird
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2013-2018 Petka Antonov
@@ -2103,6 +2165,7 @@ THE SOFTWARE.
 Licença: MIT
 
 ```
+LICENSE
 MIT License
 
 Copyright Julian Gruber <julian@juliangruber.com>
@@ -2135,6 +2198,7 @@ Autoria: Feross Aboukhadijeh <feross@feross.org>
 Origem: https://github.com/feross/buffer
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) Feross Aboukhadijeh, and other contributors.
@@ -2165,6 +2229,7 @@ Autoria: Feross Aboukhadijeh <feross@feross.org>
 Origem: https://github.com/feross/buffer
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) Feross Aboukhadijeh, and other contributors.
@@ -2195,6 +2260,7 @@ Autoria: Brian J. Brennan <brianloveswords@gmail.com>
 Origem: https://github.com/brianloveswords/buffer-crc32
 
 ```
+LICENSE
 The MIT License
 
 Copyright (c) 2013-2024 Brian J. Brennan
@@ -2222,6 +2288,7 @@ Licença: ISC
 Autoria: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
 
 ```
+LICENSE
 The ISC License
 
 Copyright (c) Isaac Z. Schlueter and Contributors
@@ -2245,6 +2312,7 @@ Licença: MIT
 Autoria: Luke Edwards <luke.edwards05@gmail.com>
 
 ```
+license
 MIT License
 
 Copyright (c) Luke Edwards <luke.edwards05@gmail.com> (lukeed.com)
@@ -2263,6 +2331,7 @@ Autoria: Chris Talkington
 Origem: https://github.com/archiverjs/node-compress-commons
 
 ```
+LICENSE
 Copyright (c) 2014 Chris Talkington, contributors.
 
 Permission is hereby granted, free of charge, to any person
@@ -2293,6 +2362,7 @@ Licença: MIT
 Autoria: Roman Shtylman <shtylman@gmail.com>
 
 ```
+LICENSE
 (The MIT License)
 
 Copyright (c) 2012-2014 Roman Shtylman <shtylman@gmail.com>
@@ -2324,6 +2394,7 @@ Licença: MIT
 Autoria: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
 
 ```
+LICENSE
 Copyright Node.js contributors. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -2352,6 +2423,7 @@ Autoria: sheetjs
 Origem: https://sheetjs.com/
 
 ```
+LICENSE
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -2562,6 +2634,7 @@ Autoria: Chris Talkington
 Origem: https://github.com/archiverjs/node-crc32-stream
 
 ```
+LICENSE
 Copyright (c) 2014 Chris Talkington, contributors.
 
 Permission is hereby granted, free of charge, to any person
@@ -2592,6 +2665,7 @@ Licença: MIT
 Autoria: Fredrik Nicol <fredrik.nicol@gmail.com>
 
 ```
+LICENSE
 Copyright (c) 2017-2018 Fredrik Nicol
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -2620,6 +2694,7 @@ Autoria: Mike Bostock
 Origem: https://d3js.org/d3-array/
 
 ```
+LICENSE
 Copyright 2010-2023 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -2642,6 +2717,7 @@ Autoria: Mike Bostock
 Origem: https://d3js.org/d3-color/
 
 ```
+LICENSE
 Copyright 2010-2022 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -2664,6 +2740,7 @@ Autoria: Mike Bostock
 Origem: https://d3js.org/d3-ease/
 
 ```
+LICENSE
 Copyright 2010-2021 Mike Bostock
 Copyright 2001 Robert Penner
 All rights reserved.
@@ -2701,6 +2778,7 @@ Autoria: Mike Bostock
 Origem: https://d3js.org/d3-format/
 
 ```
+LICENSE
 Copyright 2010-2026 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -2723,6 +2801,7 @@ Autoria: Mike Bostock
 Origem: https://d3js.org/d3-interpolate/
 
 ```
+LICENSE
 Copyright 2010-2021 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -2745,6 +2824,7 @@ Autoria: Mike Bostock
 Origem: https://d3js.org/d3-path/
 
 ```
+LICENSE
 Copyright 2015-2022 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -2767,6 +2847,7 @@ Autoria: Mike Bostock
 Origem: https://d3js.org/d3-scale/
 
 ```
+LICENSE
 Copyright 2010-2021 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -2789,6 +2870,7 @@ Autoria: Mike Bostock
 Origem: https://d3js.org/d3-shape/
 
 ```
+LICENSE
 Copyright 2010-2022 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -2811,6 +2893,7 @@ Autoria: Mike Bostock
 Origem: https://d3js.org/d3-time/
 
 ```
+LICENSE
 Copyright 2010-2022 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -2833,6 +2916,7 @@ Autoria: Mike Bostock
 Origem: https://d3js.org/d3-time-format/
 
 ```
+LICENSE
 Copyright 2010-2021 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -2855,6 +2939,7 @@ Autoria: Mike Bostock
 Origem: https://d3js.org/d3-timer/
 
 ```
+LICENSE
 Copyright 2010-2021 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -2876,6 +2961,7 @@ Licença: MIT
 Autoria: Michael Mclaughlin <M8ch88l@gmail.com>
 
 ```
+LICENCE.md
 The MIT Expat Licence.
 
 Copyright (c) 2020 Michael Mclaughlin
@@ -2906,6 +2992,7 @@ Licença: MIT
 Autoria: Sindre Sorhus <sindresorhus@gmail.com>
 
 ```
+license
 MIT License
 
 Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
@@ -2924,6 +3011,7 @@ Autoria: Viacheslav Lotsmanov <lotsmanov89@gmail.com>
 Origem: https://github.com/unclechu/node-deep-extend
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2013-2018, Viacheslav Lotsmanov
@@ -2952,6 +3040,7 @@ Licença: Apache-2.0
 Autoria: Lovell Fuller <npm@lovell.info>
 
 ```
+LICENSE
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -3161,6 +3250,7 @@ Licença: BSD-3-Clause
 Autoria: Conrad Pankoff <deoxxa@fknsrs.biz> (http://www.fknsrs.biz/)
 
 ```
+LICENSE.md
 Copyright (c) 2013, Deoxxa Development
 ======================================
 All rights reserved.
@@ -3195,6 +3285,31 @@ Licença: MIT
 Autoria: Electron Community
 
 ```
+dist/
+LICENSE
+Copyright (c) Electron contributors
+Copyright (c) 2013-2020 GitHub Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+LICENSE
 Copyright (c) Electron contributors
 Copyright (c) 2013-2020 GitHub Inc.
 
@@ -3225,6 +3340,7 @@ Autoria: Mathias Buus <mathiasbuus@gmail.com>
 Origem: https://github.com/mafintosh/end-of-stream
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2014 Mathias Buus
@@ -3254,6 +3370,7 @@ Licença: MIT
 Origem: https://es-toolkit.dev
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2024 Viva Republica, Inc.
@@ -3284,6 +3401,7 @@ Autoria: Toru Nagashima
 Origem: https://github.com/mysticatea/event-target-shim
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2015 Toru Nagashima
@@ -3313,6 +3431,7 @@ Licença: MIT
 Autoria: Arnout Kazemier
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2014 Arnout Kazemier
@@ -3342,6 +3461,7 @@ Licença: MIT
 Autoria: Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)
 
 ```
+LICENSE
 MIT
 
 Copyright Joyent, Inc. and other Node contributors.
@@ -3373,6 +3493,7 @@ Autoria: Holepunch
 Origem: https://github.com/holepunchto/events-universal#readme
 
 ```
+LICENSE
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -3583,6 +3704,7 @@ Autoria: LM <ralphtheninja@riseup.net>
 Origem: https://github.com/ralphtheninja/expand-template
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2018 Lars-Magnus Skog
@@ -3613,6 +3735,7 @@ Autoria: Evgeny Poberezkin
 Origem: https://github.com/epoberezkin/fast-deep-equal#readme
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2017 Evgeny Poberezkin
@@ -3643,6 +3766,7 @@ Autoria: Mathias Buus (@mafintosh)
 Origem: https://github.com/mafintosh/fast-fifo
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2019 Mathias Buus
@@ -3666,34 +3790,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
 
-## fast-json-stable-stringify 2.1.0
+## fast-uri 3.1.5
 
-Licença: MIT
-Autoria: James Halliday <mail@substack.net>
-Origem: https://github.com/epoberezkin/fast-json-stable-stringify
+Licença: BSD-3-Clause
+Autoria: Vincent Le Goff <vince.legoff@gmail.com> (https://github.com/zekth)
+Origem: https://github.com/fastify/fast-uri
 
 ```
-This software is released under the MIT license:
+LICENSE
+Copyright (c) 2011-2021, Gary Court until https://github.com/garycourt/uri-js/commit/a1acf730b4bba3f1097c9f52e7d9d3aba8cdcaae
+Copyright (c) 2021-present The Fastify team <https://github.com/fastify/fastify#team>
+All rights reserved.
 
-Copyright (c) 2017 Evgeny Poberezkin
-Copyright (c) 2013 James Halliday
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * The names of any contributors may not be used to endorse or promote
+      products derived from this software without specific prior written
+      permission.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS AND CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+                                  *   *   *
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+The complete list of contributors can be found at:
+- https://github.com/garycourt/uri-js/graphs/contributors
 ```
 
 ## file-uri-to-path 1.0.0
@@ -3703,6 +3837,7 @@ Autoria: Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)
 Origem: https://github.com/TooTallNate/file-uri-to-path
 
 ```
+LICENSE
 Copyright (c) 2014 Nathan Rajlich <nathan@tootallnate.net>
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -3732,6 +3867,7 @@ Autoria: Mathias Buus (@mafintosh)
 Origem: https://github.com/mafintosh/fs-constants
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2018 Mathias Buus
@@ -3762,6 +3898,7 @@ Autoria: JP Richardson <jprichardson@gmail.com>
 Origem: https://github.com/jprichardson/node-fs-extra
 
 ```
+LICENSE
 (The MIT License)
 
 Copyright (c) 2011-2024 JP Richardson
@@ -3786,6 +3923,7 @@ Autoria: James Halliday <mail@substack.net>
 Origem: https://github.com/substack/github-from-package
 
 ```
+LICENSE
 This software is released under the MIT license:
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -3811,6 +3949,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 Licença: ISC
 
 ```
+LICENSE
 The ISC License
 
 Copyright (c) 2011-2022 Isaac Z. Schlueter, Ben Noordhuis, and Contributors
@@ -3834,6 +3973,7 @@ Licença: BSD-3-Clause
 Autoria: Feross Aboukhadijeh <feross@feross.org>
 
 ```
+LICENSE
 Copyright 2008 Fair Oaks Labs, Inc.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -3854,6 +3994,7 @@ Autoria: Michel Weststrate <info@michel.codes>
 Origem: https://github.com/immerjs/immer#readme
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2017 Michel Weststrate
@@ -3882,6 +4023,7 @@ SOFTWARE.
 Licença: ISC
 
 ```
+LICENSE
 The ISC License
 
 Copyright (c) Isaac Z. Schlueter
@@ -3905,6 +4047,7 @@ Licença: ISC
 Autoria: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
 
 ```
+LICENSE
 The ISC License
 
 Copyright (c) Isaac Z. Schlueter and Contributors
@@ -3929,6 +4072,7 @@ Autoria: Mike Bostock
 Origem: https://github.com/mbostock/internmap/
 
 ```
+LICENSE
 Copyright 2021 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -3950,6 +4094,7 @@ Licença: MIT
 Autoria: Sindre Sorhus <sindresorhus@gmail.com>
 
 ```
+license
 MIT License
 
 Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
@@ -3967,15 +4112,39 @@ Licença: MIT
 Autoria: Julian Gruber <mail@juliangruber.com>
 Origem: https://github.com/juliangruber/isarray
 
-_Pacote sem arquivo de licença; ver o campo acima._
+```
+README.md — License
+(MIT)
 
-## json-schema-traverse 0.4.1
+Copyright (c) 2013 Julian Gruber &lt;julian@juliangruber.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## json-schema-traverse 1.0.0
 
 Licença: MIT
 Autoria: Evgeny Poberezkin
 Origem: https://github.com/epoberezkin/json-schema-traverse#readme
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2017 Evgeny Poberezkin
@@ -4005,6 +4174,7 @@ Licença: MIT
 Autoria: JP Richardson <jprichardson@gmail.com>
 
 ```
+LICENSE
 (The MIT License)
 
 Copyright (c) 2012-2015, JP Richardson <jprichardson@gmail.com>
@@ -4029,6 +4199,7 @@ Autoria: Jonas Pommerening <jonas.pommerening@gmail.com>
 Origem: https://github.com/jpommerening/node-lazystream
 
 ```
+LICENSE
 Copyright (c) 2013 J. Pommerening, contributors.
 
 Permission is hereby granted, free of charge, to any person
@@ -4053,13 +4224,14 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-## lucide-react 1.44.0
+## lucide-react 1.46.0
 
 Licença: ISC
 Autoria: Eric Fennis
 Origem: https://lucide.dev
 
 ```
+LICENSE
 ISC License
 
 Copyright (c) 2026 Lucide Icons and Contributors
@@ -4111,6 +4283,7 @@ Licença: MIT
 Autoria: Sindre Sorhus <sindresorhus@gmail.com>
 
 ```
+license
 MIT License
 
 Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
@@ -4128,6 +4301,7 @@ Licença: BlueOak-1.0.0
 Autoria: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)
 
 ```
+LICENSE.md
 # Blue Oak Model License
 
 Version 1.0.0
@@ -4192,6 +4366,7 @@ Autoria: James Halliday <mail@substack.net>
 Origem: https://github.com/minimistjs/minimist
 
 ```
+LICENSE
 This software is released under the MIT license:
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -4219,6 +4394,7 @@ Autoria: Mathias Buus (@mafintosh)
 Origem: https://github.com/mafintosh/mkdirp-classic
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2020 James Halliday (mail@substack.net) and Mathias Buus
@@ -4249,6 +4425,7 @@ Autoria: Jim Schlight
 Origem: https://github.com/inspiredware/napi-build-utils#readme
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2018 inspiredware
@@ -4279,6 +4456,7 @@ Autoria: Lukas Geiger
 Origem: https://github.com/electron/node-abi#readme
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2016 Lukas Geiger
@@ -4308,6 +4486,7 @@ Licença: MIT
 Autoria: Robert Kieffer <robert@broofa.com>
 
 ```
+LICENSE
 Copyright (c) 2014 Robert Kieffer
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -4336,6 +4515,7 @@ Autoria: Jon Schlinkert (https://github.com/jonschlinkert)
 Origem: https://github.com/jonschlinkert/normalize-path
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2014-2018, Jon Schlinkert.
@@ -4365,6 +4545,7 @@ Licença: ISC
 Autoria: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
 
 ```
+LICENSE
 The ISC License
 
 Copyright (c) Isaac Z. Schlueter and Contributors
@@ -4389,6 +4570,7 @@ Autoria: Mathias Buus (@mafintosh)
 Origem: https://github.com/prebuild/prebuild-install
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2015 Mathias Buus
@@ -4418,6 +4600,7 @@ Licença: MIT
 Autoria: Roman Shtylman <shtylman@gmail.com>
 
 ```
+LICENSE
 (The MIT License)
 
 Copyright (c) 2013 Roman Shtylman <shtylman@gmail.com>
@@ -4448,6 +4631,7 @@ Licença: MIT
 Origem: https://github.com/calvinmetcalf/process-nextick-args
 
 ```
+license.md
 # Copyright (c) 2015 Calvin Metcalf
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -4475,6 +4659,7 @@ Licença: MIT
 Autoria: Mathias Buus Madsen <mathiasbuus@gmail.com>
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2014 Mathias Buus
@@ -4498,41 +4683,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
 
-## punycode 2.3.1
-
-Licença: MIT
-Autoria: Mathias Bynens
-Origem: https://mths.be/punycode
-
-```
-Copyright Mathias Bynens <https://mathiasbynens.be/>
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-```
-
 ## rc 1.2.8
 
 Licença: (BSD-2-Clause OR MIT OR Apache-2.0)
 Autoria: Dominic Tarr <dominic.tarr@gmail.com> (dominictarr.com)
 
 ```
+LICENSE.APACHE2
 Apache License, Version 2.0
 
 Copyright (c) 2011 Dominic Tarr
@@ -4548,6 +4705,60 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+LICENSE.BSD
+Copyright (c) 2013, Dominic Tarr
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met: 
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+The views and conclusions contained in the software and documentation are those
+of the authors and should not be interpreted as representing official policies, 
+either expressed or implied, of the FreeBSD Project.
+
+LICENSE.MIT
+The MIT License
+
+Copyright (c) 2011 Dominic Tarr
+
+Permission is hereby granted, free of charge, 
+to any person obtaining a copy of this software and 
+associated documentation files (the "Software"), to 
+deal in the Software without restriction, including 
+without limitation the rights to use, copy, modify, 
+merge, publish, distribute, sublicense, and/or sell 
+copies of the Software, and to permit persons to whom 
+the Software is furnished to do so, 
+subject to the following conditions:
+
+The above copyright notice and this permission notice 
+shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
 ## react 19.2.8
@@ -4556,6 +4767,7 @@ Licença: MIT
 Origem: https://react.dev/
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) Meta Platforms, Inc. and affiliates.
@@ -4585,6 +4797,7 @@ Licença: MIT
 Origem: https://react.dev/
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) Meta Platforms, Inc. and affiliates.
@@ -4615,6 +4828,7 @@ Autoria: Beier(Bill) Luo <bluebill1049@hotmail.com>
 Origem: https://react-hook-form.com
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2019-present Beier(Bill) Luo
@@ -4644,6 +4858,7 @@ Licença: MIT
 Origem: https://react.dev/
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) Meta Platforms, Inc. and affiliates.
@@ -4674,6 +4889,7 @@ Autoria: Dan Abramov <dan.abramov@me.com> (https://github.com/gaearon)
 Origem: https://github.com/reduxjs/react-redux
 
 ```
+LICENSE.md
 The MIT License (MIT)
 
 Copyright (c) 2015-present Dan Abramov
@@ -4703,6 +4919,7 @@ Licença: MIT
 Autoria: Remix Software <hello@remix.run>
 
 ```
+LICENSE.md
 MIT License
 
 Copyright (c) React Training LLC 2015-2019
@@ -4734,6 +4951,7 @@ Licença: MIT
 Autoria: Remix Software <hello@remix.run>
 
 ```
+LICENSE.md
 MIT License
 
 Copyright (c) React Training LLC 2015-2019
@@ -4764,6 +4982,7 @@ SOFTWARE.
 Licença: MIT
 
 ```
+LICENSE
 Node.js is licensed for use as follows:
 
 """
@@ -4818,6 +5037,7 @@ IN THE SOFTWARE.
 Licença: MIT
 
 ```
+LICENSE
 Node.js is licensed for use as follows:
 
 """
@@ -4873,6 +5093,7 @@ Licença: MIT
 Origem: https://github.com/nodejs/readable-stream
 
 ```
+LICENSE
 Node.js is licensed for use as follows:
 
 """
@@ -4929,6 +5150,7 @@ Autoria: Yann Armelin
 Origem: https://github.com/Yqnn/node-readdir-glob
 
 ```
+LICENSE
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -5139,6 +5361,7 @@ Autoria: recharts group
 Origem: https://github.com/recharts/recharts
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2015-present recharts
@@ -5168,6 +5391,7 @@ Licença: MIT
 Origem: http://redux.js.org
 
 ```
+LICENSE.md
 The MIT License (MIT)
 
 Copyright (c) 2015-present Dan Abramov
@@ -5198,6 +5422,7 @@ Autoria: Dan Abramov <dan.abramov@me.com>
 Origem: https://github.com/reduxjs/redux-thunk
 
 ```
+LICENSE.md
 The MIT License (MIT)
 
 Copyright (c) 2015-present Dan Abramov
@@ -5221,11 +5446,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## require-from-string 2.0.2
+
+Licença: MIT
+Autoria: Vsevolod Strukchinsky <floatdrop@gmail.com>
+
+```
+license
+The MIT License (MIT)
+
+Copyright (c) Vsevolod Strukchinsky <floatdrop@gmail.com> (github.com/floatdrop)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+```
+
 ## reselect 5.2.0
 
 Licença: MIT
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2015-2018 Reselect Contributors
@@ -5256,6 +5512,7 @@ Autoria: Feross Aboukhadijeh <feross@feross.org>
 Origem: https://github.com/feross/safe-buffer
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) Feross Aboukhadijeh
@@ -5286,6 +5543,7 @@ Autoria: Feross Aboukhadijeh <feross@feross.org>
 Origem: https://github.com/feross/safe-buffer
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) Feross Aboukhadijeh
@@ -5315,6 +5573,7 @@ Licença: MIT
 Origem: https://react.dev/
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) Meta Platforms, Inc. and affiliates.
@@ -5344,6 +5603,7 @@ Licença: ISC
 Autoria: GitHub Inc.
 
 ```
+LICENSE
 The ISC License
 
 Copyright (c) Isaac Z. Schlueter and Contributors
@@ -5368,6 +5628,7 @@ Autoria: Nathan Friedly
 Origem: https://github.com/nfriedly/set-cookie-parser
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2015 Nathan Friedly <nathan@nfriedly.com> (http://nfriedly.com/)
@@ -5398,6 +5659,7 @@ Autoria: Feross Aboukhadijeh <feross@feross.org>
 Origem: https://github.com/feross/simple-concat
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) Feross Aboukhadijeh
@@ -5427,6 +5689,7 @@ Autoria: Feross Aboukhadijeh <feross@feross.org>
 Origem: https://github.com/feross/simple-get
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) Feross Aboukhadijeh
@@ -5456,6 +5719,7 @@ Autoria: Mathias Buus (@mafintosh)
 Origem: https://github.com/mafintosh/streamx
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2019 Mathias Buus
@@ -5485,6 +5749,7 @@ Licença: MIT
 Origem: https://github.com/nodejs/string_decoder
 
 ```
+LICENSE
 Node.js is licensed for use as follows:
 
 """
@@ -5540,6 +5805,7 @@ Licença: MIT
 Origem: https://github.com/nodejs/string_decoder
 
 ```
+LICENSE
 Node.js is licensed for use as follows:
 
 """
@@ -5595,6 +5861,7 @@ Licença: MIT
 Autoria: Sindre Sorhus <sindresorhus@gmail.com>
 
 ```
+license
 The MIT License (MIT)
 
 Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
@@ -5625,6 +5892,7 @@ Autoria: Mathias Buus
 Origem: https://github.com/mafintosh/tar-fs
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2014 Mathias Buus
@@ -5655,6 +5923,7 @@ Autoria: Mathias Buus <mathiasbuus@gmail.com>
 Origem: https://github.com/mafintosh/tar-stream
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2014 Mathias Buus
@@ -5685,6 +5954,7 @@ Autoria: Mathias Buus <mathiasbuus@gmail.com>
 Origem: https://github.com/mafintosh/tar-stream
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2014 Mathias Buus
@@ -5715,6 +5985,7 @@ Autoria: Mathias Buus (@mafintosh)
 Origem: https://github.com/mafintosh/teex
 
 ```
+LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2020 Mathias Buus
@@ -5745,6 +6016,7 @@ Autoria: Holepunch
 Origem: https://github.com/holepunchto/text-decoder#readme
 
 ```
+LICENSE
 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -5954,6 +6226,7 @@ Licença: MIT
 Autoria: Alex Reardon <alexreardon@gmail.com>
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2019 Alexander Reardon
@@ -5983,6 +6256,7 @@ Licença: Apache-2.0
 Autoria: Mikeal Rogers <mikeal.rogers@gmail.com> (http://www.futurealoof.com)
 
 ```
+LICENSE
 Apache License
 
 Version 2.0, January 2004
@@ -6047,6 +6321,7 @@ Autoria: Ryan Zimmerman <opensrc@ryanzim.com>
 Origem: https://github.com/RyanZim/universalify#readme
 
 ```
+LICENSE
 (The MIT License)
 
 Copyright (c) 2017, Ryan Zimmerman <opensrc@ryanzim.com>
@@ -6075,6 +6350,7 @@ Licença: MIT
 Autoria: Ziggy Jonsson <ziggy.jonsson.nyc@gmail.com>
 
 ```
+LICENSE
 Copyright (c) 2012 - 2013 Near Infinity Corporation
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -6102,31 +6378,12 @@ Commits in this fork are (c) Ziggy Jonsson (ziggy.jonsson.nyc@gmail.com)
 and fall under same licence structure as the original repo (MIT)
 ```
 
-## uri-js 4.4.1
-
-Licença: BSD-2-Clause
-Autoria: Gary Court <gary.court@gmail.com>
-Origem: https://github.com/garycourt/uri-js
-
-```
-Copyright 2011 Gary Court. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1.	Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2.	Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY GARY COURT "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL GARY COURT OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-The views and conclusions contained in the software and documentation are those of the authors and should not be interpreted as representing official policies, either expressed or implied, of Gary Court.
-```
-
 ## use-sync-external-store 1.6.0
 
 Licença: MIT
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) Meta Platforms, Inc. and affiliates.
@@ -6157,6 +6414,7 @@ Autoria: Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)
 Origem: https://github.com/TooTallNate/util-deprecate
 
 ```
+LICENSE
 (The MIT License)
 
 Copyright (c) 2014 Nathan Rajlich <nathan@tootallnate.net>
@@ -6189,7 +6447,268 @@ Licença: MIT AND ISC
 Autoria: Formidable
 Origem: https://commerce.nearform.com/open-source/victory
 
-_Pacote sem arquivo de licença; ver o campo acima._
+```
+lib-vendor/
+d3-array/
+LICENSE
+Copyright 2010-2022 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+d3-color/
+LICENSE
+Copyright 2010-2022 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+d3-ease/
+LICENSE
+Copyright 2010-2021 Mike Bostock
+Copyright 2001 Robert Penner
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the author nor the names of contributors may be used to
+  endorse or promote products derived from this software without specific prior
+  written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+d3-format/
+LICENSE
+Copyright 2010-2021 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+d3-interpolate/
+LICENSE
+Copyright 2010-2021 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+d3-path/
+LICENSE
+Copyright 2015-2021 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+d3-scale/
+LICENSE
+Copyright 2010-2021 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+d3-shape/
+LICENSE
+Copyright 2010-2021 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+d3-time/
+LICENSE
+Copyright 2010-2021 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+d3-time-format/
+LICENSE
+Copyright 2010-2021 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+d3-timer/
+LICENSE
+Copyright 2010-2021 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+d3-voronoi/
+LICENSE
+Copyright 2010-2016 Mike Bostock
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the author nor the names of contributors may be used to
+  endorse or promote products derived from this software without specific prior
+  written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Copyright (C) 2010-2013 Raymond Hill
+https://github.com/gorhill/Javascript-Voronoi
+
+Licensed under The MIT License
+http://en.wikipedia.org/wiki/MIT_License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+internmap/
+LICENSE
+Copyright 2021 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+```
 
 ## wrappy 1.0.2
 
@@ -6198,6 +6717,7 @@ Autoria: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
 Origem: https://github.com/npm/wrappy
 
 ```
+LICENSE
 The ISC License
 
 Copyright (c) Isaac Z. Schlueter and Contributors
@@ -6222,6 +6742,7 @@ Autoria: Chris Talkington
 Origem: https://github.com/archiverjs/node-zip-stream
 
 ```
+LICENSE
 Copyright (c) 2014 Chris Talkington, contributors.
 
 Permission is hereby granted, free of charge, to any person
@@ -6253,6 +6774,7 @@ Autoria: Colin McDonnell <zod@colinhacks.com>
 Origem: https://zod.dev
 
 ```
+LICENSE
 MIT License
 
 Copyright (c) 2025 Colin McDonnell
