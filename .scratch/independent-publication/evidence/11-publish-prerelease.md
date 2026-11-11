@@ -32,10 +32,10 @@ abertura pelo menu e comprovante válido em leitor externo. Notas e documentaç�
 revisadas distinguem esses resultados, sem certificar sandbox ou downgrade.
 Windows permanece excluído. Não foram identificadas novas falhas funcionais.
 
-Correções de instalação, armazenamento e desenvolvimento preparadas no clone
-independente `/tmp/meu-dinheiro-remediation-07`, commit
-`59d32167532d5cf9cabb7e1b77985476b2eed193`, descendente direto do código
-aprovado. Apenas três documentos; corrige botão inexistente e registra resultados,
+Correções do changelog, instalação, armazenamento e desenvolvimento preparadas no clone
+independente `/tmp/meu-dinheiro-public-docs-11`, commit
+`3a9ec98f9119b1bbf97c7a7065b241e2e182589f`, descendente direto do main remoto observado
+`dff300230e4c8167aab09f9d2476d49ba6431ee7`. Apenas quatro documentos; corrige botão inexistente e registra resultados,
 limitações, avisos e hash. Identidades noreply preservadas; árvore limpa após commit.
 Esse commit ainda não foi enviado. A tag continua no commit do instalador.
 O aceite de código deve autorizar esse avanço documental de main, separadamente
@@ -44,7 +44,8 @@ do aceite de publicar a release. Não há reescrita pública proposta.
 ## Verificação
 
 No clone independente passaram typecheck, lint, teste isolado de IPC (5 testes)
-e suíte completa (10 arquivos, 80 testes). Os três documentos passaram Prettier.
+e suíte completa (10 arquivos, 80 testes). Os três documentos iniciais passaram Prettier. O changelog foi alinhado após
+revisão Spec identificar afirmações históricas de pendência.
 TDD não se aplica: alterações documentais e operação sobre candidato existente,
 sem novo comportamento de código ou seam de implementação acordado.
 
@@ -58,3 +59,33 @@ inesperada, interromper a ação dependente e registrar a divergência.
 
 Origem, releases antigas e backups privados preservados. O 11 permanece aberto;
 publicação e downloads públicos ainda não conferidos. O 12 continua bloqueado.
+
+## Revisão
+
+Skill code-review aplicada em dois agentes independentes, base de coordenação
+`dff3002`. Standards: zero achados. Spec: um achado no changelog desatualizado,
+corrigido na proposta documental final. A primeira proposta `59d3216` foi
+substituída pela proposta acima, baseada no main remoto observado para evitar
+qualquer reescrita. Aceites continuam pendentes.
+
+## Conferência final da preparação
+
+Download dos três anexos concluído em `/tmp/meu-dinheiro-release-11/downloaded`.
+`sha256sum -c SHA256SUMS` passou; notas baixadas idênticas às propostas,
+e SHA-256 das notas e do manifesto coincidem com a tabela. Duas verificações
+prematuras, enquanto o download do deb ainda estava em andamento, falharam;
+foram descartadas e a conferência integral foi repetida após o processo terminar.
+O corpo remoto foi conferido contra as notas e contém o mesmo texto.
+
+Revisão renovada da proposta `3a9ec98`: Standards 0 achados; Spec 0 achados
+remanescentes. Os quatro documentos passaram Prettier no ambiente do clone
+independente. A tentativa de usar esse binário no checkout de coordenação não
+resolveu o plugin de formatação, por ausência de dependências locais; a execução
+no ambiente instalado passou. `git diff --check` passou.
+Manifesto privado do 08 revalidado: 11 arquivos coincidem. Nenhum backup removido.
+
+A API de refs apresentou somente main em `dff3002`, sem tag. Esse estado deve
+ser reconferido após aceite. A proposta é enviar apenas o commit documental
+`3a9ec98` como avanço de main, sem enviar os registros novos de coordenação,
+e publicar a tag no commit original do instalador `9e348bd`. A conferência
+pública só pode ocorrer depois da autorização e publicação.

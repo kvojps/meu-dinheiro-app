@@ -10,14 +10,20 @@ Pré-release candidata; publicação depende de aceite separado.
 
 ## Limitações
 
-Instalação limpa, atualização, sandbox Linux e backup/restauração dos instaladores
-continuam sujeitos aos ensaios dos tickets de validação em cada sistema.
+No deb Linux instalado como atualização, abertura direta, navegação, persistência
+e backup/restauração com caminhos de diálogo automatizados passaram em perfil
+fictício. Instalação limpa, continuidade de perfil anterior, seletores nativos
+completos, abertura pelo menu e comprovante válido em leitor externo não foram
+ensaiados; o mantenedor aceitou essas limitações. O renderer usa `sandbox: false`,
+sem certificação de isolamento. Consulte [Instalação](docs/installation.md).
 Windows está fora desta pré-release: não há instalador independente oferecido
 nem validação de instalação, atualização ou backup/restauração nesse sistema.
-A configuração NSIS é experimental e não representa suporte validado. Alertas de dependências
-estão sob avaliação antes da publicação; não foi aplicada atualização automática.
+A configuração NSIS é experimental e não representa suporte validado. As dependências
+foram remediadas no commit do instalador. Auditorias npm completa e de produção
+na geração não reportaram vulnerabilidades conhecidas; isso não garante ausência
+de vulnerabilidades.
 
-Os candidatos podem ser distribuídos sem assinatura digital. SHA-256 verifica
+Este deb é distribuído sem assinatura digital. SHA-256 verifica
 integridade dos bytes comparados, não autentica o autor. Avisos do Windows e do
 Linux devem ser registrados nos ensaios, sem presumir que não ocorrerão.
 Builds usam lockfile, commit e ferramentas registrados; não há promessa de

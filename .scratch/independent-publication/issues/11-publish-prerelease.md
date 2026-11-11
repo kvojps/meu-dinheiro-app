@@ -55,3 +55,10 @@ ensaios Linux e aceites separados de código/release continuam obrigatórios.
 correções propostas para os três documentos públicos. Deb e commit da tag
 preservados. Aguardar revisão e aceites explícitos do envio documental e da
 publicação. Ver [proposta](../evidence/11-publish-prerelease.md).
+
+2026-11-10 — Preparação conferida e revisada: typecheck, lint, 5 testes isolados,
+80 testes completos, formatação dos quatro documentos e downloads do rascunho
+passaram. Standards e Spec sem achados remanescentes. Proposta documental
+`3a9ec98` sobre main remoto `dff3002`; tag permanece no commit do instalador
+`9e348bd`. Ainda faltam aceite do envio documental, aceite da release,
+publicação e conferência pública. Não resolver até executar esses passos.
