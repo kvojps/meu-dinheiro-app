@@ -31,7 +31,7 @@ publicada nesta etapa.
 8. [Gerar a release candidata em rascunho](issues/08-draft-release.md) — resolvido por geração local e upload autorizado, rascunho `441089918` conferido; [evidências](evidence/08-draft-release.md).
 9. [Validar instalação e continuidade no Linux](issues/09-linux-validation.md) — resolvido por decisão do mantenedor, com limitações aceitas; [resultados e limites](evidence/09-linux-validation.md).
 10. [Validar instalação e continuidade no Windows](issues/10-windows-validation.md) — fora desta entrega (`wontfix`); nota Windows documentada.
-11. [Publicar a pré-release após aceite](issues/11-publish-prerelease.md) — 09 resolvido; conferir material final e obter aceite específico da publicação.
+11. [Publicar a pré-release após aceite](issues/11-publish-prerelease.md) — rascunho e documentação revisados; aguarda aceites explícitos do envio documental e da release; [proposta](evidence/11-publish-prerelease.md).
 12. [Validar a entrega pública e retirar o aplicativo da origem](issues/12-retire-source-app.md) — bloqueado por: 11.
 
 O aplicativo instalado é o ponto principal de teste em Linux x64, com perfis fictícios, complementado por verificações de histórico, privacidade e build. Ambiente indisponível bloqueia validações dependentes, salvo alteração explícita do escopo pelo mantenedor, como o encerramento com limitações aceitas no 09. Ensaios não executados não são declarados aprovados.

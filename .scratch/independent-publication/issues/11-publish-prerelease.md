@@ -4,7 +4,7 @@
 
 **Blocked by:** nenhum — 09 resolvido por decisão do mantenedor, com limitações aceitas
 
-**Status:** ready-for-agent
+**Status:** ready-for-human
 
 ## Parent
 
@@ -12,8 +12,8 @@
 
 ## Acceptance criteria
 
-- [ ] Consolidar resultados Linux sobre o mesmo candidato por checksum; falhas, achados ou validações pendentes impedem publicação.
-- [ ] Conferir documentação final contra comportamento observado, nomes dos artefatos, notas, limitações, avisos e instruções de instalação e backup/restauração.
+- [x] Consolidar resultados Linux sobre o mesmo candidato por checksum; falhas, achados ou validações pendentes impedem publicação.
+- [x] Conferir documentação final contra comportamento observado, nomes dos artefatos, notas, limitações, avisos e instruções de instalação e backup/restauração.
 - [ ] Submeter alterações finais às verificações afetadas e ao aceite aplicável de código público; mudanças de artefatos exigem renovar rascunho e testes afetados.
 - [ ] Apresentar rascunho, commit, instaladores, checksums e evidências; obter aceite explícito da release, distinto do aceite do código.
 - [ ] Publicar somente pré-release aprovada e conferir tag, commit, notas, anexos e SHA-256 dos downloads públicos.
@@ -50,3 +50,8 @@ somente com Linux x64 (deb). Windows fica fora desta pré-release, com nota
 explícita de ausência de instalador independente e validação. A configuração
 NSIS experimental pode permanecer, mas não bloqueia esta entrega. Auditoria,
 ensaios Linux e aceites separados de código/release continuam obrigatórios.
+
+2026-11-10 — Notas revisadas com resultados e limitações aceitas do 09;
+correções propostas para os três documentos públicos. Deb e commit da tag
+preservados. Aguardar revisão e aceites explícitos do envio documental e da
+publicação. Ver [proposta](../evidence/11-publish-prerelease.md).

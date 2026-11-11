@@ -79,6 +79,11 @@ byte a byte com o ZIP. O tema e um arquivo órfão permaneceram no destino.
 A confirmação de importação foi percorrida na interface. Somente os caminhos dos
 diálogos nativos foram automatizados via DevTools; IPC, serviços, SQLite e ZIP
 foram os reais. Isso não valida a interação dos seletores nativos em cada sistema.
-Instalação, atualização e restauração pelo instalador Linux e backups de versões
-anteriores ainda dependem da conferência do candidato. Windows está fora desta
+No candidato deb `1.0.0-beta.1` instalado, também foram conferidos exportação,
+substituição dos cadastros, comprovante idêntico ao ZIP e persistência depois de
+reabrir, com perfil fictício e caminhos de diálogo automatizados. A interação
+completa dos seletores, continuidade de perfil anterior e abertura de comprovante
+válido em leitor externo permanecem sem ensaio; essas limitações foram aceitas
+pelo mantenedor. A prova de transporte usou texto fictício com extensão PDF,
+sem certificar documento PDF válido. Backups históricos não foram validados. Windows está fora desta
 pré-release; o caminho esperado acima é referência técnica, sem suporte validado.

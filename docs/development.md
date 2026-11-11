@@ -83,7 +83,9 @@ npx electron-builder --linux --dir
 
 Compilar não comprova instalação ou continuidade dos dados. Os comandos de build
 Linux e verificações autônomas já foram executados; empacotamento e instalação
-Windows estão fora desta entrega; atualização e uso do candidato Linux continuam
-pendentes. O ensaio local
+Windows estão fora desta entrega. O deb Linux `1.0.0-beta.1` foi instalado como
+atualização pelo mantenedor; abertura, persistência e backup/restauração com
+caminhos de diálogo automatizados passaram em perfil fictício. Os limites de
+validação aceitos estão em [Instalação](installation.md). O ensaio local
 com diretório não instalado precisou de `--no-sandbox` por falta de helper SUID;
 não acrescente essa opção aos scripts ou às instruções de instalação.
