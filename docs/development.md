@@ -57,7 +57,9 @@ demo_dir=$(mktemp -d /tmp/meu-dinheiro-demo.XXXXXX)
 XDG_CONFIG_HOME="$demo_dir/config" XDG_DATA_HOME="$demo_dir/data" npm run preview
 ```
 
-Confirme o caminho em **Configurações → Backup → Abrir pasta de dados**.
+Nesse ensaio, confira a criação de `"$demo_dir/config/meu-dinheiro"` no
+gerenciador de arquivos. A seção Backup do candidato `1.0.0-beta.1` não oferece
+o botão **Abrir pasta de dados**; ele aparece na tela de erro.
 A receita XDG é para Linux; não a aplique como isolamento no Windows. Use uma
 conta de sistema descartável nos ensaios Windows até conferir seu perfil.
 Não adicione perfis, ZIPs, bancos, logs ou comprovantes ao Git ou a `resources/`.

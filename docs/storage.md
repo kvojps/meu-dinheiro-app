@@ -5,8 +5,10 @@
 ## Onde ficam os dados
 
 O processo principal usa a pasta `userData` do Electron, com o nome de aplicação
-`meu-dinheiro`. Em **Configurações → Backup → Abrir pasta de dados**, confira o
-caminho efetivo da sua instalação.
+`meu-dinheiro`. No Linux, abra no gerenciador de arquivos o caminho correspondente
+à variável `XDG_CONFIG_HOME` usada ao iniciar o app, conforme a tabela abaixo.
+O candidato `1.0.0-beta.1` não oferece **Abrir pasta de dados** na seção Backup;
+esse botão existe na tela de erro, quando ela é apresentada.
 
 | Sistema | Local padrão esperado                                        |
 | ------- | ------------------------------------------------------------ |

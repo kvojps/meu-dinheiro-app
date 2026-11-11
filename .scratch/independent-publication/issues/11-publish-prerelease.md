@@ -21,6 +21,15 @@
 
 ## Comments
 
+2026-11-10 — Instalação administrativa realizada pelo mantenedor e pacote
+candidato conferido no 09. Abertura, navegação, persistência e backup/restauração
+com caminhos de diálogo automatizados passaram. O 09 continua pendente por
+instalação limpa, continuidade de perfil fictício anterior e seletores nativos
+completos. `docs/storage.md` e `docs/development.md` corrigidos localmente:
+Backup não possui o botão Abrir pasta de dados no candidato. Mudanças documentais
+ainda precisam integrar a conferência final do material público; nenhum
+artefato foi alterado. A publicação permanece bloqueada.
+
 2026-11-10 — O 09 conferiu hash e simulação apt, mas não instalou o candidato:
 autenticação administrativa interativa indisponível à sessão do agente.
 Instalação limpa, atualização com perfil fictício e backup/restauração permanecem

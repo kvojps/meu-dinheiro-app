@@ -12,7 +12,7 @@
 
 ## Acceptance criteria
 
-- [ ] Usar Linux x64 com interface gráfica, perfil isolado e dados fictícios; registrar versão e checksum do deb testado.
+- [x] Usar Linux x64 com interface gráfica, perfil isolado e dados fictícios; registrar versão e checksum do deb testado.
 - [ ] Validar instalação limpa, abertura, navegação pelas telas demonstradas e persistência após reabrir.
 - [ ] Criar perfil fictício no instalador anterior e atualizar para o candidato, comprovando preservação de dados, comprovantes e localização de armazenamento.
 - [ ] Exportar e restaurar backup com dados e comprovantes, conferir substituição esperada e persistência após reabrir.
@@ -20,6 +20,18 @@
 - [ ] Ambiente indisponível ou incompatibilidades impedem conclusão; abrir decisão específica quando necessário, sem prometer downgrade. Correções exigem renovar revisões e testes afetados.
 
 ## Comments
+
+2026-11-10 — Retomada após instalação manual pelo mantenedor: dpkg confirma
+`1.0.0~beta.1`; checksum do download e 132 arquivos instalados coincidem com o
+candidato do 08. Abertura gráfica sem `--no-sandbox`, navegação, gravação e
+persistência após reabrir passaram com perfil fictício. Exportação/restauração
+passaram pelo IPC real, com substituição de cadastro e comprovante idêntico ao
+ZIP; os caminhos dos diálogos foram automatizados. O seletor nativo abriu, mas
+a automação não concluiu sua interação. Corrigida a documentação que indicava
+botão inexistente em Backup. Ainda faltam instalação limpa, perfil fictício
+criado na versão anterior antes da atualização e interação completa dos
+seletores nativos. Não resolver sem essas evidências. Ver
+[resultados instalados e limites](../evidence/09-linux-validation.md#retomada-após-instalação-manual).
 
 2026-11-10 — Candidato conferido por SHA-256; simulação apt planeja atualização
 de `1.0.0~beta` para `1.0.0~beta.1`. Instalação real bloqueada: `sudo` exige
