@@ -4,7 +4,7 @@
 
 **Blocked by:** nenhum — 09 resolvido por decisão do mantenedor, com limitações aceitas
 
-**Status:** ready-for-human
+**Status:** resolved
 
 ## Parent
 
@@ -14,10 +14,10 @@
 
 - [x] Consolidar resultados Linux sobre o mesmo candidato por checksum; falhas, achados ou validações pendentes impedem publicação.
 - [x] Conferir documentação final contra comportamento observado, nomes dos artefatos, notas, limitações, avisos e instruções de instalação e backup/restauração.
-- [ ] Submeter alterações finais às verificações afetadas e ao aceite aplicável de código público; mudanças de artefatos exigem renovar rascunho e testes afetados.
-- [ ] Apresentar rascunho, commit, instaladores, checksums e evidências; obter aceite explícito da release, distinto do aceite do código.
-- [ ] Publicar somente pré-release aprovada e conferir tag, commit, notas, anexos e SHA-256 dos downloads públicos.
-- [ ] Manter origem e releases antigas intactas e backup privado até aceite final; não assumir suporte a downgrade ou reescrita pública.
+- [x] Submeter alterações finais às verificações afetadas e ao aceite aplicável de código público; mudanças de artefatos exigem renovar rascunho e testes afetados.
+- [x] Apresentar rascunho, commit, instaladores, checksums e evidências; obter aceite explícito da release, distinto do aceite do código.
+- [x] Publicar somente pré-release aprovada e conferir tag, commit, notas, anexos e SHA-256 dos downloads públicos.
+- [x] Manter origem e releases antigas intactas e backup privado até aceite final; não assumir suporte a downgrade ou reescrita pública.
 
 ## Comments
 
@@ -62,3 +62,19 @@ passaram. Standards e Spec sem achados remanescentes. Proposta documental
 `3a9ec98` sobre main remoto `dff3002`; tag permanece no commit do instalador
 `9e348bd`. Ainda faltam aceite do envio documental, aceite da release,
 publicação e conferência pública. Não resolver até executar esses passos.
+
+## Answer
+
+2026-11-10 — Resolvido após autorização explícita do mantenedor para envio
+documental e publicação. README e guia alinhados à instalação Linux, commit
+`9f0e29b`, enviado sem force. Pré-release
+[v1.0.0-beta.1](https://github.com/kvojps/meu-dinheiro-app/releases/tag/v1.0.0-beta.1)
+publicada, tag em `9e348bd`, mantendo os mesmos bytes do deb ensaiado no 09.
+Downloads públicos sem autenticação conferidos: SHA-256 do deb
+`364673bb22512dbc09584d20706cc868926b38d05d5996ae1ac5cafc9a37a547`.
+Notas, manifesto, metadados e README público coincidem com os arquivos revisados.
+Typecheck, 5 testes isolados, 80 testes completos e formatação passaram;
+revisão Standards/Spec sem achados remanescentes. Ver
+[evidências finais](../evidence/11-publish-prerelease.md#aceite-e-publicação-executados).
+Origem, releases antigas e backup privado preservados. Instalação a partir da
+publicação e retirada da origem seguem no 12; não impedem esta resolução.

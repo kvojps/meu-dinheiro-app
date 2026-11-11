@@ -2,7 +2,7 @@
 
 **What to build:** Concluir migração mantendo destino acessível e demais aplicativos funcionais na origem.
 
-**Blocked by:** 11 — Publicar a pré-release após aceite
+**Blocked by:** nenhum — 11 resolvido
 
 **Status:** ready-for-agent
 
@@ -24,3 +24,12 @@ somente com Linux x64 (deb). Windows fica fora desta pré-release, com nota
 explícita de ausência de instalador independente e validação. A configuração
 NSIS experimental pode permanecer, mas não bloqueia esta entrega. Auditoria,
 ensaios Linux e aceites separados de código/release continuam obrigatórios.
+
+## Comments
+
+2026-11-10 — Ticket 11 resolvido; pré-release publicada e downloads públicos
+conferidos pelo mesmo SHA-256 do candidato Linux. Ver
+[evidências](../evidence/11-publish-prerelease.md). Ainda é necessário validar
+instalação a partir dos artefatos publicados e cumprir os demais critérios
+deste ticket antes de retirar Meu Dinheiro da origem. Nenhuma retirada ou
+liberação de backup autorizada pela conclusão do 11.

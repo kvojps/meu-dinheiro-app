@@ -89,3 +89,49 @@ ser reconferido após aceite. A proposta é enviar apenas o commit documental
 `3a9ec98` como avanço de main, sem enviar os registros novos de coordenação,
 e publicar a tag no commit original do instalador `9e348bd`. A conferência
 pública só pode ocorrer depois da autorização e publicação.
+
+## Aceite e publicação executados
+
+O mantenedor respondeu “AUtorizo, verifique o readme também se está atualizado
+com essa instalação”, após esclarecimento de que a autorização abrangia envio
+documental e publicação da pré-release. Não foi exigida ação manual no GitHub.
+
+README estava desatualizado. Atualizado com link público estável, nomes exatos,
+`sha256sum -c SHA256SUMS`, comando apt, backup antes da atualização, ausência de
+assinatura e limitações Linux aceitas. Guia de instalação agora aponta para a
+release disponível. Commit `9f0e29b221bcdebe902ba8beea4d2976dd35c655`.
+
+A reconferência remota mostrou main em `fa59296`, contendo as correções
+anteriores da coordenação. Por isso a proposta alternativa `3a9ec98` não foi
+enviada: bastou avanço normal `fa59296..9f0e29b` com README/guia, usando
+`git push --no-follow-tags`, sem force. Nenhum instalador reconstruído.
+
+Verificações renovadas: typecheck, 5 testes IPC, suíte completa de 80 testes
+e Prettier dos dois documentos passaram no clone com dependências instaladas.
+Revisão code-review em dois agentes: Standards 0 achados; Spec 0 achados.
+TDD permanece inaplicável à alteração documental.
+
+Publicação via API da release `441089918`, mantendo `prerelease: true` e
+`make_latest: false`, alterando apenas `draft: false`.
+Publicada em `2026-11-11T01:15:12Z` (2026-11-10, 22:15:12, America/Recife).
+[Pré-release pública](https://github.com/kvojps/meu-dinheiro-app/releases/tag/v1.0.0-beta.1).
+API confirmou `draft: false`, `prerelease: true`, os mesmos três anexos,
+tamanhos e digests da tabela. Ref da tag confirmada diretamente em
+`9e348bdc6d5cdee0abea0d6c328232d8cb97da1f`; main confirmado em `9f0e29b`.
+Origem e releases antigas não foram alteradas. Backup privado permanece retido.
+
+## Conferência dos downloads públicos e encerramento
+
+Os três anexos foram obtidos via curl pelas URLs públicas estáveis, sem token
+nem autenticação, em `/tmp/meu-dinheiro-release-11/public`. Processo concluído
+antes da conferência. `sha256sum -c SHA256SUMS` passou; deb público idêntico
+byte a byte ao candidato ensaiado e baixado do rascunho. Notas e manifesto
+mantêm os hashes da tabela; notas idênticas ao arquivo revisado e ao corpo
+publicado (desconsiderando apenas newline adicional da CLI). README obtido
+pela URL raw pública é idêntico ao commit revisado.
+
+Ticket 11 resolvido: aceites explícitos, documentação atualizada, pré-release
+publicada e tag/commit/notas/anexos/downloads conferidos. A instalação a partir
+da publicação e a retirada da origem pertencem ao 12; nenhuma retirada foi
+executada. Limitações aceitas do 09 permanecem documentadas. Origem e releases
+antigas preservadas; backup privado permanece retido até aceite final do 12.

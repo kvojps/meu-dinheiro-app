@@ -5,7 +5,7 @@ Divisão e pontos de teste aprovados pelo usuário em 2026-11-10. A especificaç
 Fonte: [especificação](../dinheiro-publicacao/spec.md) e [mapa de decisões](../dinheiro-publicacao/map.md).
 
 Tickets concluídos usam `resolved`; os demais mantêm seus estados de triagem.
-Os tickets 01 a 09 estão `resolved`; o 09 foi encerrado por decisão do mantenedor
+Os tickets 01 a 09 e 11 estão `resolved`; o 09 foi encerrado por decisão do mantenedor
 com limitações de validação expressamente registradas. O escopo aprovado em 2026-11-10 passou a
 ser somente Linux x64 (deb). Windows está fora desta pré-release: ticket 10
 `wontfix`, sem instalador independente oferecido ou validação nesse sistema.
@@ -18,8 +18,8 @@ Ensaios Linux e aceites separados continuam obrigatórios.
 
 [Evidências do checkpoint e recuperação](evidence/01-recovery-checkpoint.md).
 O backup privado fica fora da árvore versionada, dentro de `.git`; preservá-lo
-antes de substituir o checkout. Código publicado no ticket 07; nenhuma release
-publicada nesta etapa.
+antes de substituir o checkout. Código publicado no ticket 07; pré-release `v1.0.0-beta.1` publicada no 11
+com aceites explícitos e downloads públicos conferidos.
 
 1. [Comprovar recuperação e fixar ponto de corte](issues/01-recovery-checkpoint.md) — resolvido em 2026-11-10.
 2. [Extrair e verificar o histórico do aplicativo](issues/02-extract-history.md) — resolvido em 2026-11-10; [evidências](evidence/02-history-extraction.md).
@@ -31,8 +31,8 @@ publicada nesta etapa.
 8. [Gerar a release candidata em rascunho](issues/08-draft-release.md) — resolvido por geração local e upload autorizado, rascunho `441089918` conferido; [evidências](evidence/08-draft-release.md).
 9. [Validar instalação e continuidade no Linux](issues/09-linux-validation.md) — resolvido por decisão do mantenedor, com limitações aceitas; [resultados e limites](evidence/09-linux-validation.md).
 10. [Validar instalação e continuidade no Windows](issues/10-windows-validation.md) — fora desta entrega (`wontfix`); nota Windows documentada.
-11. [Publicar a pré-release após aceite](issues/11-publish-prerelease.md) — rascunho e documentação revisados; aguarda aceites explícitos do envio documental e da release; [proposta](evidence/11-publish-prerelease.md).
-12. [Validar a entrega pública e retirar o aplicativo da origem](issues/12-retire-source-app.md) — bloqueado por: 11.
+11. [Publicar a pré-release após aceite](issues/11-publish-prerelease.md) — resolvido após aceites, publicação e checksums públicos; [evidências](evidence/11-publish-prerelease.md).
+12. [Validar a entrega pública e retirar o aplicativo da origem](issues/12-retire-source-app.md) — próximo passo: validar instalação pública antes de retirar da origem; 11 resolvido.
 
 O aplicativo instalado é o ponto principal de teste em Linux x64, com perfis fictícios, complementado por verificações de histórico, privacidade e build. Ambiente indisponível bloqueia validações dependentes, salvo alteração explícita do escopo pelo mantenedor, como o encerramento com limitações aceitas no 09. Ensaios não executados não são declarados aprovados.
 
