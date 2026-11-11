@@ -122,3 +122,23 @@ Exige decisão específica que preserve dados atuais dos usuários. Backups da
 migração são evidência de recuperação anterior à publicação e não autorizam
 restaurar sobre perfis atuais, fazer downgrade ou reescrever histórico público.
 Não apagar releases antigas privadas nem alterar visibilidade da origem.
+
+## Aceite final e exclusão autorizada
+
+2026-11-10 — Apresentados ao mantenedor a retirada enviada em `a6cd3e0`,
+os 289 testes aprovados, a preservação dos demais apps/releases, revisões sem
+achados e o conjunto privado restante de 4,2 GiB. O mantenedor respondeu:
+“Aceito e autorizo excluir os backups restantes”. Este é o aceite final
+exigido pelo 12 e libera a retenção descrita na seção anterior.
+
+Excluídos integralmente `.git/private-recovery` e `.git/private-extraction`,
+incluindo backups originais, instaladores antigos locais, mapa privado de
+commits e checkpoint de coordenação. Ausência dos dois diretórios conferida.
+Os relatórios versionados preservam a evidência do processo, mas os arquivos
+privados de recuperação deixaram de estar disponíveis. Nenhum objeto ou
+reflog do repositório principal removido; nenhuma alteração remota nesta
+limpeza. `main` é a única branch local e remota do destino.
+
+Ticket e índice atualizados para `resolved`. A exigência de decisão específica
+para recuperação posterior continua vigente; este aceite não autoriza downgrade
+ou reescrita pública.

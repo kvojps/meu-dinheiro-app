@@ -4,7 +4,7 @@
 
 **Blocked by:** nenhum — 11 resolvido
 
-**Status:** ready-for-human
+**Status:** resolved
 
 ## Parent
 
@@ -16,7 +16,7 @@
 - [x] Confirmar destino e ponto de corte antes da retirada; divergências ou falhas bloqueiam remoção.
 - [x] Retirar somente Meu Dinheiro e deixar link no README da origem; preservar demais aplicativos, histórico e releases antigas privadas.
 - [x] Conferir e adaptar comandos, workspaces, lockfile e referências afetados, executando verificações pertinentes dos demais apps sem migrá-los ou redesenhá-los.
-- [ ] Registrar evidências dos oito marcos e aceites distintos de código e release; obter aceite final antes de liberar retenção do backup privado.
+- [x] Registrar evidências dos oito marcos e aceites distintos de código e release; obter aceite final antes de liberar retenção do backup privado.
 - [x] Recuperação posterior exige decisão específica que preserve dados dos usuários, sem presumir downgrade seguro ou autorização para reescrever histórico público.
 
 2026-11-10 — Alteração de escopo aprovada pelo usuário: concluir este fluxo
@@ -48,3 +48,12 @@ Aceites de código e release registrados separadamente no 07/11. Pendente
 somente o aceite final desta entrega para liberar retenção do backup privado;
 backups originais e mapa de commits preservados. Nenhum downgrade ou
 reescrita pública autorizado.
+
+## Aceite final e encerramento
+
+2026-11-10 — Após receber o resultado concreto da retirada `a6cd3e0`, checks,
+revisões e retenção, o mantenedor respondeu: “Aceito e autorizo excluir os
+backups restantes”. Removidos `.git/private-recovery` e
+`.git/private-extraction` conforme autorizado. Nenhuma alteração em objetos,
+refs ou histórico principal do Git. Todos os critérios concluídos; ticket
+`resolved`, respeitando a dispensa de reinstalação já registrada.
