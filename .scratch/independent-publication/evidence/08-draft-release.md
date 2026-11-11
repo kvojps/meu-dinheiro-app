@@ -144,3 +144,16 @@ instalação limpa, atualização e backup/restauração com perfil fictício; e
 ensaios não foram executados no 08. O ticket 11 mantém aceite separado e
 publicação bloqueada até concluir o 09. Alterar bytes exige repetir as
 verificações afetadas, sem presumir equivalência com reconstruções futuras.
+
+Artefatos, relatórios de auditoria, comparação de payload, metadados da API
+e verificação dos downloads preservados privadamente em
+`.git/private-extraction/2026-11-10/release-08/`. Manifesto SHA-256 conferido
+para os 11 arquivos preservados; não fazem parte dos anexos públicos.
+
+### Revisão do encerramento local
+
+Skill `code-review` executada em dois agentes independentes sobre
+`e02e9fb...57d92ea`, base anterior à mudança de método autorizada.
+Standards: zero achados. Spec: zero achados; conclusão do 08 sustentada pelos
+relatórios e downloads, com ensaios e aceite da publicação ainda pendentes.
+`git diff --check` passou; nenhuma mudança funcional ou dependência alterada.
