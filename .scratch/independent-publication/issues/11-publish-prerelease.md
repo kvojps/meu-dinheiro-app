@@ -2,7 +2,7 @@
 
 **What to build:** Disponibilizar pré-release validada com instruções conferidas e integridade verificável dos downloads.
 
-**Blocked by:** 09 — Validar instalação e continuidade no Linux
+**Blocked by:** nenhum — 09 resolvido por decisão do mantenedor, com limitações aceitas
 
 **Status:** ready-for-agent
 
@@ -20,6 +20,15 @@
 - [ ] Manter origem e releases antigas intactas e backup privado até aceite final; não assumir suporte a downgrade ou reescrita pública.
 
 ## Comments
+
+2026-11-10 — Mantenedor autorizou encerrar o 09 após conhecer os resultados
+e as lacunas. O 09 está `resolved` e deixa de bloquear este ticket. Para a
+consolidação, distinguir ensaios aprovados das limitações aceitas no
+[encerramento do 09](09-linux-validation.md#answer); elas não representam testes
+executados nem permanecem exigências bloqueadoras do 09 no escopo aceito.
+Continuam obrigatórias a conferência documental final, a apresentação dessas
+limitações e o aceite explícito da publicação. Nenhuma publicação autorizada
+ou executada por esta mudança de status.
 
 2026-11-10 — Instalação administrativa realizada pelo mantenedor e pacote
 candidato conferido no 09. Abertura, navegação, persistência e backup/restauração

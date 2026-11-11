@@ -5,7 +5,8 @@ Divisão e pontos de teste aprovados pelo usuário em 2026-11-10. A especificaç
 Fonte: [especificação](../dinheiro-publicacao/spec.md) e [mapa de decisões](../dinheiro-publicacao/map.md).
 
 Tickets concluídos usam `resolved`; os demais mantêm seus estados de triagem.
-Os tickets 01 a 08 estão `resolved`. O escopo aprovado em 2026-11-10 passou a
+Os tickets 01 a 09 estão `resolved`; o 09 foi encerrado por decisão do mantenedor
+com limitações de validação expressamente registradas. O escopo aprovado em 2026-11-10 passou a
 ser somente Linux x64 (deb). Windows está fora desta pré-release: ticket 10
 `wontfix`, sem instalador independente oferecido ou validação nesse sistema.
 A auditoria 06 foi concluída em `573b8d3`; o ticket 07 remediou dependências e
@@ -28,12 +29,12 @@ publicada nesta etapa.
 6. [Concluir a revisão do material publicável](issues/06-publication-audit.md) — resolvido; [evidências](evidence/06-publication-audit.md).
 7. [Publicar o código após aceite](issues/07-publish-source.md) — resolvido após aceite e publicação conferida em `9e348bd`; [evidências](evidence/07-publish-source.md).
 8. [Gerar a release candidata em rascunho](issues/08-draft-release.md) — resolvido por geração local e upload autorizado, rascunho `441089918` conferido; [evidências](evidence/08-draft-release.md).
-9. [Validar instalação e continuidade no Linux](issues/09-linux-validation.md) — `ready-for-human`: atualização manual e ensaios do aplicativo instalado conferidos; faltam instalação limpa, continuidade de perfil fictício anterior e seletores nativos completos; [evidências](evidence/09-linux-validation.md).
+9. [Validar instalação e continuidade no Linux](issues/09-linux-validation.md) — resolvido por decisão do mantenedor, com limitações aceitas; [resultados e limites](evidence/09-linux-validation.md).
 10. [Validar instalação e continuidade no Windows](issues/10-windows-validation.md) — fora desta entrega (`wontfix`); nota Windows documentada.
-11. [Publicar a pré-release após aceite](issues/11-publish-prerelease.md) — bloqueado por: 09.
+11. [Publicar a pré-release após aceite](issues/11-publish-prerelease.md) — 09 resolvido; conferir material final e obter aceite específico da publicação.
 12. [Validar a entrega pública e retirar o aplicativo da origem](issues/12-retire-source-app.md) — bloqueado por: 11.
 
-O aplicativo instalado é o ponto principal de teste em Linux x64, com perfis fictícios, complementado por verificações de histórico, privacidade e build. Ambiente indisponível bloqueia validações dependentes, sem dispensar critérios.
+O aplicativo instalado é o ponto principal de teste em Linux x64, com perfis fictícios, complementado por verificações de histórico, privacidade e build. Ambiente indisponível bloqueia validações dependentes, salvo alteração explícita do escopo pelo mantenedor, como o encerramento com limitações aceitas no 09. Ensaios não executados não são declarados aprovados.
 
 A aprovação desta divisão autoriza criar os tickets. Publicar código e publicar a release continuam sujeitos a aceites explícitos separados sobre resultados concretos. Nenhuma migração foi executada ao criar estes tickets.
 

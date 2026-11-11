@@ -4,13 +4,17 @@
 
 **Blocked by:** 08 — Gerar a release candidata em rascunho
 
-**Status:** ready-for-human
+**Status:** resolved
 
 ## Parent
 
 [Especificação de publicação independente](../../dinheiro-publicacao/spec.md).
 
-## Acceptance criteria
+## Acceptance criteria originais
+
+Preservados abaixo como registro do que foi efetivamente ensaiado. Os itens
+não marcados têm execução parcial ou não realizada; a decisão de encerramento
+em `Answer` aceita essas limitações e substitui sua exigência para este ticket.
 
 - [x] Usar Linux x64 com interface gráfica, perfil isolado e dados fictícios; registrar versão e checksum do deb testado.
 - [ ] Validar instalação limpa, abertura, navegação pelas telas demonstradas e persistência após reabrir.
@@ -19,7 +23,28 @@
 - [ ] Conferir instruções Linux, armazenamento, backup/restauração e avisos observados; registrar evidências sem dados privados.
 - [ ] Ambiente indisponível ou incompatibilidades impedem conclusão; abrir decisão específica quando necessário, sem prometer downgrade. Correções exigem renovar revisões e testes afetados.
 
+## Answer
+
+2026-11-10 — Resolvido por orientação explícita do mantenedor: “Pode marcar
+como resolvido”, após apresentação dos resultados e das lacunas. Aceitos os
+ensaios do candidato instalado: versão e checksum, navegação, dados fictícios,
+backup/restauração com caminhos de diálogo automatizados e persistência após
+reabrir. Ver [evidências](../evidence/09-linux-validation.md).
+
+Instalação limpa, continuidade de perfil fictício preparado na versão anterior,
+seleção nativa completa dos backups, abertura pelo menu e abertura de comprovante
+válido em leitor externo não são declaradas testadas. Permanecem limitações
+aceitas no encerramento, sem promessa de downgrade. Esta decisão supera as
+orientações anteriores de manter o 09 aberto até esses ensaios. Nenhum novo
+teste ou artefato foi produzido para marcar a resolução.
+
+O 09 deixa de bloquear o 11. A conferência documental e o aceite explícito
+da publicação continuam no ticket 11; encerrar o 09 não autoriza publicar.
+
 ## Comments
+
+2026-11-10 — Encerramento autorizado pelo mantenedor, com limitações registradas
+em `Answer`. Status alterado para `resolved`; índice e ticket 11 atualizados.
 
 2026-11-10 — Retomada após instalação manual pelo mantenedor: dpkg confirma
 `1.0.0~beta.1`; checksum do download e 132 arquivos instalados coincidem com o

@@ -171,3 +171,14 @@ Typecheck, teste isolado (5 testes) e suíte completa (10 arquivos, 80 testes)
 passaram novamente no clone do candidato `9e348bd`. Nenhum código funcional,
 dependência ou artefato reconstruído. Ticket 09 continua `ready-for-human`,
 com apenas o critério de ambiente/perfil/checksum marcado; ticket 11 bloqueado.
+
+## Decisão de encerramento do mantenedor
+
+2026-11-10 — Após receber o resumo dos ensaios e das lacunas, o mantenedor
+instruiu: “Pode marcar como resolvido”. O ticket 09 foi encerrado por essa
+decisão, aceitando as limitações descritas acima. Esta decisão substitui as
+indicações anteriores deste relatório de manter o ticket aberto e o 11
+bloqueado pelo 09. Os resultados técnicos permanecem os mesmos: nenhum ensaio
+adicional foi executado e nenhum item não testado passa a ser declarado aprovado.
+O ticket 11 deve apresentar as limitações e conferir a documentação final;
+a publicação da release continua sujeita a seu aceite explícito separado.
