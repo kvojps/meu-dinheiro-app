@@ -9,11 +9,11 @@ A tag `v1.0.0-beta.1` continua em
 Release pública `441089918`, `draft: false`, `prerelease: true`, mesmos três
 anexos do 11. Nenhum rebuild nem alteração na release.
 
-| Artefato público | SHA-256 |
-| --- | --- |
+| Artefato público                          | SHA-256                                                            |
+| ----------------------------------------- | ------------------------------------------------------------------ |
 | `meu-dinheiro-1.0.0-beta.1-linux-x64.deb` | `364673bb22512dbc09584d20706cc868926b38d05d5996ae1ac5cafc9a37a547` |
-| `RELEASE-NOTES.md` | `725e1c3f93fdf9193f44f32db2d76cc7648e992559783a079224d68fd1c3ac8b` |
-| `SHA256SUMS` | `984545acba41f971fcfc1be388bce744fde6ccb3e50746d5599516f34bdcd642` |
+| `RELEASE-NOTES.md`                        | `725e1c3f93fdf9193f44f32db2d76cc7648e992559783a079224d68fd1c3ac8b` |
+| `SHA256SUMS`                              | `984545acba41f971fcfc1be388bce744fde6ccb3e50746d5599516f34bdcd642` |
 
 Recalculados os hashes dos downloads públicos preservados pelo 11, conferidos
 contra os digests atuais da API. Pacote deb `meu-dinheiro-app`, versão
@@ -76,20 +76,22 @@ Não houve alteração funcional nem seam de implementação novo: TDD inaplicá
 
 Skill `code-review` aplicada com dois agentes independentes, base da origem
 `17cb66b`, commit `a6cd3e0`. Standards: zero achados. Spec: zero achados no patch
-de retirada; consolidação e aceite final tratados neste registro.
+de retirada. Revisão adicional da consolidação documental sobre a base
+`3ae31e9`: Standards zero achados; Spec zero achados. Aceite final permanece
+pendente. Prettier da consolidação aplicado após essa revisão.
 
 ## Oito marcos e aceites
 
-| Marco | Resultado e evidência |
-| --- | --- |
-| 1. Recuperação e corte | Backup privado restaurado e verificado no [01](01-recovery-checkpoint.md); corte reconferido no 12. |
-| 2. Extração | Equivalência e correspondência de commits no [02](02-history-extraction.md). |
-| 3. Autonomia e documentação | [03](03-standalone-app.md), [04](04-usage-documentation.md), [05](05-release-packaging.md). |
-| 4. Validação local e privacidade | [06](06-publication-audit.md) e renovação no [07](07-publish-source.md). |
-| 5. Código público após aceite | Aceite específico e publicação de código no [07](07-publish-source.md); avanço documental autorizado no [11](11-publish-prerelease.md). |
-| 6. Rascunho e testes Linux | [08](08-draft-release.md), [09](09-linux-validation.md), limitações aceitas pelo mantenedor. |
-| 7. Release após aceite próprio | Aceite distinto do código, publicação e downloads no [11](11-publish-prerelease.md). |
-| 8. Retirada restrita da origem | Commit `a6cd3e0`, origem privada atualizada e releases antigas preservadas; validação existente aceita pelo mantenedor neste 12. |
+| Marco                            | Resultado e evidência                                                                                                                   |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Recuperação e corte           | Backup privado restaurado e verificado no [01](01-recovery-checkpoint.md); corte reconferido no 12.                                     |
+| 2. Extração                      | Equivalência e correspondência de commits no [02](02-history-extraction.md).                                                            |
+| 3. Autonomia e documentação      | [03](03-standalone-app.md), [04](04-usage-documentation.md), [05](05-release-packaging.md).                                             |
+| 4. Validação local e privacidade | [06](06-publication-audit.md) e renovação no [07](07-publish-source.md).                                                                |
+| 5. Código público após aceite    | Aceite específico e publicação de código no [07](07-publish-source.md); avanço documental autorizado no [11](11-publish-prerelease.md). |
+| 6. Rascunho e testes Linux       | [08](08-draft-release.md), [09](09-linux-validation.md), limitações aceitas pelo mantenedor.                                            |
+| 7. Release após aceite próprio   | Aceite distinto do código, publicação e downloads no [11](11-publish-prerelease.md).                                                    |
+| 8. Retirada restrita da origem   | Commit `a6cd3e0`, origem privada atualizada e releases antigas preservadas; validação existente aceita pelo mantenedor neste 12.        |
 
 ## Limpeza local e retenção
 
@@ -110,7 +112,8 @@ para aproximadamente 4,2 GiB; conferir tamanho atual no encerramento.
 Backups originais (`source.tar`, `source.bundle`, `destination.tar`,
 `destination.bundle`), instaladores anteriores, manifests, mapa de commits e
 checkpoint de coordenação continuam retidos fora da árvore pública até o aceite
-final desta entrega. A limpeza dos temporários não equivale à liberação dessa
+final desta entrega. Os quatro arquivos originais foram novamente conferidos
+por SHA-256 contra `checksums.json`, todos íntegros após a limpeza. A limpeza dos temporários não equivale à liberação dessa
 retenção. O ticket permanece `ready-for-human` exclusivamente pelo aceite final.
 
 ## Recuperação posterior
