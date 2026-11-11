@@ -99,8 +99,8 @@ function migrateLegacyDataIfNeeded(dbPath: string, uploadsDir: string) {
 
 /**
  * Diretório dos comprovantes. Helper de caminho puro — deriva um path, não abre
- * conexão nenhuma, então não é "getter de módulo" no sentido que o README §2.2 /
- * ADR-0002 proíbem: nada aqui alcança o banco por fora da unidade de trabalho.
+ * conexão nenhuma: nada aqui alcança o banco por fora da unidade de trabalho.
+ * Ver docs/architecture.md para a composição.
  * `registerIpc` passa o resultado, fechado, aos gateways de comprovante e de
  * backup.
  */

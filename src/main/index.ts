@@ -81,11 +81,8 @@ app.whenReady().then(() => {
     return;
   }
 
-  // Carve-out do ADR-0002 (spec de `.scratch/dinheiro-camadas-processo-principal/`,
-  // decisão 5): `registerIpcHandlers` devolve a composição de services porque o
-  // bootstrap precisa invocar uma operação de negócio — garantir o Mês corrente.
-  // A ordem mudou de "ensure → register" para "register → ensure", ainda antes
-  // de `createWindow`.
+  // A composição devolve o serviço de meses para garantir o mês corrente após
+  // registrar os canais e antes de criar a janela. Ver docs/architecture.md.
   const services = registerIpcHandlers(db);
   services.months.ensureCurrentMonth();
 
@@ -97,7 +94,7 @@ app.whenReady().then(() => {
   });
 
   // Precisa vir antes da janela: é o modo que decide a cor com que ela nasce e a
-  // da moldura nativa. Carve-out do ADR-0002: o bootstrap lê o tema direto do
+  // da moldura nativa. O bootstrap lê o tema direto do
   // repositório, sem montar uma unidade de trabalho só para um getter.
   const stored = makeAppSettingsRepository(db).getAppSetting(THEME_MODE_KEY);
   const mode = resolveThemeMode(stored, themeMode.systemPrefersDark());

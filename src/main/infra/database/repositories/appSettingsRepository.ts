@@ -25,7 +25,7 @@ export function deleteAppSetting(db: Database.Database, key: string) {
  *
  * As três funções livres acima continuam exportadas para o carve-out de
  * bootstrap: o `index.ts` monta `makeAppSettingsRepository(db)` direto para ler
- * `THEME_MODE_KEY` antes de existir renderer (ADR-0002; spec desta pasta, decisão 5).
+ * `THEME_MODE_KEY` antes de existir renderer. Ver docs/architecture.md.
  */
 export function makeAppSettingsRepository(db: Database.Database) {
   return {

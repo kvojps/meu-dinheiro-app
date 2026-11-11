@@ -20,6 +20,11 @@ não há certificação de outras distribuições nem requisito mínimo comprova
 nem validação de instalação, atualização ou recuperação de dados nesse sistema.
 A configuração NSIS existente é experimental; não implica suporte validado.
 
+O [roteiro de validação futura no Windows](windows-validation.md) registra os
+critérios necessários antes de oferecer um instalador nesse sistema.
+Os resultados detalhados do candidato Linux estão no
+[relatório da 1.0.0-beta.1](validation/v1.0.0-beta.1-linux.md).
+
 ## Conferir o arquivo
 
 Obtenha o instalador e o SHA-256 da mesma release aprovada. Compare o hash antes

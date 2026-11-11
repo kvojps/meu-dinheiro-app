@@ -30,13 +30,12 @@ import { registerSettingsController } from './settingsController';
 
 /**
  * Compõe as camadas em ordem topológica e registra um controller por domínio —
- * as duas funções que este arquivo acumula por decisão do ADR-0002. `receipts` e
- * `uploadsDir` chegam fechados aqui (path puro de `connection.ts`, decisão 13);
+ * conforme docs/architecture.md. `receipts` e `uploadsDir` são preparados aqui
+ * a partir do caminho puro fornecido por `connection.ts`;
  * o `backupService` recebe o `monthsService` já pronto porque o pós-import
- * precisa garantir o Mês corrente (service→service, decisão 12).
+ * precisa garantir o Mês corrente após a importação.
  *
- * **Retorna a composição** (`{ months }` no mínimo): carve-out do ADR-0002 (spec
- * de `.scratch/dinheiro-camadas-processo-principal/`, decisão 5). O `index.ts`
+ * **Retorna a composição** (`{ months }` no mínimo). O `index.ts`
  * chama `services.months.ensureCurrentMonth()` no boot e no
  * `browser-window-focus`, agora *depois* de registrar os canais. Ver comentário
  * no `index.ts`.

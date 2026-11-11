@@ -14,6 +14,16 @@ Issues e especificações vivem em `.scratch/`.
 Quando uma skill pedir publicação no tracker, crie ou atualize
 o arquivo local correspondente.
 
+## Encerramento e limpeza
+
+`.scratch/` é temporário e pode ser recriado para novos esforços. Antes de
+remover um esforço concluído, consolide em `docs/` os procedimentos reutilizáveis,
+decisões ainda relevantes, resultados finais e pendências que precisam sobreviver.
+Distinga ensaios executados de limitações aceitas. Atualize referências de código
+e documentação para os destinos permanentes e confira os links antes da remoção.
+Comentários de acompanhamento, caminhos temporários e estados superados podem
+ser descartados. Preserve esta convenção de tracker após limpar os registros.
+
 ## Wayfinding operations
 
 - Mapa: `.scratch/<effort>/map.md`.

@@ -46,6 +46,13 @@ esse override, confira backup com comprovantes, lint, testes, build e
 empacotamento, além de renovar os avisos de terceiros e o `npm audit`.
 Não use `npm audit fix --force` para trocar contratos automaticamente.
 
+Confira `npm audit` completo e `npm audit --omit=dev`: Electron integra o
+produto mesmo declarado em `devDependencies`, portanto a análise de produção
+isolada não cobre todo o runtime entregue. Ao mudar dependências transitivas,
+confira compatibilidade das APIs legadas preservadas, conteúdo do ASAR e módulos
+desempacotados, além de exportar/restaurar ZIP com comprovantes. Consulte a
+[auditoria de publicação](publication-audit.md) para escopo e limites.
+
 ## Separar dados de ensaio
 
 Desenvolvimento também usa a identidade `meu-dinheiro`. Antes de iniciar, escolha

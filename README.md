@@ -63,6 +63,9 @@ Para executar o código localmente, veja [Desenvolvimento](docs/development.md).
 - [Desenvolvimento](docs/development.md)
 - [Arquitetura](docs/architecture.md)
 - [Capturas de demonstração](docs/screenshots.md)
+- [Preparação e auditoria de releases](docs/release.md)
+- [Validação Linux da 1.0.0-beta.1](docs/validation/v1.0.0-beta.1-linux.md)
+- [Histórico da publicação independente](docs/project-history.md)
 
 ## Licença
 

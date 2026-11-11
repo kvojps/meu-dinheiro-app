@@ -28,6 +28,28 @@ fazem a persistência. `registerIpcHandlers` compõe essas dependências. Erros 
 traduzidos para a resposta IPC; avisos de alteração permitem recarregar consultas.
 O renderer não recebe acesso direto ao Node.js nem ao banco.
 
+## Composição e transações
+
+`registerIpcHandlers` compõe repositórios, gateways e serviços e registra os
+controllers. Retorna o serviço de meses para o bootstrap garantir o mês corrente
+depois do registro dos canais e antes de criar a janela; ao recuperar o foco,
+repete a garantia e notifica a interface somente se criou o mês.
+
+Serviços coordenam operações compostas por `repos.transaction(fn)`, enquanto
+repositórios recebem a conexão SQLite e executam persistência. A unidade de
+trabalho também expõe a importação integral do backup; o serviço de backup
+recebe o serviço de meses para garantir o mês corrente após importar.
+O caminho de uploads vem de `connection.ts` e é fornecido aos consumidores
+durante a composição, sem expor a conexão do banco por um getter global.
+
+O bootstrap lê o tema pelo repositório de configurações antes de criar a janela,
+para definir a aparência inicial e a moldura nativa. Em execução, o serviço de
+configurações altera o tema pelo gateway; novas janelas consultam o modo atual.
+Essas responsabilidades descrevem o código atual; referências antigas ao
+ADR-0002 pertenciam à origem e não representam um ADR disponível neste projeto.
+
+## Dados e regras
+
 Meses são competências (ano/mês). Padrões são copiados na criação de meses;
 criar um padrão também o propaga aos existentes. A lista de meses usa agregados
 SQL; o detalhe contém os lançamentos. Realizado é recebido menos pago; Previsto

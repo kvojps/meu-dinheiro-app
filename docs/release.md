@@ -1,5 +1,8 @@
 # Preparar uma pré-release
 
+[Auditoria de publicação](publication-audit.md) ·
+[Relatório da 1.0.0-beta.1](validation/v1.0.0-beta.1-linux.md)
+
 Gerar o instalador localmente, em clone isolado, somente após publicar o código
 aprovado no destino correto (etapa separada). Fixar o checkout no SHA completo
 de 40 caracteres aprovado e conferir `git rev-parse HEAD` e árvore limpa.
@@ -97,3 +100,6 @@ Qualquer entrega Windows futura exige build nativo e inspeção, instalação,
 atualização e backup/restauração em Windows x64. O NSIS anterior apresentou
 módulo SQLite Linux em inspeção privada; reavaliar sua compatibilidade antes de
 planejar uma atualização nesse sistema.
+
+O [roteiro Windows](windows-validation.md) detalha ambiente nativo, inspeção do
+SQLite e critérios de instalação, continuidade e recuperação para uma entrega futura.

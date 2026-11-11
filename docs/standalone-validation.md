@@ -50,5 +50,8 @@ Na prova local de 2026-11-10, o diretório Linux não instalado exigiu
 `--no-sandbox` porque o helper SUID não estava configurado. A opção foi usada
 somente no ensaio com perfil descartável; não foi adicionada ao aplicativo nem
 aos scripts de uso. Essa prova comprova abertura e renderização, sem comprovar
-instalação, atualização ou restauração de backups. Essas verificações continuam
-nos tickets de validação dos instaladores em cada sistema.
+instalação, atualização ou restauração de backups. O ensaio posterior do deb
+instalado e suas limitações aceitas estão no
+[relatório Linux da 1.0.0-beta.1](validation/v1.0.0-beta.1-linux.md).
+Para outra entrega, repita os ensaios de [instalação](installation.md);
+Windows tem um [roteiro futuro próprio](windows-validation.md).

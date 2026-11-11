@@ -21,9 +21,9 @@ export function isThemeModeEntity(value: string | null): value is ThemeModeEntit
  * O modo a usar quando ainda não há escolha gravada: o do sistema operacional.
  *
  * Pura de propósito, e em `domain/` e não no gateway: quem precisa dela é o
- * bootstrap, que por carve-out (ADR-0002) resolve o tema antes de existir
- * camada para atravessar. O gateway `infra/gateways/system/themeMode.ts` faz a
- * leitura do banco e do `nativeTheme` e delega a decisão para cá.
+ * bootstrap, que resolve o tema antes de criar a janela (docs/architecture.md).
+ * O bootstrap lê a preferência no banco e o gateway fornece o tema do sistema;
+ * a decisão fica nesta função pura.
  *
  * O modo derivado do SO **não** é persistido: gravar uma preferência que o
  * usuário nunca expressou faria toda mudança de tema do sistema ser ignorada

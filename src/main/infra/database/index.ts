@@ -12,14 +12,13 @@ import { makeMonthsRepository } from './repositories/monthsRepository';
 /**
  * A unidade de trabalho: os repositórios prontos mais a transação, e é só isto
  * que o service recebe. É o que permite ao service orquestrar persistência sem
- * nunca importar `better-sqlite3` (README §2.2, ADR-0002).
+ * acessar a conexão SQLite diretamente. Ver docs/architecture.md.
  *
  * `transaction()` é a costura de composição: cada `db.transaction` que morava
  * dentro de um repositório (`createMonthWithDefaults`, `createBatch`, `pay`/
  * `unpay`, `receive`/`unreceive`, os `create` de padrão, os `delete` de conta/
  * categoria, `runSetup`) virou `repos.transaction(fn)` autorado no service
- * correspondente (spec de `.scratch/dinheiro-camadas-processo-principal/`,
- * decisões 6, 7, 8). Os repositórios terminam com zero `db.transaction`.
+ * correspondente. Os repositórios terminam com zero `db.transaction`.
  */
 export function makeRepositories(db: Database.Database) {
   return {
