@@ -4,7 +4,7 @@
 
 **Blocked by:** 07 — Publicar o código após aceite
 
-**Status:** ready-for-human
+**Status:** resolved
 
 ## Parent
 
@@ -12,13 +12,31 @@
 
 ## Acceptance criteria
 
-- [ ] Executar workflow manual sobre commit fixado e registrar execução, versão, tag e classificação de pré-release.
-- [ ] Conferir deb Linux x64, nomes, notas e SHA-256 dos arquivos efetivamente anexados ao rascunho.
-- [ ] Inspecionar artefatos finais, conteúdo, recursos externos, dependências, metadados, MIT e avisos; repetir verificações afetadas se divergirem dos candidatos anteriores.
-- [ ] Conferir notas com mudanças verificadas, limitações e ausência de assinatura quando aplicável; manter rascunho sem publicação.
-- [ ] Identificar por checksum os mesmos candidatos para os testes dos dois sistemas; build em runner não comprova instalação. Mudanças exigem repetir validações afetadas.
+- [x] Gerar localmente sobre commit fixado e registrar execução, versão, tag e classificação de pré-release; enviar os anexos ao rascunho no GitHub.
+- [x] Conferir deb Linux x64, nomes, notas e SHA-256 dos arquivos efetivamente anexados ao rascunho.
+- [x] Inspecionar artefatos finais, conteúdo, recursos externos, dependências, metadados, MIT e avisos; repetir verificações afetadas se divergirem dos candidatos anteriores.
+- [x] Conferir notas com mudanças verificadas, limitações e ausência de assinatura quando aplicável; manter rascunho sem publicação.
+- [x] Identificar por checksum o mesmo candidato para os testes Linux; Windows fora desta entrega. Build local não comprova instalação. Mudanças exigem repetir validações afetadas.
+
+## Answer
+
+Concluído pelo método local autorizado em 2026-11-10. Gerado deb Linux x64
+no commit aprovado `9e348bdc6d5cdee0abea0d6c328232d8cb97da1f` e criada
+pré-release `v1.0.0-beta.1` em rascunho, ID `441089918`, sem publicação.
+Conferidos os três anexos por digest da API e download byte a byte.
+Deb SHA-256: `364673bb22512dbc09584d20706cc868926b38d05d5996ae1ac5cafc9a37a547`.
+Inspeção renovada, typecheck, lint e 80 testes passaram. Ensaios de instalação,
+atualização e backup/restauração continuam no 09 sobre esse checksum;
+aceite de publicação continua no 11. Windows permanece fora desta entrega.
+Ver [evidências](../evidence/08-draft-release.md).
 
 ## Comments
+
+2026-11-10 — O usuário substituiu o workflow por geração local e upload ao
+GitHub: “não quero workflow pra isso, gere a release localmente suba no github”.
+Critérios ajustados ao método autorizado e ao escopo Linux já aprovado.
+O bloqueio de cobrança do Actions não bloqueia mais este ticket; publicação
+continua separada da criação do rascunho e depende dos ensaios e aceite do 11.
 
 2026-11-10 — Workflow manual executado sobre o commit aprovado, mas o GitHub
 bloqueou o job antes de qualquer etapa por problema de cobrança da conta.

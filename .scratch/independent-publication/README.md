@@ -5,13 +5,14 @@ Divisão e pontos de teste aprovados pelo usuário em 2026-11-10. A especificaç
 Fonte: [especificação](../dinheiro-publicacao/spec.md) e [mapa de decisões](../dinheiro-publicacao/map.md).
 
 Tickets concluídos usam `resolved`; os demais mantêm seus estados de triagem.
-Os tickets 01 a 07 estão `resolved`. O escopo aprovado em 2026-11-10 passou a
+Os tickets 01 a 08 estão `resolved`. O escopo aprovado em 2026-11-10 passou a
 ser somente Linux x64 (deb). Windows está fora desta pré-release: ticket 10
 `wontfix`, sem instalador independente oferecido ou validação nesse sistema.
 A auditoria 06 foi concluída em `573b8d3`; o ticket 07 remediou dependências e
 renovou as verificações no commit `9e348bd`. Código publicado nesse commit após
-aceite explícito e conferência do destino; a execução do 08 foi bloqueada
-pela cobrança da conta GitHub antes do build, sem artefatos ou rascunho.
+aceite explícito e conferência do destino. Após bloqueio do Actions por cobrança,
+o usuário autorizou geração local: o 08 criou e conferiu o rascunho no GitHub,
+com o deb de SHA-256 `364673bb22512dbc09584d20706cc868926b38d05d5996ae1ac5cafc9a37a547`.
 Ensaios Linux e aceites separados continuam obrigatórios.
 
 [Evidências do checkpoint e recuperação](evidence/01-recovery-checkpoint.md).
@@ -26,8 +27,8 @@ publicada nesta etapa.
 5. [Preparar instaladores e workflow de release](issues/05-release-packaging.md) — resolvido no escopo Linux; workflow e notas ajustados; [evidências](evidence/05-release-packaging.md).
 6. [Concluir a revisão do material publicável](issues/06-publication-audit.md) — resolvido; [evidências](evidence/06-publication-audit.md).
 7. [Publicar o código após aceite](issues/07-publish-source.md) — resolvido após aceite e publicação conferida em `9e348bd`; [evidências](evidence/07-publish-source.md).
-8. [Gerar a release candidata em rascunho](issues/08-draft-release.md) — `ready-for-human`: regularizar cobrança GitHub; execução sobre `9e348bd` falhou antes do build; [evidências](evidence/08-draft-release.md).
-9. [Validar instalação e continuidade no Linux](issues/09-linux-validation.md) — bloqueado por: 08.
+8. [Gerar a release candidata em rascunho](issues/08-draft-release.md) — resolvido por geração local e upload autorizado, rascunho `441089918` conferido; [evidências](evidence/08-draft-release.md).
+9. [Validar instalação e continuidade no Linux](issues/09-linux-validation.md) — 08 resolvido; usar o deb efetivo do rascunho pelo checksum registrado.
 10. [Validar instalação e continuidade no Windows](issues/10-windows-validation.md) — fora desta entrega (`wontfix`); nota Windows documentada.
 11. [Publicar a pré-release após aceite](issues/11-publish-prerelease.md) — bloqueado por: 09.
 12. [Validar a entrega pública e retirar o aplicativo da origem](issues/12-retire-source-app.md) — bloqueado por: 11.

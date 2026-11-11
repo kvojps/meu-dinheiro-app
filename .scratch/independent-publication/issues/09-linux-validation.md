@@ -21,6 +21,15 @@
 
 ## Comments
 
+2026-11-10 — Ticket 08 resolvido após autorização de geração local e upload,
+dispensando Actions. Rascunho `441089918`, versão `1.0.0-beta.1`, commit
+`9e348bdc6d5cdee0abea0d6c328232d8cb97da1f`. Usar exclusivamente o deb
+`meu-dinheiro-1.0.0-beta.1-linux-x64.deb`, SHA-256
+`364673bb22512dbc09584d20706cc868926b38d05d5996ae1ac5cafc9a37a547`,
+conferido após download do GitHub. Build e inspeção não comprovam instalação.
+Bloqueio por cobrança superado pelo método local; ensaios deste ticket
+permanecem pendentes. Ver [evidências do 08](../evidence/08-draft-release.md).
+
 2026-11-10 — O workflow do 08 falhou antes do build por bloqueio de cobrança
 da conta GitHub. Nenhum artefato ou rascunho criado; aguardar regularização e
 conclusão do 08 para identificar por checksum o deb efetivo a ensaiar.
