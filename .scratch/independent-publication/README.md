@@ -32,7 +32,7 @@ com aceites explícitos e downloads públicos conferidos.
 9. [Validar instalação e continuidade no Linux](issues/09-linux-validation.md) — resolvido por decisão do mantenedor, com limitações aceitas; [resultados e limites](evidence/09-linux-validation.md).
 10. [Validar instalação e continuidade no Windows](issues/10-windows-validation.md) — fora desta entrega (`wontfix`); nota Windows documentada.
 11. [Publicar a pré-release após aceite](issues/11-publish-prerelease.md) — resolvido após aceites, publicação e checksums públicos; [evidências](evidence/11-publish-prerelease.md).
-12. [Validar a entrega pública e retirar o aplicativo da origem](issues/12-retire-source-app.md) — próximo passo: validar instalação pública antes de retirar da origem; 11 resolvido.
+12. [Validar a entrega pública e retirar o aplicativo da origem](issues/12-retire-source-app.md) — retirada concluída na origem privada em `a6cd3e0`, 289 testes aprovados; `ready-for-human` somente pelo aceite final para liberar retenção do backup. [Evidências e oito marcos](evidence/12-retire-source-app.md).
 
 O aplicativo instalado é o ponto principal de teste em Linux x64, com perfis fictícios, complementado por verificações de histórico, privacidade e build. Ambiente indisponível bloqueia validações dependentes, salvo alteração explícita do escopo pelo mantenedor, como o encerramento com limitações aceitas no 09. Ensaios não executados não são declarados aprovados.
 

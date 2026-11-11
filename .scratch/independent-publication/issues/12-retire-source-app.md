@@ -4,7 +4,7 @@
 
 **Blocked by:** nenhum — 11 resolvido
 
-**Status:** ready-for-agent
+**Status:** ready-for-human
 
 ## Parent
 
@@ -12,12 +12,12 @@
 
 ## Acceptance criteria
 
-- [ ] Conferir repositório e release públicos e validar instalação dos artefatos baixados da publicação em Linux x64; registrar versões e checksums.
-- [ ] Confirmar destino e ponto de corte antes da retirada; divergências ou falhas bloqueiam remoção.
-- [ ] Retirar somente Meu Dinheiro e deixar link no README da origem; preservar demais aplicativos, histórico e releases antigas privadas.
-- [ ] Conferir e adaptar comandos, workspaces, lockfile e referências afetados, executando verificações pertinentes dos demais apps sem migrá-los ou redesenhá-los.
+- [x] Conferir repositório e release públicos e validar instalação dos artefatos baixados da publicação em Linux x64; registrar versões e checksums.
+- [x] Confirmar destino e ponto de corte antes da retirada; divergências ou falhas bloqueiam remoção.
+- [x] Retirar somente Meu Dinheiro e deixar link no README da origem; preservar demais aplicativos, histórico e releases antigas privadas.
+- [x] Conferir e adaptar comandos, workspaces, lockfile e referências afetados, executando verificações pertinentes dos demais apps sem migrá-los ou redesenhá-los.
 - [ ] Registrar evidências dos oito marcos e aceites distintos de código e release; obter aceite final antes de liberar retenção do backup privado.
-- [ ] Recuperação posterior exige decisão específica que preserve dados dos usuários, sem presumir downgrade seguro ou autorização para reescrever histórico público.
+- [x] Recuperação posterior exige decisão específica que preserve dados dos usuários, sem presumir downgrade seguro ou autorização para reescrever histórico público.
 
 2026-11-10 — Alteração de escopo aprovada pelo usuário: concluir este fluxo
 somente com Linux x64 (deb). Windows fica fora desta pré-release, com nota
@@ -33,3 +33,18 @@ conferidos pelo mesmo SHA-256 do candidato Linux. Ver
 instalação a partir dos artefatos publicados e cumprir os demais critérios
 deste ticket antes de retirar Meu Dinheiro da origem. Nenhuma retirada ou
 liberação de backup autorizada pela conclusão do 11.
+
+## Resultado
+
+2026-11-10 — Retirada aplicada e enviada à origem privada em `a6cd3e0`,
+com os três outros apps intactos e releases antigas preservadas. Destino e
+release públicos reconferidos; 132 arquivos instalados coincidem com o deb
+público. Mantenedor dispensou reinstalação: “Já tá validado não precisa
+reinstalar.” Typecheck, lint sem erros, build e 289 testes passaram. Branch
+alternativa e cópias temporárias redundantes removidas.
+
+[Evidências consolidadas e oito marcos](../evidence/12-retire-source-app.md).
+Aceites de código e release registrados separadamente no 07/11. Pendente
+somente o aceite final desta entrega para liberar retenção do backup privado;
+backups originais e mapa de commits preservados. Nenhum downgrade ou
+reescrita pública autorizado.
