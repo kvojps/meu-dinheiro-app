@@ -4,8 +4,8 @@
 
 ## Situação da distribuição
 
-A pré-release `1.0.0-beta.1` está em rascunho, aguardando aceite explícito
-para publicação. O único instalador é `meu-dinheiro-1.0.0-beta.1-linux-x64.deb`,
+A pré-release [1.0.0-beta.1](https://github.com/kvojps/meu-dinheiro-app/releases/tag/v1.0.0-beta.1)
+está disponível para download. O único instalador é `meu-dinheiro-1.0.0-beta.1-linux-x64.deb`,
 pacote `meu-dinheiro-app` versão `1.0.0~beta.1`, arquitetura `amd64`.
 
 O candidato foi instalado pelo mantenedor como atualização em Ubuntu 26.04.1 LTS

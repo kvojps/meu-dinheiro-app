@@ -16,17 +16,32 @@ Veja as [demais telas e o cenário](docs/screenshots.md), incluindo o tema escur
 
 ## Instalação
 
-A publicação independente está em preparação. Ainda não há instalador independente
-validado indicado aqui. Esta pré-release terá apenas **Linux x64
-(Debian/Ubuntu, `.deb`)**; o nome e link definitivos serão conferidos com o
-candidato da release.
+A pré-release **1.0.0-beta.1** oferece um instalador para **Linux x64
+(Debian/Ubuntu, `.deb`)**:
+
+1. Na [página da release](https://github.com/kvojps/meu-dinheiro-app/releases/tag/v1.0.0-beta.1),
+   baixe `meu-dinheiro-1.0.0-beta.1-linux-x64.deb` e `SHA256SUMS`.
+2. Na pasta dos downloads, confira a integridade e instale:
+
+   ```bash
+   sha256sum -c SHA256SUMS
+   sudo apt install './meu-dinheiro-1.0.0-beta.1-linux-x64.deb'
+   ```
+
+Antes de atualizar, [exporte um backup](docs/storage.md). O deb não possui
+assinatura digital; SHA-256 confere os bytes, sem autenticar autoria.
+
+Abertura direta, navegação, persistência e backup/restauração com caminhos de
+diálogo automatizados foram conferidos em Ubuntu 26.04.1 LTS x64. Instalação
+limpa, continuidade de perfil anterior, seletores nativos completos, abertura
+pelo menu e comprovante válido em leitor externo não foram ensaiados; essas
+limitações foram aceitas pelo mantenedor. Consulte o [guia de instalação](docs/installation.md)
+e as notas da release antes de instalar. Não há garantia de downgrade.
 
 **Windows:** fora desta pré-release. Não há instalador independente oferecido
 nem validação nesse sistema; a configuração NSIS existente é experimental.
 Não há instruções validadas para macOS ou outras arquiteturas.
 
-O [guia de instalação](docs/installation.md) prepara os passos de conferência dos
-candidatos, incluindo integridade, atualização e limites da versão sem assinatura.
 Para executar o código localmente, veja [Desenvolvimento](docs/development.md).
 
 ## Primeiros passos
