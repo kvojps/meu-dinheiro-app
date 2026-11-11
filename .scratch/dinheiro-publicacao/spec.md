@@ -4,6 +4,17 @@ Status: needs-info
 
 Rascunho completo; aguarda confirmação dos pontos de teste exigida pela skill `to-spec` antes da publicação como `ready-for-agent`.
 
+## Alteração de escopo — 2026-11-10
+
+O usuário decidiu concluir o fluxo de publicação apenas com Linux x64 (deb).
+Esta decisão substitui as exigências Windows deste documento para esta entrega:
+sem candidato NSIS, build, ensaio Windows ou dependência da validação Windows.
+Documentar que Windows está fora desta pré-release, sem instalador independente
+oferecido ou suporte validado. A configuração experimental pode permanecer.
+Todos os demais critérios, auditoria, ensaios Linux, backups e aceites explícitos
+separados de código e release permanecem vigentes. A decisão não afirma
+validação Windows nem autoriza publicação antecipada.
+
 ## Problem Statement
 
 Quem quer instalar ou contribuir com Meu Dinheiro depende de um monorepositório privado com outros aplicativos, ferramentas compartilhadas e releases sem ciclo independente. O mantenedor precisa disponibilizar o aplicativo sem expor dados privados, perder seu histórico relevante ou interromper instalações existentes e os demais aplicativos da origem.

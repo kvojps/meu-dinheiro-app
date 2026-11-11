@@ -4,7 +4,7 @@
 
 **Blocked by:** 08 — Gerar a release candidata em rascunho
 
-**Status:** ready-for-human
+**Status:** wontfix
 
 ## Parent
 
@@ -25,3 +25,28 @@
 Providenciar esse ambiente e perfil fictício isolado antes da validação;
 Wine local não atende ao critério. Tickets 11 e 12 continuam bloqueados por
 esta validação, além das dependências já declaradas.
+
+2026-11-10 — O ticket 04 preparou `docs/installation.md` e `docs/storage.md`
+no clone extraído. Conferir no NSIS candidato os passos, caminho `%APPDATA%`,
+seletores nativos, avisos sem assinatura, atualização e restauração com
+comprovantes. A ausência de Windows gráfico permanece bloqueio deste ticket;
+não impede concluir a produção documental do 04. Ver
+[evidências](../evidence/04-usage-documentation.md).
+
+2026-11-10 — A preparação 05 gerou deb privado e configurou workflow manual,
+mas falta candidato NSIS nativo. Ver [evidências](../evidence/05-release-packaging.md).
+O NSIS anterior foi extraído com 7-Zip do cache: seu módulo SQLite é ELF Linux
+x86-64. Conferir impacto real e abrir decisão específica se a preparação do
+perfil de atualização falhar; não presumir compatibilidade nem apagar releases.
+A avaliação dos seis pacotes de produção alertados pelo npm continua obrigatória
+antes de publicar; cinco foram encontrados como pacotes no ASAR Linux.
+
+2026-11-10 — Alteração de escopo aprovada pelo usuário: concluir este fluxo
+somente com Linux x64 (deb). Windows fica fora desta pré-release, com nota
+explícita de ausência de instalador independente e validação. A configuração
+NSIS experimental pode permanecer, mas não bloqueia esta entrega. Auditoria,
+ensaios Linux e aceites separados de código/release continuam obrigatórios.
+
+Retirado do fluxo atual por decisão do usuário; nenhum critério Windows foi
+executado ou dispensado como se tivesse passado. Retomar em esforço próprio
+quando houver decisão de oferecer Windows. Não bloqueia tickets 11 e 12.
