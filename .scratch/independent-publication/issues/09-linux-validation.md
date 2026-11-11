@@ -21,6 +21,11 @@
 
 ## Comments
 
+2026-11-10 — O workflow do 08 falhou antes do build por bloqueio de cobrança
+da conta GitHub. Nenhum artefato ou rascunho criado; aguardar regularização e
+conclusão do 08 para identificar por checksum o deb efetivo a ensaiar.
+Ver [tentativa do 08](../evidence/08-draft-release.md).
+
 2026-11-10 — O ticket 04 preparou `docs/installation.md` e `docs/storage.md`
 no clone extraído, com roteiro Linux e limites explícitos. Conferir comandos,
 nomes, hashes, avisos, sandbox e restauração no deb candidato; o ensaio via

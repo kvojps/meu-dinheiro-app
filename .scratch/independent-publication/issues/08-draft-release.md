@@ -4,7 +4,7 @@
 
 **Blocked by:** 07 — Publicar o código após aceite
 
-**Status:** ready-for-agent
+**Status:** ready-for-human
 
 ## Parent
 
@@ -19,6 +19,12 @@
 - [ ] Identificar por checksum os mesmos candidatos para os testes dos dois sistemas; build em runner não comprova instalação. Mudanças exigem repetir validações afetadas.
 
 ## Comments
+
+2026-11-10 — Workflow manual executado sobre o commit aprovado, mas o GitHub
+bloqueou o job antes de qualquer etapa por problema de cobrança da conta.
+Nenhum artefato ou rascunho criado. Regularizar a conta antes de repetir;
+não há candidato do runner para inspeção ou ensaios. Critérios permanecem
+pendentes. Ver [evidências da tentativa](../evidence/08-draft-release.md).
 
 2026-11-10 — Alteração de escopo aprovada pelo usuário: concluir este fluxo
 somente com Linux x64 (deb). Windows fica fora desta pré-release, com nota
