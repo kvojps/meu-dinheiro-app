@@ -28,7 +28,7 @@ publicada nesta etapa.
 6. [Concluir a revisão do material publicável](issues/06-publication-audit.md) — resolvido; [evidências](evidence/06-publication-audit.md).
 7. [Publicar o código após aceite](issues/07-publish-source.md) — resolvido após aceite e publicação conferida em `9e348bd`; [evidências](evidence/07-publish-source.md).
 8. [Gerar a release candidata em rascunho](issues/08-draft-release.md) — resolvido por geração local e upload autorizado, rascunho `441089918` conferido; [evidências](evidence/08-draft-release.md).
-9. [Validar instalação e continuidade no Linux](issues/09-linux-validation.md) — 08 resolvido; usar o deb efetivo do rascunho pelo checksum registrado.
+9. [Validar instalação e continuidade no Linux](issues/09-linux-validation.md) — `ready-for-human`: hash conferido, instalação bloqueada por autenticação administrativa; [tentativa e retomada](evidence/09-linux-validation.md). Ensaios pendentes.
 10. [Validar instalação e continuidade no Windows](issues/10-windows-validation.md) — fora desta entrega (`wontfix`); nota Windows documentada.
 11. [Publicar a pré-release após aceite](issues/11-publish-prerelease.md) — bloqueado por: 09.
 12. [Validar a entrega pública e retirar o aplicativo da origem](issues/12-retire-source-app.md) — bloqueado por: 11.

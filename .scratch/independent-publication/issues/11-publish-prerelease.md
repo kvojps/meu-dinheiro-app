@@ -19,6 +19,14 @@
 - [ ] Publicar somente pré-release aprovada e conferir tag, commit, notas, anexos e SHA-256 dos downloads públicos.
 - [ ] Manter origem e releases antigas intactas e backup privado até aceite final; não assumir suporte a downgrade ou reescrita pública.
 
+## Comments
+
+2026-11-10 — O 09 conferiu hash e simulação apt, mas não instalou o candidato:
+autenticação administrativa interativa indisponível à sessão do agente.
+Instalação limpa, atualização com perfil fictício e backup/restauração permanecem
+pendentes. Publicação continua bloqueada até concluir os ensaios sobre o mesmo
+deb. Ver [evidências do 09](../evidence/09-linux-validation.md).
+
 2026-11-10 — Alteração de escopo aprovada pelo usuário: concluir este fluxo
 somente com Linux x64 (deb). Windows fica fora desta pré-release, com nota
 explícita de ausência de instalador independente e validação. A configuração

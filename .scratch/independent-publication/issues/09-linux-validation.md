@@ -4,7 +4,7 @@
 
 **Blocked by:** 08 — Gerar a release candidata em rascunho
 
-**Status:** ready-for-agent
+**Status:** ready-for-human
 
 ## Parent
 
@@ -20,6 +20,13 @@
 - [ ] Ambiente indisponível ou incompatibilidades impedem conclusão; abrir decisão específica quando necessário, sem prometer downgrade. Correções exigem renovar revisões e testes afetados.
 
 ## Comments
+
+2026-11-10 — Candidato conferido por SHA-256; simulação apt planeja atualização
+de `1.0.0~beta` para `1.0.0~beta.1`. Instalação real bloqueada: `sudo` exige
+autenticação interativa mesmo fora do sandbox. Necessário ambiente de ensaio
+com acesso administrativo, instalação limpa separada e perfil anterior fictício
+antes da atualização. Nenhum critério concluído, pacote instalado ou perfil
+pessoal alterado. Ver [tentativa e roteiro de retomada](../evidence/09-linux-validation.md).
 
 2026-11-10 — Ticket 08 resolvido após autorização de geração local e upload,
 dispensando Actions. Rascunho `441089918`, versão `1.0.0-beta.1`, commit
